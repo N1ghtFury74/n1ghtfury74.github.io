@@ -1,0 +1,120 @@
+site_name: N1ghtFury — Threat Research Blog
+site_description: Cybersecurity threat research, malware analysis, and red team techniques by N1ghtFury
+site_url: https://sitename.example
+site_author: N1ghtFury
+
+theme:
+  name: material
+  font:
+    text: Merriweather Sans
+    code: Red Hat Mono
+  logo: assets/nightfury.png
+  favicon: assets/nightfury.ico
+  palette:
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+      primary: green
+      accent: light green
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+      primary: green
+      accent: green
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.footer
+    - toc.integrate
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - content.code.annotate
+    - content.tooltips
+
+nav:
+  - Home: index.md
+  - Blog: blog/index.md
+  - About: about.md
+
+plugins:
+  - blog:
+      blog_dir: blog
+      post_date_format: long
+      post_excerpt: optional
+      post_readtime: true
+      archive: true
+      archive_name: Archive
+      categories: true
+      categories_name: Categories
+      categories_allowed:
+        - MISC
+        - Detection Engineering
+        - DFIR & Threat Hunting
+        - Adversary Emulation
+      authors: true
+      authors_file: blog/.authors.yml
+  - tags
+  - search:
+      separator: '[\s​\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+
+validation:
+  links:
+    unrecognized_links: ignore
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/N1ghtFury74
+      name: N1ghtFury on GitHub
+    - icon: fontawesome/brands/linkedin
+      link: https://linkedin.com/in/mohamed-hanii-0291031aa
+      name: N1ghtFury on LinkedIn
+    - icon: material/email
+      link: mailto:mohamedhany.de@outlook.com
+      name: Email N1ghtFury
+
+extra_css:
+  - stylesheets/nightfury_mkdocs_extra.css
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+      title: On this page
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - pymdownx.keys
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.caret
+  - pymdownx.critic
+  - admonition
+  - abbr
+  - tables
+  - footnotes
+  - def_list
