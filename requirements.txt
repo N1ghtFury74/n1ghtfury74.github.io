@@ -1,0 +1,7 @@
+# Build dependencies for the N1ghtFury blog.
+#
+# Bounded to the 9.x line so a future major release of mkdocs-material
+# cannot silently break the deployed site. The blog, tags and search
+# plugins used in mkdocs.yml all ship with Material itself, so this is
+# the only direct dependency.
+mkdocs-material>=9.5,<10

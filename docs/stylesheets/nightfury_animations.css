@@ -1,0 +1,300 @@
+/* ===================================================================
+   N1ghtFury — Animation Layer
+   Entrance, scroll-reveal and hover motion.
+
+   Everything in this file is decorative. The prefers-reduced-motion
+   block at the bottom switches all of it off, and no layout or
+   readability depends on any of it running — if the JS never loads or
+   motion is disabled, the site renders exactly as it did before.
+   =================================================================== */
+
+/* ------------------------------------------------------------------
+   KEYFRAMES
+   ------------------------------------------------------------------ */
+
+/* Rise and fade in to full opacity */
+@keyframes nf-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Rise and fade in to the dimmed opacity the slogan rests at */
+@keyframes nf-rise-dim {
+  from { opacity: 0;    transform: translateY(18px); }
+  to   { opacity: 0.72; transform: translateY(0); }
+}
+
+/* Terminal caret */
+@keyframes nf-blink {
+  0%, 45%  { opacity: 0.8; }
+  50%, 95% { opacity: 0; }
+  100%     { opacity: 0.8; }
+}
+
+/* Slow drift of the hero dot grid */
+@keyframes nf-grid-drift {
+  from { background-position: 0 0; }
+  to   { background-position: 28px 28px; }
+}
+
+/* Light sweep across a button on hover */
+@keyframes nf-sheen {
+  from { transform: translateX(-130%) skewX(-18deg); }
+  to   { transform: translateX(300%)  skewX(-18deg); }
+}
+
+/* ------------------------------------------------------------------
+   HERO ENTRANCE — staggered rise, runs once on load
+   ------------------------------------------------------------------ */
+.nf-hero {
+  animation: nf-grid-drift 26s linear infinite;
+}
+
+.nf-hero__logo-wrap {
+  /* Rise first, then hand over to the ring pulse from the main stylesheet */
+  animation:
+    nf-rise 0.75s cubic-bezier(0.22, 1, 0.36, 1) both,
+    nf-ring-pulse 4s ease-in-out 0.75s infinite;
+}
+
+.nf-hero__title {
+  animation: nf-rise 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+.nf-hero__slogan {
+  animation: nf-rise-dim 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both;
+}
+
+/* Blinking caret after the slogan */
+.nf-hero__slogan::after {
+  content: "\2590";
+  margin-left: 0.15em;
+  animation: nf-blink 1.15s step-end infinite;
+}
+
+.nf-hero__desc {
+  animation: nf-rise 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.34s both;
+}
+
+.nf-hero__btns {
+  animation: nf-rise 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.46s both;
+}
+
+.nf-hero__logo {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nf-hero__logo-wrap:hover .nf-hero__logo {
+  transform: scale(1.06) rotate(-3deg);
+}
+
+/* ------------------------------------------------------------------
+   SCROLL REVEAL
+
+   docs/javascripts/nightfury_anim.js adds body.nf-anim, tags elements
+   with .nf-reveal, then adds .nf-in as each enters the viewport.
+   Every rule below is scoped to body.nf-anim, so if the script does not
+   run nothing is ever hidden.
+   ------------------------------------------------------------------ */
+body.nf-anim .nf-reveal {
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.nf-anim .nf-reveal:not(.nf-in) {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+body.nf-anim .nf-reveal.nf-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger siblings so a row of cards cascades instead of popping together */
+body.nf-anim .nf-reveal.nf-in:nth-child(2) { transition-delay: 0.08s; }
+body.nf-anim .nf-reveal.nf-in:nth-child(3) { transition-delay: 0.16s; }
+body.nf-anim .nf-reveal.nf-in:nth-child(4) { transition-delay: 0.24s; }
+body.nf-anim .nf-reveal.nf-in:nth-child(5) { transition-delay: 0.32s; }
+body.nf-anim .nf-reveal.nf-in:nth-child(6) { transition-delay: 0.40s; }
+
+/* ------------------------------------------------------------------
+   BUTTON SHEEN
+   ------------------------------------------------------------------ */
+.nf-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.nf-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 35%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.28),
+    transparent
+  );
+  transform: translateX(-130%) skewX(-18deg);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.nf-btn:hover::after {
+  opacity: 1;
+  animation: nf-sheen 0.75s ease-out;
+}
+
+.nf-btn:active {
+  transform: translateY(1px) scale(0.985);
+}
+
+/* ------------------------------------------------------------------
+   CARD / PILL / TAG HOVER POLISH
+   ------------------------------------------------------------------ */
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid > .card {
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.md-typeset .grid.cards > ul > li:hover,
+.md-typeset .grid > .card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(0, 200, 83, 0.4);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(0, 200, 83, 0.1);
+}
+
+.nf-topic-pills span {
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.nf-topic-pills span:hover { transform: translateY(-3px); }
+.nf-skill-tag:hover        { transform: translateY(-2px); }
+.nf-cert-badge:hover       { transform: translateY(-4px); }
+
+.nf-stat {
+  transition:
+    background 0.25s ease,
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nf-stat:hover { transform: translateY(-3px); }
+
+/* Timeline dot grows as its entry is hovered */
+.nf-timeline__item::before {
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease;
+}
+
+.nf-timeline__item:hover::before {
+  transform: scale(1.35);
+  box-shadow: 0 0 14px rgba(0, 200, 83, 0.6);
+}
+
+/* Section-title underline redraws on hover */
+.nf-section .nf-section__title::after {
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ------------------------------------------------------------------
+   BLOG INDEX + TAGS
+   ------------------------------------------------------------------ */
+.md-typeset a.md-tag {
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.md-typeset a.md-tag:hover { transform: translateY(-2px); }
+
+/* ------------------------------------------------------------------
+   POST DIAGRAMS
+
+   The WRAITH sketch diagrams are SVGs drawn on a white canvas. On the
+   dark theme they get an explicit light panel so they read as drawings
+   on paper rather than as blown-out rectangles.
+   ------------------------------------------------------------------ */
+.md-typeset img[src$=".svg"] {
+  border-radius: 10px;
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease;
+}
+
+[data-md-color-scheme="slate"] .md-typeset img[src$=".svg"] {
+  background: #fdfdfd;
+  padding: 0.9rem;
+  border: 1px solid rgba(0, 200, 83, 0.18);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+}
+
+.md-typeset img[src$=".svg"]:hover {
+  transform: scale(1.012);
+  box-shadow:
+    0 10px 34px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(0, 200, 83, 0.28);
+}
+
+/* ------------------------------------------------------------------
+   BACK-TO-TOP
+   ------------------------------------------------------------------ */
+.md-top {
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease;
+}
+
+.md-top:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 200, 83, 0.25);
+}
+
+/* ------------------------------------------------------------------
+   REDUCED MOTION
+
+   One switch that disables everything above. Anything that fades in is
+   forced back to its resting opacity, so no content can be left
+   invisible when motion is off.
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .nf-hero__logo-wrap,
+  .nf-hero__title,
+  .nf-hero__desc,
+  .nf-hero__btns,
+  body.nf-anim .nf-reveal,
+  body.nf-anim .nf-reveal:not(.nf-in) {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .nf-hero__slogan {
+    opacity: 0.72 !important;
+    transform: none !important;
+  }
+
+  .nf-hero__slogan::after {
+    content: none;
+  }
+}

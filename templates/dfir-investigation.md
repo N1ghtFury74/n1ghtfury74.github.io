@@ -15,7 +15,7 @@ tags:
   - Root Cause Analysis
   - Malware Analysis
 categories:
-  - DFIR & Threat Hunting
+  - DFIR
 ---
 
 # [Incident Name] — DFIR Investigation Writeup

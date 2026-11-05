@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 764 412" font-family="'Kalam', 'Comic Sans MS', cursive">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&amp;display=swap');</style>
+    <filter id="sk5" x="-2%" y="-4%" width="104%" height="108%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="31" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="m5" markerWidth="14" markerHeight="14" refX="8" refY="5" orient="auto">
+      <path d="M1,1 L11,5 L1,9" fill="none" stroke="#6741d9" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="m5r" markerWidth="13" markerHeight="13" refX="7" refY="5" orient="auto">
+      <path d="M1,1 L10,5 L1,9" fill="none" stroke="#c92a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <rect width="764" height="412" fill="#ffffff"/>
+  <text x="22" y="32" font-size="20" font-weight="700" fill="#1e1e1e">The edge — the attacker's direction, and the reason why</text>
+  <text x="22" y="53" font-size="12.5" fill="#868e96">source → target reads "source can do this TO target". AD does not store it this way.</text>
+
+  <g filter="url(#sk5)">
+    <!-- the two nodes -->
+    <circle cx="150" cy="128" r="44" fill="#eef2ff" stroke="#1f4bd8" stroke-width="2.5"/>
+    <circle cx="470" cy="128" r="44" fill="#ffffff" stroke="#c92a2a" stroke-width="2.5"/>
+    <!-- the edge -->
+    <line x1="198" y1="128" x2="420" y2="128" stroke="#6741d9" stroke-width="3" marker-end="url(#m5)"/>
+    <!-- label plate on the line -->
+    <rect x="256" y="106" width="106" height="24" rx="5" fill="#ffffff" stroke="#6741d9" stroke-width="1.8"/>
+
+    <!-- why plate -->
+    <rect x="212" y="186" width="252" height="52" rx="7" fill="#f1f3f5" stroke="#495057" stroke-width="1.8"/>
+
+    <!-- the ddl card -->
+    <rect x="540" y="76" width="202" height="162" rx="8" fill="#ffffff" stroke="#495057" stroke-width="2"/>
+
+    <!-- bottom: the four design points -->
+    <rect x="22" y="262" width="352" height="134" rx="8" fill="#ffffff" stroke="#14532d" stroke-width="2"/>
+    <rect x="390" y="262" width="352" height="134" rx="8" fill="#ffffff" stroke="#7a1a1a" stroke-width="2"/>
+  </g>
+
+  <!-- node labels -->
+  <text x="150" y="122" font-size="13" font-weight="700" fill="#1f4bd8" text-anchor="middle">HELPDESK</text>
+  <text x="150" y="138" font-size="10.5" fill="#495057" text-anchor="middle">(group)</text>
+  <text x="150" y="190" font-size="10.5" font-weight="700" fill="#495057" text-anchor="middle">source_node_id</text>
+  <text x="470" y="122" font-size="13" font-weight="700" fill="#7a1a1a" text-anchor="middle">DOMAIN</text>
+  <text x="470" y="138" font-size="13" font-weight="700" fill="#7a1a1a" text-anchor="middle">ADMINS</text>
+  <text x="470" y="190" font-size="10.5" font-weight="700" fill="#495057" text-anchor="middle">target_node_id</text>
+
+  <text x="309" y="122" font-size="12" font-weight="700" fill="#6741d9" text-anchor="middle">GenericWrite</text>
+  <text x="309" y="96" font-size="10.5" font-weight="700" fill="#8a6d00" text-anchor="middle">kind</text>
+
+  <text x="338" y="206" font-size="11" font-weight="700" fill="#495057" text-anchor="middle">derivation — "ACE:GenericWrite on group"</text>
+  <text x="338" y="222" font-size="10.5" fill="#1e1e1e" text-anchor="middle">not where it came from — WHY we claim it exists</text>
+
+  <!-- ddl card -->
+  <text x="641" y="96" font-size="11.5" font-weight="700" fill="#1e1e1e" text-anchor="middle">the row</text>
+  <text x="554" y="116" font-size="9.5" font-weight="700" fill="#6741d9">edge_id</text>
+  <text x="554" y="129" font-size="8.5" fill="#868e96">stable_id(kind,src,tgt,derivation)</text>
+  <text x="554" y="146" font-size="9.5" fill="#495057">is_inherited</text>
+  <text x="554" y="158" font-size="8.5" fill="#868e96">inherited ACE or explicit?</text>
+  <text x="554" y="175" font-size="9.5" fill="#495057">access_mask  BIGINT</text>
+  <text x="554" y="187" font-size="8.5" fill="#868e96">clean UNSIGNED 0‥4294967295</text>
+  <text x="554" y="204" font-size="9.5" fill="#495057">object_type_guid</text>
+  <text x="554" y="216" font-size="8.5" fill="#868e96">the rights GUID</text>
+  <text x="554" y="231" font-size="9" font-weight="700" fill="#14532d">+ scoping + provenance</text>
+
+  <!-- left bottom box: why it works -->
+  <text x="198" y="284" font-size="12.5" font-weight="700" fill="#14532d" text-anchor="middle">WHY THIS SHAPE WORKS</text>
+  <text x="38" y="304" font-size="11" fill="#1e1e1e">• PK is <tspan font-weight="700">content-derived</tspan> → re-deriving the same</text>
+  <text x="46" y="319" font-size="11" fill="#1e1e1e">fact yields the same row. Re-runs are idempotent</text>
+  <text x="46" y="334" font-size="11" fill="#1e1e1e">by construction; duplicates are impossible.</text>
+  <text x="38" y="354" font-size="11" fill="#1e1e1e">• <tspan font-weight="700">derivation is part of the key</tspan> → two edges</text>
+  <text x="46" y="369" font-size="11" fill="#1e1e1e">between the same pair for different reasons are</text>
+  <text x="46" y="384" font-size="11" fill="#1e1e1e">two distinct facts, not a collision.</text>
+
+  <!-- right bottom box: what it prevents -->
+  <text x="566" y="284" font-size="12.5" font-weight="700" fill="#7a1a1a" text-anchor="middle">WHAT IT PREVENTS</text>
+  <text x="406" y="304" font-size="11" fill="#1e1e1e">• A mask stored signed: GENERIC_READ is</text>
+  <text x="414" y="319" font-size="11" fill="#1e1e1e">0x80000000 — past INT32_MAX. Unsigned, so no</text>
+  <text x="414" y="334" font-size="11" fill="#1e1e1e">reader needs two's-complement recovery.</text>
+  <text x="406" y="354" font-size="11" fill="#1e1e1e">• A <tspan font-weight="700">reversed trust edge</tspan> — a documented class</text>
+  <text x="414" y="369" font-size="11" fill="#1e1e1e">of false attack path. Direction is the product;</text>
+  <text x="414" y="384" font-size="11" fill="#1e1e1e">get it backwards and the answer is confidently wrong.</text>
+</svg>
