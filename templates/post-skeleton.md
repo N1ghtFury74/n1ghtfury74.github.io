@@ -33,8 +33,10 @@ authors:
 tags:                                 # Free-form tags (any string)
   - Tag One
   - Tag Two
-categories:                           # Broader grouping
-  - Category Name
+categories:                           # One or more of: Threat Hunting,
+  - Category Name                     # Detection Engineering, Security
+                                      # Engineering, DFIR, Adversary
+                                      # Emulation, Tools, MISC
 description: >                        # Overrides auto-excerpt for SEO meta
   One or two sentence custom description.
 draft: true                           # Remove this line to publish

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 764 392" font-family="'Kalam', 'Comic Sans MS', cursive">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&amp;display=swap');</style>
+    <filter id="sk1" x="-3%" y="-6%" width="106%" height="112%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="m1" markerWidth="13" markerHeight="13" refX="7" refY="5" orient="auto">
+      <path d="M1,1 L10,5 L1,9" fill="none" stroke="#495057" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="m1r" markerWidth="13" markerHeight="13" refX="7" refY="5" orient="auto">
+      <path d="M1,1 L10,5 L1,9" fill="none" stroke="#c92a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <rect width="764" height="392" fill="#ffffff"/>
+  <text x="22" y="32" font-size="20" font-weight="700" fill="#1e1e1e">WRAITH — the whole idea</text>
+  <text x="22" y="54" font-size="12.5" fill="#868e96">rebuild the attacker's privilege map from a dead disk, without touching the estate</text>
+
+  <g filter="url(#sk1)">
+    <!-- INPUT -->
+    <rect x="22" y="76" width="188" height="186" rx="8" fill="#f1f3f5" stroke="#495057" stroke-width="2"/>
+    <rect x="38" y="104" width="156" height="36" rx="6" fill="#ffffff" stroke="#0b3d66" stroke-width="2"/>
+    <rect x="38" y="152" width="156" height="36" rx="6" fill="#ffffff" stroke="#0b3d66" stroke-width="2"/>
+    <rect x="38" y="200" width="156" height="36" rx="6" fill="#ffffff" stroke="#0b3d66" stroke-width="2"/>
+
+    <!-- ENGINE -->
+    <rect x="266" y="76" width="212" height="186" rx="8" fill="#eef2ff" stroke="#1f4bd8" stroke-width="2.5"/>
+
+    <!-- OUTPUT -->
+    <rect x="534" y="76" width="208" height="186" rx="8" fill="#ffffff" stroke="#2f9e44" stroke-width="2"/>
+    <rect x="548" y="104" width="180" height="30" rx="6" fill="#b2f2bb" stroke="#14532d" stroke-width="1.6"/>
+    <rect x="548" y="142" width="180" height="30" rx="6" fill="#b2f2bb" stroke="#14532d" stroke-width="1.6"/>
+    <rect x="548" y="180" width="180" height="30" rx="6" fill="#b2f2bb" stroke="#14532d" stroke-width="1.6"/>
+    <rect x="548" y="218" width="180" height="30" rx="6" fill="#b2f2bb" stroke="#14532d" stroke-width="1.6"/>
+
+    <!-- FLOW -->
+    <line x1="214" y1="169" x2="258" y2="169" stroke="#495057" stroke-width="2.5" marker-end="url(#m1)"/>
+    <line x1="482" y1="169" x2="526" y2="169" stroke="#495057" stroke-width="2.5" marker-end="url(#m1)"/>
+
+    <!-- THE GUARANTEE -->
+    <rect x="534" y="300" width="208" height="62" rx="8" fill="#ffffff" stroke="#c92a2a" stroke-width="2" stroke-dasharray="7 5"/>
+    <line x1="372" y1="300" x2="372" y2="331" stroke="#c92a2a" stroke-width="2.5" stroke-dasharray="6 5"/>
+    <line x1="378" y1="331" x2="526" y2="331" stroke="#c92a2a" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#m1r)"/>
+    <line x1="398" y1="312" x2="430" y2="350" stroke="#c92a2a" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="430" y1="312" x2="398" y2="350" stroke="#c92a2a" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- INPUT labels -->
+  <text x="116" y="96" font-size="12.5" font-weight="700" fill="#495057" text-anchor="middle">DEAD-DISK ARTIFACTS</text>
+  <text x="116" y="121" font-size="13.5" font-weight="700" fill="#0b3d66" text-anchor="middle">ntds.dit</text>
+  <text x="116" y="135" font-size="10.5" fill="#868e96" text-anchor="middle">the directory database</text>
+  <text x="116" y="169" font-size="13.5" font-weight="700" fill="#0b3d66" text-anchor="middle">SYSTEM hive</text>
+  <text x="116" y="183" font-size="10.5" fill="#868e96" text-anchor="middle">boot key → PEK</text>
+  <text x="116" y="217" font-size="13.5" font-weight="700" fill="#0b3d66" text-anchor="middle">SYSVOL</text>
+  <text x="116" y="231" font-size="10.5" fill="#868e96" text-anchor="middle">GPO policy files</text>
+
+  <!-- ENGINE labels -->
+  <text x="372" y="100" font-size="15" font-weight="700" fill="#1f4bd8" text-anchor="middle">WRAITH ENGINE</text>
+  <text x="372" y="116" font-size="10.5" fill="#495057" text-anchor="middle">in-process · no server · no network</text>
+  <text x="372" y="146" font-size="12.5" fill="#1e1e1e" text-anchor="middle">parse the artifacts</text>
+  <text x="372" y="170" font-size="12.5" fill="#1e1e1e" text-anchor="middle">normalize to entities</text>
+  <text x="372" y="194" font-size="12.5" fill="#1e1e1e" text-anchor="middle">derive the relationships</text>
+  <text x="372" y="218" font-size="12.5" fill="#1e1e1e" text-anchor="middle">project the attacker's lens</text>
+  <text x="372" y="246" font-size="11" font-weight="700" fill="#8a6d00" text-anchor="middle">every row stamped with provenance</text>
+
+  <!-- OUTPUT labels -->
+  <text x="638" y="96" font-size="12.5" font-weight="700" fill="#14532d" text-anchor="middle">WHAT YOU GET</text>
+  <text x="638" y="124" font-size="12.5" font-weight="700" fill="#14532d" text-anchor="middle">capability graph</text>
+  <text x="638" y="162" font-size="12.5" font-weight="700" fill="#14532d" text-anchor="middle">per-entity dossiers</text>
+  <text x="638" y="200" font-size="12.5" font-weight="700" fill="#14532d" text-anchor="middle">risk &amp; attack paths</text>
+  <text x="638" y="238" font-size="12.5" font-weight="700" fill="#14532d" text-anchor="middle">BloodHound export</text>
+
+  <!-- GUARANTEE labels -->
+  <text x="638" y="326" font-size="13.5" font-weight="700" fill="#7a1a1a" text-anchor="middle">THE LIVE DOMAIN</text>
+  <text x="638" y="346" font-size="11.5" fill="#7a1a1a" text-anchor="middle">never contacted. zero packets.</text>
+  <text x="300" y="356" font-size="11.5" font-weight="700" fill="#c92a2a">no egress, by design</text>
+</svg>

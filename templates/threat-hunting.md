@@ -16,7 +16,7 @@ tags:
   - Anomaly Detection
   - Baseline
 categories:
-  - DFIR & Threat Hunting
+  - Threat Hunting
 ---
 
 # [Hunt Name] — [Target Behavior or Threat Actor]

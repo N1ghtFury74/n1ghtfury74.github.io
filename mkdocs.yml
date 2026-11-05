@@ -1,6 +1,6 @@
 site_name: N1ghtFury — Threat Research Blog
 site_description: Cybersecurity threat research, malware analysis, and red team techniques by N1ghtFury
-site_url: https://n1ghtfury74.github.io/0xn1ghtfury.github.io
+site_url: https://n1ghtfury74.github.io/
 site_author: N1ghtFury
 
 theme:
@@ -53,10 +53,13 @@ plugins:
       categories: true
       categories_name: Categories
       categories_allowed:
-        - MISC
+        - Threat Hunting
         - Detection Engineering
-        - DFIR & Threat Hunting
+        - Security Engineering
+        - DFIR
         - Adversary Emulation
+        - Tools
+        - MISC
       authors: true
       authors_file: blog/.authors.yml
   - tags
@@ -82,6 +85,10 @@ extra:
 
 extra_css:
   - stylesheets/nightfury_mkdocs_extra.css
+  - stylesheets/nightfury_animations.css
+
+extra_javascript:
+  - javascripts/nightfury_anim.js
 
 markdown_extensions:
   - attr_list

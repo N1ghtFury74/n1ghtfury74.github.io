@@ -413,8 +413,9 @@ authors:
 tags:                              # Free-form tags for filtering
   - Tag One
   - Tag Two
-categories:                        # One of: Detection Engineering, DFIR & Threat Hunting,
-  - Category Name                  # Adversary Emulation, MISC
+categories:                        # Threat Hunting, Detection Engineering,
+  - Category Name                  # Security Engineering, DFIR, Adversary
+                                   # Emulation, Tools, MISC (one or more)
 description: >                     # Optional: custom excerpt for SEO (overrides auto-excerpt)
   One or two sentence custom description for search engines and social cards.
 draft: true                        # Remove this line to publish the post
