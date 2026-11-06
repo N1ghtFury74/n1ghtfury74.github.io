@@ -366,3 +366,122 @@ body.nf-anim .md-content__inner {
     display: none;
   }
 }
+
+/* ===================================================================
+   HERO EMBERS
+
+   Replaces the flying dragon. Deliberately abstract: nine small motes
+   drifting up through the hero and fading out. There is no figure to
+   read wrong, so it reads as atmosphere rather than as a thing moving
+   badly across the screen.
+
+   Each mote gets its own column, size, speed and delay below, because
+   nine identical particles on the same timing reads as a machine, not
+   as embers.
+   =================================================================== */
+
+.nf-embers {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.nf-embers span {
+  position: absolute;
+  bottom: -12px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--md-primary-fg-color);
+  box-shadow: 0 0 6px rgba(0, 200, 83, 0.8);
+  opacity: 0;
+  animation: nf-ember-rise linear infinite;
+}
+
+@keyframes nf-ember-rise {
+  0%   { opacity: 0;    transform: translate(0, 0) scale(0.6); }
+  12%  { opacity: 0.55; }
+  65%  { opacity: 0.3; }
+  100% { opacity: 0;    transform: translate(26px, -330px) scale(1); }
+}
+
+.nf-embers span:nth-child(1) { left:  6%; animation-duration: 15s; animation-delay:  0s;   }
+.nf-embers span:nth-child(2) { left: 17%; animation-duration: 19s; animation-delay: 2.6s; width: 2px; height: 2px; }
+.nf-embers span:nth-child(3) { left: 29%; animation-duration: 13s; animation-delay: 5.1s; }
+.nf-embers span:nth-child(4) { left: 41%; animation-duration: 21s; animation-delay: 1.4s; width: 4px; height: 4px; }
+.nf-embers span:nth-child(5) { left: 54%; animation-duration: 16s; animation-delay: 7.3s; width: 2px; height: 2px; }
+.nf-embers span:nth-child(6) { left: 66%; animation-duration: 18s; animation-delay: 3.8s; }
+.nf-embers span:nth-child(7) { left: 78%; animation-duration: 14s; animation-delay: 9.0s; width: 2px; height: 2px; }
+.nf-embers span:nth-child(8) { left: 87%; animation-duration: 22s; animation-delay: 6.2s; width: 4px; height: 4px; }
+.nf-embers span:nth-child(9) { left: 95%; animation-duration: 17s; animation-delay: 11.5s; }
+
+/* ===================================================================
+   KEYBOARD FOCUS
+
+   Material's default focus ring is easy to lose against the dark
+   scheme, and several of the components on this site are custom
+   anchors that never had one. :focus-visible keeps it to keyboard
+   users, so mouse clicks do not grow a ring.
+   =================================================================== */
+
+a:focus-visible,
+button:focus-visible,
+.nf-btn:focus-visible,
+.nf-cat-chip:focus-visible,
+.nf-post-card:focus-visible,
+.nf-cert-badge:focus-visible,
+.nf-contact-item:focus-visible,
+.md-nav__link:focus-visible,
+.md-tabs__link:focus-visible,
+.md-typeset a.md-tag:focus-visible {
+  outline: 2px solid var(--md-primary-fg-color);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ===================================================================
+   SMALL POLISH
+   =================================================================== */
+
+::selection {
+  background: rgba(0, 200, 83, 0.28);
+}
+
+/* Brand-tinted scrollbar instead of the default grey */
+html {
+  scrollbar-color: rgba(0, 200, 83, 0.45) transparent;
+  scrollbar-width: thin;
+}
+
+/* Anchor jumps glide instead of snapping. Guarded below for anyone who
+   has asked for reduced motion. */
+html {
+  scroll-behavior: smooth;
+}
+
+/* External links in body copy get a quiet outbound marker */
+.md-typeset a[href^="http"]:not(.nf-btn):not(.nf-cat-chip):not(.md-tag)::after {
+  content: "\2197";
+  display: inline-block;
+  margin-left: 0.15em;
+  font-size: 0.85em;
+  opacity: 0.55;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.md-typeset a[href^="http"]:not(.nf-btn):not(.nf-cat-chip):not(.md-tag):hover::after {
+  opacity: 1;
+  transform: translate(1px, -1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .nf-embers {
+    display: none;
+  }
+}
