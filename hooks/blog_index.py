@@ -31,6 +31,8 @@ import logging
 import pathlib
 import re
 
+from mkdocs.plugins import event_priority
+
 log = logging.getLogger("mkdocs.hooks.blog_index")
 
 RECENT_LIMIT = 6
@@ -342,3 +344,70 @@ def on_post_build(config, **kwargs):
         )
         page.write_text(html, encoding="utf-8")
         log.info("blog_index hook: injected into %s", rel)
+
+
+def _find_section(items, name):
+    """Depth-first search for a nav section by title."""
+    for item in items or []:
+        if getattr(item, "is_section", False) and getattr(item, "title", None) == name:
+            return item
+        found = _find_section(getattr(item, "children", None), name)
+        if found is not None:
+            return found
+    return None
+
+
+@event_priority(-100)
+def on_nav(nav, config, files, **kwargs):
+    """Add the generated empty-category pages to the Categories sidebar.
+
+    Priority -100 so this runs after the blog plugin's own on_nav, which
+    is what creates the Categories section in the first place. Without
+    it the sidebar lists only the categories that happen to have posts,
+    which is exactly the subset a reader does not need help finding.
+    """
+    plugin = _blog_plugin(config)
+    if plugin is None:
+        return nav
+
+    try:
+        section_name = plugin.config.categories_name
+        blog_dir = plugin.config.blog_dir
+    except Exception:
+        section_name, blog_dir = "Categories", "blog"
+
+    section = _find_section(nav.items, section_name)
+    if section is None:
+        log.warning("blog_index hook: no %r nav section found", section_name)
+        return nav
+
+    allowed = _allowed(config)
+    slugify = _slugify(config)
+    by_slug = {slugify(name): name for name in allowed}
+
+    present = {getattr(child, "url", None) for child in section.children}
+    prefix = f"{blog_dir}/category/"
+
+    for file in files:
+        if not file.src_uri.startswith(prefix) or not file.src_uri.endswith(".md"):
+            continue
+
+        page = getattr(file, "page", None)
+        if page is None or getattr(page, "url", None) in present:
+            continue
+
+        title = by_slug.get(file.src_uri[len(prefix):-3])
+        if title is None:
+            continue
+
+        # Titles are normally resolved while a page renders; set it here
+        # so the nav has something to show for pages it never rendered.
+        page.title = title
+        page.parent = section
+        section.children.append(page)
+
+    order = {name: i for i, name in enumerate(allowed)}
+    section.children.sort(
+        key=lambda c: order.get(getattr(c, "title", None) or _cat_name(c), 999)
+    )
+    return nav

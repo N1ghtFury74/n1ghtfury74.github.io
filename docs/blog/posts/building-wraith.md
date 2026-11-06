@@ -31,11 +31,20 @@ tags:
 
 <!-- more -->
 
-**~40-minute read · For engineers, architects, and tool builders.**
+!!! abstract "At a glance"
+    - **What it is:** an offline Active Directory relationship engine for dead-disk forensics
+    - **Inputs:** `ntds.dit` · `SYSTEM` hive · `SYSVOL` — nothing touches the network
+    - **Outputs:** capability graph · per-entity dossiers · attack paths to Tier-0 · provenance for every claim
+    - **Read time:** ~40 minutes · **Audience:** engineers, architects, tool builders
+    - **Prerequisites:** none specific — Active Directory familiarity helps for Parts 2 and 4
 
-*Prerequisites: none specific. Familiarity with Active Directory helps for Parts 2 and 4; everything else is general systems engineering.*
+!!! info "Companion post"
+    ***Know what the attacker knows*** — the same tool from the hunter's side: why context
+    evaluation is the hunt, and a walkthrough on real evidence.
 
-> **Companion post:** *Know what the attacker knows* — the same tool from the hunter's side: why context evaluation is the hunt, and a walkthrough on real evidence. This post is the machine room. That one is the reason it exists.
+    This post is the machine room. That one is the reason it exists.
+
+??? abstract "Table of contents — 10 parts"
 
 ---
 
@@ -54,8 +63,6 @@ Three things make it worth writing about as engineering rather than as a securit
 3. **It was built by a team of specialised agents under one human architect**, with a documented decision record for every module. I wrote the constraints, the architecture, and the rulings; I did not type the implementation. That is a build methodology worth examining, including where it failed.
 
 ---
-
-## Table of contents
 
 1. **Five constraints that decided everything** *(~7 min)* — the spine. Every later choice is a consequence of one of these.
 2. **The whole flow** *(~12 min)* — the seven-stage pipeline, then each stage broken open:
@@ -80,6 +87,13 @@ Three things make it worth writing about as engineering rather than as a securit
 
 ## Part 1 — Five constraints that decided everything
 
+!!! abstract "The five non-negotiables"
+    - **Offline guarantee** — no component may initiate network egress at runtime
+    - **Provenance everywhere** — every row carries source file, image hash, object id, run id
+    - **Secrets** — Argon2id + AES-256-GCM in a ciphertext-only store, never logged in plaintext
+    - **Determinism** — identical inputs produce byte-identical outputs, zip archive included
+    - **Untrusted input** — artifacts are hostile: isolated mode, path validation, least privilege
+
 Most "technology choices" posts are a list of preferences. This one is a list of consequences, because five non-negotiables were fixed before any code existed, and almost every subsequent decision was forced by them.
 
 ![constraints to consequences](wraith-diagrams/02-constraints-to-consequences.svg)
@@ -102,7 +116,7 @@ Every entity, edge, and finding carries `{source file, image SHA-256, source obj
 
 **What it forced:** the choice of a store with **native nested types**. Provenance rides *inside* every row as a `STRUCT` rather than living in a join table:
 
-```sql
+```sql title="Provenance rides inside every row"
 provenance STRUCT(
     source_file         VARCHAR,
     image_sha256        VARCHAR,
@@ -140,11 +154,16 @@ Artifacts are untrusted. Validate paths, run least-privilege, never execute anyt
 
 **What it forced:** the launch mode. WRAITH refuses to start unless it is launched with `python -I` (isolated mode), which drops the script directory and user site-packages from `sys.path`. The reason is concrete: an evidence directory containing a planted `json.py` would otherwise be imported by `import json`. Try to start it the ordinary way and it stops:
 
-```
+```text title="What happens if you launch it the ordinary way"
 ERROR: WRAITH must be launched with 'python -I -m wraith' (isolated mode) so
 artifact directories cannot shadow stdlib imports. Pass --allow-unisolated to
 override (development only).
 ```
+
+!!! danger "Why isolated mode is not optional"
+    An evidence directory containing a planted `json.py` would be imported by `import json`.
+    `python -I` drops the script directory and user site-packages from `sys.path`, which is
+    the only thing standing between untrusted artifacts and arbitrary code execution.
 
 It also forced a whole robustness surface on the upload path: zip-slip rejection, symlink and hardlink members skipped and counted, zip-bomb member caps, magic-byte sniffing, oversize rejection while streaming, and path containment checks — 24 dedicated tests on that layer alone.
 
@@ -164,6 +183,11 @@ Rights-GUIDs, UAC flags, well-known SIDs, `[MS-*]` constants: reuse freely. Impl
 
 ## Part 2 — The whole flow
 
+!!! abstract "The pipeline at a glance"
+    - **Seven stages:** acquisition → ESE read → security descriptors → secrets → hives → GPO/SYSVOL → normalization → closure → edges
+    - **Riskiest dependency:** the `ntds.dit` ESE reader, deliberately kept behind a swappable adapter
+    - **The rule:** nothing downstream is built on an uncounted gap
+
 The spine is seven stages — **acquire → parse → normalize → store → derive edges → analyze → consume** — and it has one rule:
 
 > Nothing flows backward, and nothing skips the canonical graph.
@@ -174,36 +198,38 @@ Before breaking pieces open, here is the entire pipeline on one screen. Everythi
 
 ![the pipeline](wraith-diagrams/03-the-pipeline.svg)
 
-```
-  evidence dir ──▶ acquisition ──▶ ESE reader ──▶ structural parse ──┐
-                   (validate,      (dissect,      (schema maps,      │
-                    SHA-256,        swappable       SD join, links)   │
-                    ledger)         adapter)                          │
-                                                                      ▼
-   SYSTEM hive ──▶ bootkey ──▶ PEK ──▶ secret decryption ──▶ [encrypted store]
-                                                                      │
-                                                                      ▼
-                                              normalizer ──▶ canonical entities
-                                                                      │
-                                              ┌───────────────────────┤
-                                              ▼                       ▼
-                                   membership closure          edge engine
-                                   (transitive MemberOf)    (ACE → capability)
-                                              │                       │
-   SYSVOL ──▶ GPO parse ──────────────────────┼───────────────────────▶│
-   SAM hives ──▶ C-blob parse ────────────────┼───────────────────────▶│
-   AD CS objects ──▶ topology + ESC ──────────┴───────────────────────▶│
-                                                                      ▼
-                                                            canonical graph
-                                                                      │
-                                           ┌──────────────────────────┼──────────────┐
-                                           ▼                          ▼              ▼
-                                   projection + API            networkx paths   BloodHound
-                                   (read-only, 127.0.0.1)      (Tier-0 reach)     export
-                                           │
-                                           ▼
-                                   React SPA · sigma WebGL graph
-```
+??? example "The same pipeline as plain text"
+
+    ```
+      evidence dir ──▶ acquisition ──▶ ESE reader ──▶ structural parse ──┐
+                       (validate,      (dissect,      (schema maps,      │
+                        SHA-256,        swappable       SD join, links)   │
+                        ledger)         adapter)                          │
+                                                                          ▼
+       SYSTEM hive ──▶ bootkey ──▶ PEK ──▶ secret decryption ──▶ [encrypted store]
+                                                                          │
+                                                                          ▼
+                                                  normalizer ──▶ canonical entities
+                                                                          │
+                                                  ┌───────────────────────┤
+                                                  ▼                       ▼
+                                       membership closure          edge engine
+                                       (transitive MemberOf)    (ACE → capability)
+                                                  │                       │
+       SYSVOL ──▶ GPO parse ──────────────────────┼───────────────────────▶│
+       SAM hives ──▶ C-blob parse ────────────────┼───────────────────────▶│
+       AD CS objects ──▶ topology + ESC ──────────┴───────────────────────▶│
+                                                                          ▼
+                                                                canonical graph
+                                                                          │
+                                               ┌──────────────────────────┼──────────────┐
+                                               ▼                          ▼              ▼
+                                       projection + API            networkx paths   BloodHound
+                                       (read-only, 127.0.0.1)      (Tier-0 reach)     export
+                                               │
+                                               ▼
+                                       React SPA · sigma WebGL graph
+    ```
 
 Now each stage, with the problem it exists to solve.
 
@@ -298,7 +324,7 @@ The normalizer produces the canonical entity tables and, critically, decides wha
 
 The direct `MemberOf` edges are materialised into a reflexive-free transitive closure keyed by `node_id`, not by SID:
 
-```sql
+```sql title="effective_membership — the closure table"
 CREATE TABLE effective_membership (
     member_node_id VARCHAR NOT NULL,
     group_node_id  VARCHAR NOT NULL,
@@ -347,6 +373,12 @@ A **read-only** FastAPI application over the canonical store, with Uvicorn bound
 
 ## Part 3 — The data layer
 
+!!! info "The store"
+    - **Engine:** DuckDB — in-process, so there is no listening socket to contradict the offline claim
+    - **Schema:** ten tables in four groups
+    - **Provenance:** a native `STRUCT` inside every row rather than a join table
+    - **Keys:** content-derived `stable_id`, so re-deriving a fact is idempotent by construction
+
 ### Why DuckDB
 
 Framed as constraint → consequence rather than as a preference:
@@ -378,7 +410,7 @@ Framed as constraint → consequence rather than as a preference:
 
 Three things appear on every table, each a decision rather than boilerplate:
 
-```sql
+```sql title="node — the entity table"
 node_id   VARCHAR PRIMARY KEY           -- dedup + reproducibility
 forest_id VARCHAR NOT NULL,             -- the scoping block:
 domain_id VARCHAR, domain_fqdn VARCHAR  -- multi-forest from day one
@@ -391,7 +423,7 @@ The scoping block is on every table from the first module, on a single-forest to
 
 ![the edge model](wraith-diagrams/05-the-edge-model.svg)
 
-```sql
+```sql title="edge — the relationship table"
 CREATE TABLE edge (
     edge_id          VARCHAR PRIMARY KEY,  -- stable_id(kind, source, target, derivation)
     kind             VARCHAR NOT NULL,
@@ -435,6 +467,11 @@ Be honest about that shape, because a careful reader will spot it immediately: *
 
 ## Part 4 — Graph analysis, and a bug worth describing
 
+!!! abstract "The graph layer"
+    - **Engine:** networkx over the edge table — pure Python, no compiled dependency to vendor
+    - **Question it answers:** who can reach Tier-0, and by which chain
+    - **Worth your time:** the projection bug below, which produced confident wrong answers
+
 ### Pathfinding: networkx over the edge table
 
 Attack-path queries run in **networkx**, built in-process from the edge table. SQL stores and scans; a graph library traverses. Nobody pretends SQL is a traversal engine.
@@ -444,6 +481,12 @@ Attack-path queries run in **networkx**, built in-process from the edge table. S
 The path engine **bounds work, not just output** — a crafted request with `max_hops=9999, max_paths=99999` is capped rather than hanging or exhausting memory. That was a review finding on a read-only API: read-only is not the same as safe.
 
 ### The projection bug
+
+!!! bug "Confident wrong answers, not a crash"
+    A projection that collapsed multi-edges produced attack paths that looked valid and
+    were not. Nothing threw; the suite stayed green. This is the failure mode the whole
+    design is built against, and it still got through — which is why Part 6 ends with
+    three reviewers rather than two.
 
 The graph has two distinct node spaces: the **canonical** nodes (principals, containers, GPOs, AD CS objects) and the **raw object space**, which includes every normalised object whether or not it is a modelled entity.
 
@@ -464,6 +507,11 @@ Verified live after the fix: default graph **0** raw nodes, `tier0_only` **0**, 
 ---
 
 ## Part 5 — Every choice, with its rejection
+
+!!! note "How to read this part"
+    Each row is a decision *plus* the alternative that was rejected *plus* the specific wrong
+    answer that rejection prevents. Licences appear wherever they actually changed the outcome
+    rather than as an afterthought.
 
 The complete record, because "we chose X" is worth nothing without "instead of Y, for reason Z".
 
@@ -526,6 +574,12 @@ Two from the frontend, included because they are measured rather than asserted:
 
 ## Part 6 — How it was built: a team of agents, one architect
 
+!!! info "The build method"
+    - **Team:** nine specialised agents under a single human architect
+    - **Tool grants:** scoped per agent, which in practice functions as an org chart
+    - **Review:** three reviewers asking three deliberately different questions
+    - **Record:** 25 research records and 19 gates — and one place the method failed
+
 This is the part of the project I find most interesting as engineering, and the part where I have to be most careful not to overclaim.
 
 I did not write the implementation. I wrote the constraints, locked the architecture and the schema, ruled on every question escalated to me, and held veto over everything. The code was written by a team of nine specialised agents, each with an explicit mandate, explicit boundaries, and — the detail that makes it work — **deliberately restricted tools**.
@@ -558,7 +612,7 @@ With one rule enforced in three separate documents: **nothing downstream is buil
 
 As built, the pipeline is seven stages, not five — code review and domain-expert review sit between implementation and the test gate:
 
-```
+```text title="The per-module rhythm"
 research → lock → build ONE module → code review (quality · safety · licence)
          → domain review (is the AD logic true?) → test gate
          → PASS: next module    FAIL: one consolidated fix → re-test
@@ -625,6 +679,12 @@ Three honest failures, because a methodology post that only reports success is m
 
 ## Part 7 — Testing
 
+!!! success "Three layers and a gate"
+    - **Layer 1** — unit / golden
+    - **Layer 2** — reference / independent re-derivation
+    - **Layer 3** — property / robustness
+    - **Scale:** ~90 counted gaps · 835 tests · every layer must pass before the next module starts
+
 > These are not crashes. They are **plausible wrong answers** — the worst outcome for forensics — and they are exactly what a code reviewer or a type checker would never catch.
 
 That sentence is the testing strategy's reason for existing. **47 test files, 835 tests, 19,426 lines of test code.**
@@ -670,6 +730,11 @@ A module is not done because its tests pass. It is done on a written PASS verdic
 ---
 
 ## Part 8 — The GOAD run: stress test and parity test
+
+!!! example "Two separate claims"
+    - **Stress test** — does it survive a large multi-domain forest?
+    - **Parity test** — does it agree with the reference implementation?
+    - These are **not** the same claim, and the divergence between them was predicted in advance
 
 Everything in Part 7 validates the tool against **one** domain controller: a single-domain CTF image with no AD CS, no trusts, no delegation and no gMSA. 390 nodes. That fixture shaped what got validated, and it is the single biggest limitation in the project.
 
@@ -727,7 +792,11 @@ This is published deliberately, because a responder needs to know which findings
 
 **Synthetic-only — implemented, tested only against crafted fixtures:** the entire AD CS surface (topology and every ESC class), RBCD and constrained delegation, gMSA and LAPS password reads, SID history, forest trusts, GPO local-group derived admin rights, and member-host AdminTo emission.
 
-The AD CS caveat is worth stating in full because it is the largest: **AD CS findings are unvalidated until a CA artifact is ingested and a parity gate is run against it.** The test DC has no usable AD CS. The code is built, reviewed, domain-validated and synthetically tested — and it has never seen a real certificate authority. In the API, deferred queries carry `supported=false` and `data_confidence="synthetic-only"` in the response itself, so the honesty reaches the operator rather than stopping at the documentation.
+!!! warning "The largest caveat, stated in full"
+    **AD CS findings are unvalidated until a CA artifact is ingested and a parity gate is
+    run against it.**
+
+The test DC has no usable AD CS. The code is built, reviewed, domain-validated and synthetically tested — and it has never seen a real certificate authority. In the API, deferred queries carry `supported=false` and `data_confidence="synthetic-only"` in the response itself, so the honesty reaches the operator rather than stopping at the documentation.
 
 ### Four more limits
 
@@ -740,13 +809,15 @@ The AD CS caveat is worth stating in full because it is the largest: **AD CS fin
 
 ## What I would do differently
 
-**Commit history.** The entire project — 25 research records, 19 gates, the full implementation — lives in essentially one commit. The decision trail is excellent and the *version* trail is absent. Those are not substitutes for each other, and I had the wrong one.
+!!! tip "With hindsight"
 
-**CI from module one.** Not for the automation, but because the absence of CI is why the suite runs on the wrong Python version and why "it passes locally" is doing more work than it should.
+    **Commit history.** The entire project — 25 research records, 19 gates, the full implementation — lives in essentially one commit. The decision trail is excellent and the *version* trail is absent. Those are not substitutes for each other, and I had the wrong one.
 
-**The counted-gap rule enforced mechanically.** It is the most-violated rule in the project. A lint rule or a type-level construct that makes an uncounted degraded branch *unrepresentable* would have been worth more than restating the rule in every brief.
+    **CI from module one.** Not for the automation, but because the absence of CI is why the suite runs on the wrong Python version and why "it passes locally" is doing more work than it should.
 
-**A second real fixture, earlier.** One DC shaped what got validated. The GOAD run in Part 8 should have happened at module five, not after the UI shipped — a domain with AD CS, delegation and trusts would have moved a third of the edge vocabulary out of synthetic-only long before now, and would have caught the AD CS specification error without needing a domain expert to reason it out from first principles.
+    **The counted-gap rule enforced mechanically.** It is the most-violated rule in the project. A lint rule or a type-level construct that makes an uncounted degraded branch *unrepresentable* would have been worth more than restating the rule in every brief.
+
+    **A second real fixture, earlier.** One DC shaped what got validated. The GOAD run in Part 8 should have happened at module five, not after the UI shipped — a domain with AD CS, delegation and trusts would have moved a third of the edge vocabulary out of synthetic-only long before now, and would have caught the AD CS specification error without needing a domain expert to reason it out from first principles.
 
 ---
 
@@ -754,45 +825,57 @@ The AD CS caveat is worth stating in full because it is the largest: **AD CS fin
 
 The through-line, if there is one: **in forensics the dangerous bug is not the crash, it is the confident wrong answer.** Nearly every engineering decision in this project follows from taking that seriously — in-process storage so there is no server to contradict the offline claim, content-derived primary keys so re-derivation is idempotent, provenance in every row so every claim is traceable, counted gaps so a degraded branch announces itself, and three independent reviewers because tests derived from a wrong specification pass.
 
-That last one is the finding I did not expect when I started. A green test suite tells you the code matches the specification. It tells you nothing at all about whether the specification is true.
+!!! quote "The finding I did not expect"
+    A green test suite tells you the code matches the specification.
+
+    It tells you nothing at all about whether the specification is true.
 
 ---
 
 ## References and further reading
 
-Licences are noted where they affected a decision, because licence hygiene is a running theme of this post rather than an afterthought.
+Licences are noted where they affected a decision, because licence hygiene is a
+running theme of this post rather than an afterthought.
 
-**The reference implementation — studied for its concepts, never for its code**
-- **BloodHound CE / SharpHound** (SpecterOps) — the reference for the edge model, the attacker-lens graph, and the rights-GUID→edge logic: [github.com/SpecterOps/BloodHound](https://github.com/SpecterOps/BloodHound) · **GPL-3.0**, which is precisely why only the public facts were reused and the mapper written from scratch.
-- **Certified Pre-Owned** — Will Schroeder & Lee Christensen (SpecterOps), the foundational AD CS escalation research behind the ESC classes: [specterops.io](https://specterops.io/)
-- **Certipy** — Oliver Lyak, the de-facto AD CS tooling reference: [github.com/ly4k/Certipy](https://github.com/ly4k/Certipy)
-- **ANSSI ADCP** — Active Directory control-path analysis, a separate lineage of the same idea: [github.com/ANSSI-FR/AD-control-paths](https://github.com/ANSSI-FR/AD-control-paths)
+=== "Reference implementation"
+    Studied for its concepts, never for its code.
 
-**Primary specifications — the public facts the edge mapper is built on**
-- `[MS-ADTS]` Active Directory Technical Specification · `[MS-DTYP]` Windows Data Types (the security-descriptor and ACE binary format) · `[MS-DRSR]` Directory Replication Service (the DCSync rights) · `[MS-GPOL]` Group Policy Protocol · `[MS-ADSC]` AD Schema Classes · `[MS-CRTD]` Certificate Templates — all at [learn.microsoft.com/openspecs](https://learn.microsoft.com/en-us/openspecs/windows_protocols/)
-- **MITRE ATT&CK** — [attack.mitre.org](https://attack.mitre.org/), in particular [T1003.006 DCSync](https://attack.mitre.org/techniques/T1003/006/), [T1484.001 Group Policy Modification](https://attack.mitre.org/techniques/T1484/001/), and [T1649 Steal or Forge Authentication Certificates](https://attack.mitre.org/techniques/T1649/)
+    - **BloodHound CE / SharpHound** (SpecterOps) — the reference for the edge model, the attacker-lens graph, and the rights-GUID→edge logic: [github.com/SpecterOps/BloodHound](https://github.com/SpecterOps/BloodHound) · **GPL-3.0**, which is precisely why only the public facts were reused and the mapper written from scratch.
+    - **Certified Pre-Owned** — Will Schroeder & Lee Christensen (SpecterOps), the foundational AD CS escalation research behind the ESC classes: [specterops.io](https://specterops.io/)
+    - **Certipy** — Oliver Lyak, the de-facto AD CS tooling reference: [github.com/ly4k/Certipy](https://github.com/ly4k/Certipy)
+    - **ANSSI ADCP** — Active Directory control-path analysis, a separate lineage of the same idea: [github.com/ANSSI-FR/AD-control-paths](https://github.com/ANSSI-FR/AD-control-paths)
 
-**Libraries the correctness-critical work is delegated to**
-- **dissect** (Fox-IT) — `dissect.database` for the ESE reader: [github.com/fox-it/dissect](https://github.com/fox-it/dissect) · Apache-2.0
-- **Impacket** (Fortra) — `ldaptypes` for security-descriptor parsing, the `secretsdump` chain for PEK decryption, `winregistry` for hives: [github.com/fortra/impacket](https://github.com/fortra/impacket) · "Apache modified", *not* BSD-2 as commonly assumed
-- **DuckDB** — [duckdb.org](https://duckdb.org/) · MIT
-- **networkx** — [networkx.org](https://networkx.org/) · BSD-3-Clause
-- **cryptography** / **argon2-cffi** — AES-256-GCM and Argon2id: [cryptography.io](https://cryptography.io/) · [github.com/hynek/argon2-cffi](https://github.com/hynek/argon2-cffi)
-- **sigma.js** + **graphology** — the WebGL renderer and its graph model: [sigmajs.org](https://www.sigmajs.org/) · [graphology.github.io](https://graphology.github.io/)
-- **FastAPI** — [fastapi.tiangolo.com](https://fastapi.tiangolo.com/)
+=== "Specifications"
+    The public facts the edge mapper is built on.
 
-**Standards referenced by specific decisions**
-- **RFC 9106** — Argon2 memory-hard key derivation: [datatracker.ietf.org/doc/html/rfc9106](https://datatracker.ietf.org/doc/html/rfc9106)
-- **FIPS 180-4** — the SHA-256 vectors the determinism tests assert against: [csrc.nist.gov](https://csrc.nist.gov/publications/detail/fips/180/4/final)
-- **RFC 8493 (BagIt)** — the checksum-manifest discipline the run manifest borrows: [datatracker.ietf.org/doc/html/rfc8493](https://datatracker.ietf.org/doc/html/rfc8493)
-- **CASE / UCO** — the forensic exchange ontology the manifest field names are kept mappable onto: [caseontology.org](https://caseontology.org/)
-- **WCAG 2.1** — the AA contrast ratios the dark theme was measured against: [w3.org/WAI/WCAG21](https://www.w3.org/WAI/WCAG21/quickref/)
+    - `[MS-ADTS]` Active Directory Technical Specification · `[MS-DTYP]` Windows Data Types (the security-descriptor and ACE binary format) · `[MS-DRSR]` Directory Replication Service (the DCSync rights) · `[MS-GPOL]` Group Policy Protocol · `[MS-ADSC]` AD Schema Classes · `[MS-CRTD]` Certificate Templates — all at [learn.microsoft.com/openspecs](https://learn.microsoft.com/en-us/openspecs/windows_protocols/)
+    - **MITRE ATT&CK** — [attack.mitre.org](https://attack.mitre.org/), in particular [T1003.006 DCSync](https://attack.mitre.org/techniques/T1003/006/), [T1484.001 Group Policy Modification](https://attack.mitre.org/techniques/T1484/001/), and [T1649 Steal or Forge Authentication Certificates](https://attack.mitre.org/techniques/T1649/)
 
-**Test data and lab environments**
-- **Stolen Szechuan Sauce** (DFIR Madness) — the public training DC image used as the real-data fixture throughout: [dfirmadness.com](https://dfirmadness.com/)
-- **GOAD — Game of Active Directory** (Orange Cyberdefense) — the multi-domain lab for the Part 8 stress and parity run: [github.com/Orange-Cyberdefense/GOAD](https://github.com/Orange-Cyberdefense/GOAD)
-- **BadBlood** — AD object population for scale testing: [github.com/davidprowe/BadBlood](https://github.com/davidprowe/BadBlood)
+=== "Libraries"
+    Where the correctness-critical work is delegated.
 
----
+    - **dissect** (Fox-IT) — `dissect.database` for the ESE reader: [github.com/fox-it/dissect](https://github.com/fox-it/dissect) · Apache-2.0
+    - **Impacket** (Fortra) — `ldaptypes` for security-descriptor parsing, the `secretsdump` chain for PEK decryption, `winregistry` for hives: [github.com/fortra/impacket](https://github.com/fortra/impacket) · "Apache modified", *not* BSD-2 as commonly assumed
+    - **DuckDB** — [duckdb.org](https://duckdb.org/) · MIT
+    - **networkx** — [networkx.org](https://networkx.org/) · BSD-3-Clause
+    - **cryptography** / **argon2-cffi** — AES-256-GCM and Argon2id: [cryptography.io](https://cryptography.io/) · [github.com/hynek/argon2-cffi](https://github.com/hynek/argon2-cffi)
+    - **sigma.js** + **graphology** — the WebGL renderer and its graph model: [sigmajs.org](https://www.sigmajs.org/) · [graphology.github.io](https://graphology.github.io/)
+    - **FastAPI** — [fastapi.tiangolo.com](https://fastapi.tiangolo.com/)
+
+=== "Standards"
+    Referenced by specific decisions in the build.
+
+    - **RFC 9106** — Argon2 memory-hard key derivation: [datatracker.ietf.org/doc/html/rfc9106](https://datatracker.ietf.org/doc/html/rfc9106)
+    - **FIPS 180-4** — the SHA-256 vectors the determinism tests assert against: [csrc.nist.gov](https://csrc.nist.gov/publications/detail/fips/180/4/final)
+    - **RFC 8493 (BagIt)** — the checksum-manifest discipline the run manifest borrows: [datatracker.ietf.org/doc/html/rfc8493](https://datatracker.ietf.org/doc/html/rfc8493)
+    - **CASE / UCO** — the forensic exchange ontology the manifest field names are kept mappable onto: [caseontology.org](https://caseontology.org/)
+    - **WCAG 2.1** — the AA contrast ratios the dark theme was measured against: [w3.org/WAI/WCAG21](https://www.w3.org/WAI/WCAG21/quickref/)
+
+=== "Test data"
+    The labs and images every validated claim rests on.
+
+    - **Stolen Szechuan Sauce** (DFIR Madness) — the public training DC image used as the real-data fixture throughout: [dfirmadness.com](https://dfirmadness.com/)
+    - **GOAD — Game of Active Directory** (Orange Cyberdefense) — the multi-domain lab for the Part 8 stress and parity run: [github.com/Orange-Cyberdefense/GOAD](https://github.com/Orange-Cyberdefense/GOAD)
+    - **BadBlood** — AD object population for scale testing: [github.com/davidprowe/BadBlood](https://github.com/davidprowe/BadBlood)
 
 *WRAITH operates on lawfully-held artifacts for authorized penetration testing and incident response. Test data throughout is the public Stolen Szechuan Sauce CTF image (DFIR Madness). No client evidence appears in the repository or in this post.*
