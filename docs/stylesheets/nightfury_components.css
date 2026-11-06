@@ -1,0 +1,368 @@
+/* ===================================================================
+   N1ghtFury — Blog components + page motion
+
+   Two things live here:
+     1. The post cards and category chips the build hook generates for
+        the homepage (hooks/blog_index.py).
+     2. Motion that applies across every page type — blog index, post,
+        category, archive, about — so the site reads as one piece.
+
+   As with nightfury_animations.css, all motion is decorative and the
+   prefers-reduced-motion block at the bottom switches it off.
+   =================================================================== */
+
+/* ------------------------------------------------------------------
+   LATEST POSTS — card grid
+   ------------------------------------------------------------------ */
+.nf-post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 1.1rem;
+  margin: 2rem 0 2.5rem;
+  text-align: left;
+}
+
+.nf-post-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1.4rem 1.5rem 1.3rem;
+  border: 1px solid rgba(0, 200, 83, 0.16);
+  border-radius: 12px;
+  background: var(--md-code-bg-color);
+  color: inherit !important;
+  text-decoration: none !important;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.32s ease,
+    box-shadow 0.32s ease;
+}
+
+/* Green wash that rises from the bottom on hover */
+.nf-post-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 40%,
+    rgba(0, 200, 83, 0.07) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.32s ease;
+  pointer-events: none;
+}
+
+.nf-post-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(0, 200, 83, 0.45);
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.38),
+    0 0 0 1px rgba(0, 200, 83, 0.12);
+}
+
+.nf-post-card:hover::before { opacity: 1; }
+
+.nf-post-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--md-code-font-family);
+  font-size: 0.68rem;
+  letter-spacing: 0.3px;
+  color: var(--md-default-fg-color--light);
+}
+
+.nf-post-card__read::before {
+  content: "·";
+  margin-right: 0.5rem;
+  opacity: 0.6;
+}
+
+.nf-post-card__title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--md-primary-fg-color);
+  transition: color 0.25s ease;
+}
+
+.nf-post-card__excerpt {
+  font-size: 0.8rem;
+  line-height: 1.62;
+  color: var(--md-default-fg-color--light);
+  /* Clamp to keep every card the same height regardless of excerpt */
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.nf-post-card__cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.15rem;
+}
+
+.nf-post-card__cat {
+  font-family: var(--md-code-font-family);
+  font-size: 0.63rem;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 200, 83, 0.22);
+  background: rgba(0, 200, 83, 0.07);
+  color: var(--md-primary-fg-color);
+  white-space: nowrap;
+}
+
+.nf-post-card__more {
+  margin-top: auto;
+  padding-top: 0.6rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--md-primary-fg-color);
+}
+
+.nf-post-card__more::after {
+  content: " \2192";
+  display: inline-block;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nf-post-card:hover .nf-post-card__more::after {
+  transform: translateX(5px);
+}
+
+/* ------------------------------------------------------------------
+   BROWSE BY CATEGORY — chips
+   ------------------------------------------------------------------ */
+.nf-cat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 1.8rem 0 0.5rem;
+}
+
+.nf-cat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 200, 83, 0.25);
+  background: rgba(0, 200, 83, 0.05);
+  color: var(--md-primary-fg-color) !important;
+  text-decoration: none !important;
+  font-family: var(--md-code-font-family);
+  font-size: 0.76rem;
+  transition:
+    transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.26s ease,
+    border-color 0.26s ease,
+    box-shadow 0.26s ease;
+}
+
+.nf-cat-chip:hover {
+  transform: translateY(-3px);
+  background: rgba(0, 200, 83, 0.14);
+  border-color: rgba(0, 200, 83, 0.55);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+.nf-cat-chip__count {
+  min-width: 1.35rem;
+  height: 1.35rem;
+  padding: 0 0.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(0, 200, 83, 0.18);
+  font-size: 0.66rem;
+  font-weight: 700;
+  transition: background 0.26s ease;
+}
+
+.nf-cat-chip:hover .nf-cat-chip__count {
+  background: rgba(0, 200, 83, 0.32);
+}
+
+.nf-empty {
+  text-align: center;
+  color: var(--md-default-fg-color--light);
+}
+
+/* ------------------------------------------------------------------
+   READING PROGRESS BAR
+   Width is driven by --nf-progress, set by nightfury_anim.js on scroll.
+   Shown only on blog posts, where a progress indicator means something.
+   ------------------------------------------------------------------ */
+.nf-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: var(--nf-progress, 0%);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 200, 83, 0.55),
+    var(--md-primary-fg-color)
+  );
+  box-shadow: 0 0 10px rgba(0, 200, 83, 0.55);
+  z-index: 100;
+  transition: width 0.1s linear, opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------
+   PAGE ENTRANCE
+   Material swaps the <article> on instant navigation, so every page —
+   post, category, archive, about — fades its content up on arrival.
+   ------------------------------------------------------------------ */
+@keyframes nf-page-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+body.nf-anim .md-content__inner {
+  animation: nf-page-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ------------------------------------------------------------------
+   BLOG INDEX — post entries
+   ------------------------------------------------------------------ */
+.md-post--excerpt {
+  padding: 1.2rem 1.3rem;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.md-post--excerpt:hover {
+  transform: translateY(-3px);
+  border-color: rgba(0, 200, 83, 0.28);
+  background: rgba(0, 200, 83, 0.03);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+}
+
+.md-post--excerpt .md-post__title a,
+.md-post--excerpt h2 a {
+  transition: color 0.22s ease;
+}
+
+/* ------------------------------------------------------------------
+   POST BODY — headings, images, tables, code
+   ------------------------------------------------------------------ */
+
+/* Heading anchor fades in rather than appearing abruptly */
+.md-typeset .headerlink {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform: translateX(-4px);
+}
+
+.md-typeset h1:hover .headerlink,
+.md-typeset h2:hover .headerlink,
+.md-typeset h3:hover .headerlink,
+.md-typeset h4:hover .headerlink {
+  transform: translateX(0);
+}
+
+/* Table rows pick up a tint on hover — helps when scanning the long
+   decision tables in the WRAITH post */
+.md-typeset table:not([class]) tbody tr {
+  transition: background 0.2s ease;
+}
+
+.md-typeset table:not([class]) tbody tr:hover {
+  background: rgba(0, 200, 83, 0.06);
+}
+
+/* Code blocks lift very slightly, enough to feel interactive */
+.md-typeset pre > code,
+.md-typeset .highlight {
+  transition: box-shadow 0.3s ease;
+}
+
+.md-typeset .highlight:hover {
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.3);
+}
+
+/* Admonitions slide their left edge in */
+.md-typeset .admonition,
+.md-typeset details {
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s ease;
+}
+
+.md-typeset .admonition:hover,
+.md-typeset details:hover {
+  transform: translateX(3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.26);
+}
+
+/* ------------------------------------------------------------------
+   NAV + TABS
+   ------------------------------------------------------------------ */
+.md-tabs__link {
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.md-tabs__link:hover {
+  transform: translateY(-2px);
+  opacity: 1;
+}
+
+.md-nav__link {
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.md-nav__link:hover {
+  transform: translateX(3px);
+}
+
+/* ------------------------------------------------------------------
+   RESPONSIVE
+   ------------------------------------------------------------------ */
+@media (max-width: 44.9375em) {
+  .nf-post-grid {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+
+  .nf-post-card {
+    padding: 1.2rem 1.2rem 1.1rem;
+  }
+}
+
+/* ------------------------------------------------------------------
+   REDUCED MOTION
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .nf-post-card,
+  .nf-cat-chip,
+  .md-post--excerpt,
+  .md-typeset .admonition,
+  .md-typeset details,
+  .md-tabs__link,
+  .md-nav__link,
+  body.nf-anim .md-content__inner {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .nf-progress {
+    display: none;
+  }
+}

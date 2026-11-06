@@ -19,50 +19,26 @@ hide:
 
 <div class="nf-section" markdown>
 
-## Recent Posts { #recent-posts .nf-section__title }
+## Latest Posts { #recent-posts .nf-section__title }
 
-<div class="grid cards" markdown>
-
--   :material-target: **Threat Hunting**
-
-    ---
-
-    *Hunt operations &nbsp;·&nbsp; Hypothesis-driven &nbsp;·&nbsp; Anomaly detection*
-
-    Structured hunting methodologies across endpoint, network, and identity telemetry —
-    from hypothesis formation to validated findings and playbook updates.
-
-    [:octicons-arrow-right-24: View posts](blog/index.md)
-
--   :material-shield-check: **Detection Engineering**
-
-    ---
-
-    *Analytics &nbsp;·&nbsp; SIEM/EDR &nbsp;·&nbsp; ATT&CK coverage*
-
-    Building high-signal detections, tuning false positives, and mapping coverage
-    to MITRE ATT&CK. From use-case design to Sigma rules and validation.
-
-    [:octicons-arrow-right-24: View posts](blog/index.md)
-
--   :material-magnify-scan: **DFIR & Adversary Emulation**
-
-    ---
-
-    *Forensics &nbsp;·&nbsp; Incident response &nbsp;·&nbsp; Attack simulation*
-
-    Incident analysis, attack timeline reconstruction, and controlled adversary
-    emulation to validate defenses and close visibility gaps.
-
-    [:octicons-arrow-right-24: View posts](blog/index.md)
-
-</div>
+<!-- nf:recent-posts -->
 
 [View all posts :octicons-arrow-right-24:](blog/index.md){ .nf-btn .nf-btn--secondary }
 
 </div>
 
 <div class="nf-section nf-section--tinted" markdown>
+
+## Browse by Category { .nf-section__title }
+
+<p class="nf-section__lead">Every post is filed under one or more areas. Pick one to see
+everything in it.</p>
+
+<!-- nf:categories -->
+
+</div>
+
+<div class="nf-section" markdown>
 
 ## What This Blog Is { .nf-section__title }
 
@@ -75,7 +51,7 @@ everything in between.</p>
 <div class="nf-topic-pills">
   <span>Threat Research</span>
   <span>Detection Engineering</span>
-  <span>DFIR &amp; Forensics</span>
+  <span>DFIR</span>
   <span>Adversary Emulation</span>
   <span>Threat Intelligence</span>
   <span>Malware Analysis</span>
