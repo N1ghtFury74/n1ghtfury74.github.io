@@ -27,20 +27,20 @@ hide:
 
 <div class="nf-about-stats">
   <div class="nf-stat">
-    <span class="nf-stat__number">~3</span>
+    <span class="nf-stat__number">3+</span>
     <span class="nf-stat__label">Years Experience</span>
   </div>
   <div class="nf-stat">
-    <span class="nf-stat__number">1,500</span>
-    <span class="nf-stat__label">Detection Rules</span>
-  </div>
-  <div class="nf-stat">
-    <span class="nf-stat__number">20+</span>
-    <span class="nf-stat__label">Hunts Led</span>
-  </div>
-  <div class="nf-stat">
     <span class="nf-stat__number">13+</span>
-    <span class="nf-stat__label">Labs Published</span>
+    <span class="nf-stat__label">Labs Built</span>
+  </div>
+  <div class="nf-stat">
+    <span class="nf-stat__number">3</span>
+    <span class="nf-stat__label">Certifications</span>
+  </div>
+  <div class="nf-stat">
+    <span class="nf-stat__number">&#8734;</span>
+    <span class="nf-stat__label">Curiosity</span>
   </div>
 </div>
 
@@ -146,10 +146,6 @@ hide:
 </a>
 </div>
 
-<div class="nf-tooling">
-  <span class="nf-tooling__label">Training</span>
-  <span class="nf-tooling__items">SANS FOR508 — Advanced Incident Response, Threat Hunting &amp; Digital Forensics &nbsp;&middot;&nbsp; SANS FOR578 — Cyber Threat Intelligence &nbsp;&middot;&nbsp; 13Cubed — Investigating Windows Endpoints &nbsp;&middot;&nbsp; 13Cubed — Investigating Linux Devices</span>
-</div>
 
 ---
 
@@ -175,10 +171,6 @@ hide:
 
 </div>
 
-<div class="nf-tooling">
-  <span class="nf-tooling__label">Languages</span>
-  <span class="nf-tooling__items">Arabic (Native) &nbsp;&middot;&nbsp; English (Professional working proficiency)</span>
-</div>
 
 ---
 
