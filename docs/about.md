@@ -66,56 +66,6 @@ hide:
   <span class="nf-skill-tag">Agentic AI Workflows</span>
 </div>
 
-<div class="nf-tooling">
-  <span class="nf-tooling__label">Query Languages</span>
-  <span class="nf-tooling__items">KQL &nbsp;&middot;&nbsp; SPL &nbsp;&middot;&nbsp; EQL</span>
-</div>
-
-<div class="nf-tooling">
-  <span class="nf-tooling__label">SIEM &amp; EDR/XDR</span>
-  <span class="nf-tooling__items">Microsoft Sentinel &nbsp;&middot;&nbsp; Splunk &nbsp;&middot;&nbsp; Elastic Security &nbsp;&middot;&nbsp; IBM QRadar &nbsp;&middot;&nbsp; Gurucul &nbsp;&middot;&nbsp; Microsoft Defender for Endpoint &nbsp;&middot;&nbsp; CrowdStrike Falcon</span>
-</div>
-
-<div class="nf-tooling">
-  <span class="nf-tooling__label">Detection Engineering</span>
-  <span class="nf-tooling__items">Sigma &nbsp;&middot;&nbsp; YARA &nbsp;&middot;&nbsp; ATT&amp;CK Navigator &nbsp;&middot;&nbsp; Detection Pipeline Development &nbsp;&middot;&nbsp; Rule Testing &amp; Tuning</span>
-</div>
-
-<div class="nf-tooling">
-  <span class="nf-tooling__label">Threat Intel &amp; OSINT</span>
-  <span class="nf-tooling__items">MISP &nbsp;&middot;&nbsp; OpenCTI &nbsp;&middot;&nbsp; AIL Framework &nbsp;&middot;&nbsp; Lacus &nbsp;&middot;&nbsp; AlienVault OTX &nbsp;&middot;&nbsp; AbuseIPDB &nbsp;&middot;&nbsp; ransomware.live</span>
-</div>
-
-<div class="nf-tooling">
-  <span class="nf-tooling__label">Identity &amp; Active Directory</span>
-  <span class="nf-tooling__items">BloodHound &nbsp;&middot;&nbsp; Impacket &nbsp;&middot;&nbsp; Attack-path Analysis &nbsp;&middot;&nbsp; Kerberos &amp; Delegation Abuse &nbsp;&middot;&nbsp; DCSync &nbsp;&middot;&nbsp; AD CS Abuse</span>
-</div>
-
-<div class="nf-tooling">
-  <span class="nf-tooling__label">DFIR &amp; Malware Analysis</span>
-  <span class="nf-tooling__items">Velociraptor &nbsp;&middot;&nbsp; KAPE &nbsp;&middot;&nbsp; Eric Zimmerman's Tools &nbsp;&middot;&nbsp; Volatility &nbsp;&middot;&nbsp; FTK Imager &nbsp;&middot;&nbsp; IDA Pro &nbsp;&middot;&nbsp; Ghidra &nbsp;&middot;&nbsp; x64dbg &nbsp;&middot;&nbsp; PEStudio</span>
-</div>
-
-<div class="nf-tooling">
-  <span class="nf-tooling__label">Network Forensics &amp; NDR</span>
-  <span class="nf-tooling__items">Corelight NDR &nbsp;&middot;&nbsp; Wireshark</span>
-</div>
-
-<div class="nf-tooling">
-  <span class="nf-tooling__label">Offensive &amp; Emulation</span>
-  <span class="nf-tooling__items">Attack-chain Emulation &nbsp;&middot;&nbsp; Nmap &nbsp;&middot;&nbsp; Metasploit</span>
-</div>
-
-<div class="nf-tooling">
-  <span class="nf-tooling__label">Cloud</span>
-  <span class="nf-tooling__items">Microsoft Azure &nbsp;&middot;&nbsp; AWS (IAM, EC2, S3, VPC)</span>
-</div>
-
-<div class="nf-tooling">
-  <span class="nf-tooling__label">Scripting &amp; Automation</span>
-  <span class="nf-tooling__items">Python &nbsp;&middot;&nbsp; PowerShell &nbsp;&middot;&nbsp; Bash &nbsp;&middot;&nbsp; Git/GitHub &nbsp;&middot;&nbsp; LLM Integration &nbsp;&middot;&nbsp; Agentic AI Workflows</span>
-</div>
-
 ---
 
 ## Professional Experience
@@ -171,42 +121,6 @@ hide:
     <ul>
       <li>Supported SOC investigations using QRadar SIEM — alert triage, correlation and escalation notes.</li>
       <li>Assisted penetration testing with Nmap and Metasploit to validate exposures and support remediation.</li>
-    </ul>
-  </div>
-</div>
-
-</div>
-
----
-
-## Teaching
-
-<div class="nf-timeline">
-
-<div class="nf-timeline__item">
-  <div class="nf-timeline__meta">
-    <span class="nf-timeline__date">Freelance</span>
-    <span class="nf-timeline__location">Jordan &middot; Egypt</span>
-  </div>
-  <div class="nf-timeline__body">
-    <p class="nf-timeline__title">Security Instructor</p>
-    <p class="nf-timeline__company">OTrain &middot; FahemSec</p>
-    <ul>
-      <li>Delivered cloud security, SOC operations and threat hunting bootcamps and courses to ~150 professionals and university students.</li>
-    </ul>
-  </div>
-</div>
-
-<div class="nf-timeline__item">
-  <div class="nf-timeline__meta">
-    <span class="nf-timeline__date">2020 – 2022</span>
-    <span class="nf-timeline__location">Mansoura, Egypt</span>
-  </div>
-  <div class="nf-timeline__body">
-    <p class="nf-timeline__title">Technical Trainer (Volunteer)</p>
-    <p class="nf-timeline__company">ICPC Mansoura &middot; Momentum Robotics Team</p>
-    <ul>
-      <li>Delivered technical and non-technical Training of Trainers (TOT) sessions to prepare new instructors, alongside technical sessions on problem solving with C++ and on robotics.</li>
     </ul>
   </div>
 </div>
