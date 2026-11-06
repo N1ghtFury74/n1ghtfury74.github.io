@@ -298,3 +298,128 @@ body.nf-anim .nf-reveal.nf-in:nth-child(6) { transition-delay: 0.40s; }
     content: none;
   }
 }
+
+/* ===================================================================
+   THE NIGHT FURY
+   A dragon glides across the hero, dips, and disappears into the dark,
+   then comes back around. The flight path and the wingbeat are separate
+   animations on separate elements so they stay independent: the sprite
+   translates, the wings flap inside it.
+   =================================================================== */
+
+.nf-dragon {
+  position: absolute;
+  top: 26%;
+  left: 0;
+  width: 96px;
+  height: 64px;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 0;
+  color: var(--md-primary-fg-color);
+  filter: drop-shadow(0 0 10px rgba(0, 200, 83, 0.55));
+  animation: nf-dragon-fly 26s cubic-bezier(0.45, 0, 0.55, 1) 2.5s infinite;
+}
+
+/* The flight: in from the left, a dip through the middle, out to the
+   right, then a long dark pause before the next pass. */
+@keyframes nf-dragon-fly {
+  0% {
+    opacity: 0;
+    transform: translate(-14vw, 0) rotate(-5deg) scale(0.75);
+  }
+  6% {
+    opacity: 0.5;
+  }
+  22% {
+    transform: translate(22vw, 46px) rotate(7deg) scale(0.92);
+  }
+  42% {
+    opacity: 0.62;
+    transform: translate(52vw, -22px) rotate(-6deg) scale(1.04);
+  }
+  62% {
+    transform: translate(78vw, 30px) rotate(5deg) scale(0.9);
+  }
+  74% {
+    opacity: 0;
+    transform: translate(104vw, 4px) rotate(-3deg) scale(0.76);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(104vw, 4px) rotate(-3deg) scale(0.76);
+  }
+}
+
+/* Wingbeat — the far wing trails the near one slightly, which is what
+   stops it reading as a single flapping sheet. */
+.nf-dragon__wing {
+  fill: currentColor;
+  transform-origin: 62px 36px;
+  animation: nf-wing-beat 0.85s ease-in-out infinite;
+}
+
+.nf-dragon__wing--far {
+  opacity: 0.55;
+  animation-delay: 0.1s;
+}
+
+@keyframes nf-wing-beat {
+  0%, 100% { transform: scaleY(1)    skewX(0deg); }
+  30%      { transform: scaleY(0.35) skewX(6deg); }
+  60%      { transform: scaleY(1.12) skewX(-3deg); }
+}
+
+.nf-dragon__body {
+  fill: currentColor;
+}
+
+/* Keep the dragon from crowding the text on small screens */
+@media (max-width: 44.9375em) {
+  .nf-dragon {
+    width: 62px;
+    height: 42px;
+    top: 18%;
+  }
+}
+
+/* ===================================================================
+   EMPTY CATEGORY STATES
+   =================================================================== */
+
+/* A chip for a category with no posts yet — present and clickable, but
+   visibly quieter than one with content. */
+.nf-cat-chip--empty {
+  opacity: 0.55;
+  border-style: dashed;
+}
+
+.nf-cat-chip--empty:hover {
+  opacity: 1;
+}
+
+.nf-cat-chip--empty .nf-cat-chip__count {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.nf-empty-category {
+  padding: 1.6rem 1.4rem;
+  border: 1px dashed rgba(0, 200, 83, 0.28);
+  border-radius: 12px;
+  background: rgba(0, 200, 83, 0.03);
+  color: var(--md-default-fg-color--light);
+}
+
+.nf-empty-category__back {
+  margin-top: 1rem;
+}
+
+/* ===================================================================
+   REDUCED MOTION
+   =================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .nf-dragon {
+    display: none;
+  }
+}

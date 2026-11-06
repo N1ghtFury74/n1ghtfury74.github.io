@@ -1,20 +1,28 @@
 """
-Generate the homepage's "Latest Posts" and "Browse by Category" blocks at
-build time, so neither has to be maintained by hand.
+Build-time generation for the homepage and the blog index.
 
-Two placeholders in docs/index.md are replaced:
+Three jobs:
 
-    <!-- nf:recent-posts -->   -> cards for the N most recent posts
-    <!-- nf:categories -->     -> one chip per category that actually has
-                                  posts, with a count, linking to its page
+1. A page is generated for every category in `categories_allowed` that has
+   no posts yet, so the full taxonomy is browsable from day one. These sit
+   at exactly the URL the blog plugin would use once the category gains a
+   post (`blog/category/<slug>/`), using the plugin's own slugify function,
+   so the link never changes and never breaks.
 
-Post data comes from the Material blog plugin itself (post.url, post.title,
-post.categories[].url), so the URLs always match whatever the plugin
-generates — no duplicated slug or date-format logic here.
+2. `<!-- nf:recent-posts -->` in docs/index.md is replaced with cards for
+   the most recent posts.
 
-If anything goes wrong the placeholder is replaced with a plain link to the
-blog instead of raising, because a broken homepage is a worse failure than a
-missing section. Nothing else on the page is touched.
+3. `<!-- nf:categories -->` in docs/index.md and docs/blog/index.md is
+   replaced with a chip per category, each showing its post count.
+
+Injection happens at on_post_build, not on_page_markdown. The blog plugin
+fills in `readtime` and the category `title` only while each post or view
+page renders, and the homepage renders first — at markdown time read times
+are missing and category titles are None.
+
+Post and category URLs come from the plugin wherever a page exists, so no
+slug or date-format logic is duplicated. If anything fails the markers are
+left as HTML comments, which are invisible, rather than raising.
 """
 
 from __future__ import annotations
@@ -31,6 +39,75 @@ CATEGORY_MARKER = "<!-- nf:categories -->"
 
 FALLBACK = '<p class="nf-empty"><a href="blog/">Browse the blog &rarr;</a></p>'
 
+# Pages the markers may appear in, with the path prefix each needs to reach
+# the site root. docs/index.md sits at the root; docs/blog/index.md one down.
+TARGETS = {
+    "index.html": "",
+    "blog/index.html": "../",
+}
+
+
+# -------------------------------------------------------------------------
+# Category helpers
+# -------------------------------------------------------------------------
+
+def _blog_plugin(config):
+    return config.plugins.get("material/blog")
+
+
+def _slugify(config):
+    """The blog plugin's own slugify, so generated stubs match its URLs."""
+    plugin = _blog_plugin(config)
+    try:
+        cfg = plugin.config
+        fn, sep = cfg.categories_slugify, cfg.categories_slugify_separator
+        return lambda name: fn(name, sep)
+    except Exception:
+        from pymdownx.slugs import slugify
+
+        fn = slugify(case="lower")
+        return lambda name: fn(name, "-")
+
+
+def _allowed(config):
+    plugin = _blog_plugin(config)
+    try:
+        return list(plugin.config.categories_allowed or [])
+    except Exception:
+        return []
+
+
+def _category_url(config, name):
+    """URL the blog plugin uses (or would use) for a category."""
+    plugin = _blog_plugin(config)
+    slug = _slugify(config)(name)
+    try:
+        fmt = plugin.config.categories_url_format
+        blog_dir = plugin.config.blog_dir
+    except Exception:
+        fmt, blog_dir = "category/{slug}", "blog"
+    return f"{blog_dir}/{fmt.format(slug=slug)}/"
+
+
+def _cat_name(cat) -> str:
+    """Display name of a category view.
+
+    `Category.title` is still None while the homepage renders — the blog
+    plugin only fills it in when the category's own page is built, which
+    happens later. `Category.name` carries the string from the start.
+    """
+    for attr in ("name", "title"):
+        value = getattr(cat, attr, None)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+
+    slug = (getattr(cat, "url", "") or "").rstrip("/").rsplit("/", 1)[-1]
+    return slug.replace("-", " ").title() if slug else "Uncategorised"
+
+
+# -------------------------------------------------------------------------
+# Post helpers
+# -------------------------------------------------------------------------
 
 def _esc(text: str) -> str:
     return (
@@ -42,33 +119,14 @@ def _esc(text: str) -> str:
     )
 
 
-def _cat_name(cat) -> str:
-    """Display name of a category view.
-
-    `Category.title` is still None while the homepage renders — the blog
-    plugin only fills it in when the category's own page is built, which
-    happens later. `Category.name` carries the string from the start, so
-    prefer it and keep the others as fallbacks.
-    """
-    for attr in ("name", "title"):
-        value = getattr(cat, attr, None)
-        if isinstance(value, str) and value.strip():
-            return value.strip()
-
-    slug = (getattr(cat, "url", "") or "").rstrip("/").rsplit("/", 1)[-1]
-    return slug.replace("-", " ").title() if slug else "Uncategorised"
-
-
 def _excerpt(post) -> str:
     """First real paragraph of the post, before the <!-- more --> marker."""
-    md = post.markdown or ""
-    md = md.split("<!-- more -->")[0]
+    md = (post.markdown or "").split("<!-- more -->")[0]
 
     for block in md.split("\n\n"):
         block = block.strip()
         if not block or block.startswith("#"):
             continue
-        # Drop surrounding emphasis and collapse newlines
         block = re.sub(r"^\*+|\*+$", "", block.strip())
         block = re.sub(r"\s+", " ", block).strip()
         if block:
@@ -76,36 +134,37 @@ def _excerpt(post) -> str:
     return ""
 
 
-def _date(post):
-    raw = (post.config or {}).get("date")
-    if isinstance(raw, dict):
-        raw = raw.get("created")
-    try:
-        # Cross-platform: %-d / %#d differ, so strip the zero by hand
-        return f"{raw.strftime('%B')} {raw.day}, {raw.year}"
-    except Exception:
-        return ""
-
-
-def _sort_key(post):
+def _created(post):
     raw = (post.config or {}).get("date")
     if isinstance(raw, dict):
         raw = raw.get("created")
     return raw
 
 
-def _posts(config):
-    plugin = config.plugins.get("material/blog")
-    posts = list(getattr(getattr(plugin, "blog", None), "posts", []) or [])
-    # The plugin already sorts newest-first, but do not rely on it.
+def _date(post) -> str:
+    raw = _created(post)
     try:
-        posts.sort(key=_sort_key, reverse=True)
+        # %-d / %#d differ across platforms, so strip the zero by hand
+        return f"{raw.strftime('%B')} {raw.day}, {raw.year}"
+    except Exception:
+        return ""
+
+
+def _posts(config):
+    plugin = _blog_plugin(config)
+    posts = list(getattr(getattr(plugin, "blog", None), "posts", []) or [])
+    try:
+        posts.sort(key=_created, reverse=True)
     except Exception:
         pass
     return posts
 
 
-def _render_posts(posts) -> str:
+# -------------------------------------------------------------------------
+# Rendering
+# -------------------------------------------------------------------------
+
+def _render_posts(posts, prefix: str) -> str:
     if not posts:
         return FALLBACK
 
@@ -122,20 +181,17 @@ def _render_posts(posts) -> str:
             )
 
         # Categories are spans, not links: the whole card is already an <a>,
-        # and nesting anchors is invalid HTML. Category links live in the
-        # "Browse by Category" block below.
+        # and nesting anchors is invalid HTML.
         cats = "".join(
             f'<span class="nf-post-card__cat">{_esc(_cat_name(c))}</span>'
             for c in (post.categories or [])
         )
 
-        excerpt = _excerpt(post)
-
         out.append(
-            f'<a class="nf-post-card nf-reveal" href="{_esc(post.url)}">'
+            f'<a class="nf-post-card nf-reveal" href="{_esc(prefix + post.url)}">'
             f'<span class="nf-post-card__meta">{"".join(meta)}</span>'
             f'<span class="nf-post-card__title">{_esc(post.title)}</span>'
-            f'<span class="nf-post-card__excerpt">{_esc(excerpt)}</span>'
+            f'<span class="nf-post-card__excerpt">{_esc(_excerpt(post))}</span>'
             f'<span class="nf-post-card__cats">{cats}</span>'
             f'<span class="nf-post-card__more">Read post</span>'
             f"</a>"
@@ -144,68 +200,145 @@ def _render_posts(posts) -> str:
     return "".join(out)
 
 
-def _render_categories(posts) -> str:
-    # Count posts per category, keeping the plugin's own URL for each.
-    seen: dict[str, dict] = {}
+def _render_categories(config, posts, prefix: str) -> str:
+    """One chip per allowed category, including those with no posts."""
+    counts: dict[str, int] = {}
     for post in posts:
         for cat in post.categories or []:
             name = _cat_name(cat)
-            entry = seen.setdefault(
-                name, {"url": cat.url, "title": name, "count": 0}
-            )
-            entry["count"] += 1
+            counts[name] = counts.get(name, 0) + 1
 
-    if not seen:
+    names = _allowed(config)
+    # Any category used by a post but somehow not in the allowed list still
+    # gets a chip, so nothing silently disappears.
+    for name in counts:
+        if name not in names:
+            names.append(name)
+
+    if not names:
         return ""
 
-    ordered = sorted(seen.values(), key=lambda e: (-e["count"], e["title"].lower()))
+    chips = []
+    for name in names:
+        count = counts.get(name, 0)
+        empty = " nf-cat-chip--empty" if not count else ""
+        url = _category_url(config, name)
+        chips.append(
+            f'<a class="nf-cat-chip nf-reveal{empty}" href="{_esc(prefix + url)}">'
+            f'<span class="nf-cat-chip__name">{_esc(name)}</span>'
+            f'<span class="nf-cat-chip__count">{count}</span>'
+            f"</a>"
+        )
+    return f'<div class="nf-cat-chips">{"".join(chips)}</div>'
 
-    chips = "".join(
-        f'<a class="nf-cat-chip nf-reveal" href="{_esc(e["url"])}">'
-        f'<span class="nf-cat-chip__name">{_esc(e["title"])}</span>'
-        f'<span class="nf-cat-chip__count">{e["count"]}</span>'
-        f"</a>"
-        for e in ordered
-    )
-    return f'<div class="nf-cat-chips">{chips}</div>'
+
+# -------------------------------------------------------------------------
+# Hooks
+# -------------------------------------------------------------------------
+
+def on_files(files, config, **kwargs):
+    """Generate a page for every category that has no posts yet.
+
+    Categories with posts are left entirely to the blog plugin; this only
+    fills the gaps, so the two never collide. Categories are read straight
+    from the post source files because the plugin has not collected its
+    posts yet at this point in the build.
+    """
+    try:
+        from mkdocs.structure.files import File
+    except Exception:  # pragma: no cover
+        return files
+
+    plugin = _blog_plugin(config)
+    if plugin is None:
+        return files
+
+    try:
+        blog_dir = plugin.config.blog_dir
+    except Exception:
+        blog_dir = "blog"
+
+    docs_dir = pathlib.Path(config["docs_dir"])
+    used: set[str] = set()
+
+    for path in (docs_dir / blog_dir / "posts").glob("*.md"):
+        try:
+            text = path.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        match = re.match(r"^---\s*\n(.*?)\n---\s*\n", text, re.S)
+        if not match:
+            continue
+        block = re.search(
+            r"^categories:\s*\n((?:\s*-\s*.+\n?)+)", match.group(1), re.M
+        )
+        if not block:
+            continue
+        for line in block.group(1).splitlines():
+            item = line.strip()
+            if item.startswith("- "):
+                used.add(item[2:].strip().strip("'\""))
+
+    slugify = _slugify(config)
+    made = 0
+
+    for name in _allowed(config):
+        if name in used:
+            continue
+
+        src_uri = f"{blog_dir}/category/{slugify(name)}.md"
+        if files.get_file_from_path(src_uri) is not None:
+            continue
+
+        content = (
+            f"---\ntitle: {name}\nsearch:\n  exclude: true\n---\n\n"
+            f"# {name}\n\n"
+            f'<p class="nf-empty-category">Nothing filed under this category '
+            f"yet. It is part of what this blog covers, so posts will land "
+            f'here.</p>\n\n'
+            f'<p class="nf-empty-category__back">'
+            f'<a href="../../">Back to the blog</a></p>\n'
+        )
+
+        try:
+            files.append(File.generated(config, src_uri, content=content))
+            made += 1
+        except Exception as error:  # pragma: no cover
+            log.warning("blog_index hook: could not generate %s (%s)", src_uri, error)
+
+    if made:
+        log.info("blog_index hook: generated %d empty-category page(s)", made)
+    return files
 
 
 def on_post_build(config, **kwargs):
-    """Inject the blocks once every page has rendered.
-
-    This runs at post-build rather than on_page_markdown deliberately.
-    The blog plugin fills in `readtime` and the category `title` only
-    while each post or view page renders, and the homepage renders
-    before them, so at markdown time read times are absent and category
-    titles are None. By post-build every value is final.
-
-    The markers are HTML comments, so if this hook never runs they stay
-    invisible on the page rather than showing as stray text.
-    """
+    """Inject the generated blocks once every page has rendered."""
     try:
         site_dir = pathlib.Path(config["site_dir"])
     except Exception:
         site_dir = pathlib.Path(getattr(config, "site_dir", "site"))
 
-    index = site_dir / "index.html"
-    if not index.is_file():
-        log.warning("blog_index hook: %s not found; skipping", index)
-        return
-
-    html = index.read_text(encoding="utf-8")
-    if RECENT_MARKER not in html and CATEGORY_MARKER not in html:
-        return
-
     try:
         posts = _posts(config)
-    except Exception as error:  # pragma: no cover - defensive
+    except Exception as error:  # pragma: no cover
         log.warning("blog_index hook: could not read posts (%s)", error)
         posts = []
 
     if not posts:
         log.warning("blog_index hook: no posts found; using fallback link")
 
-    html = html.replace(RECENT_MARKER, _render_posts(posts))
-    html = html.replace(CATEGORY_MARKER, _render_categories(posts))
-    index.write_text(html, encoding="utf-8")
-    log.info("blog_index hook: injected %d post(s) into the homepage", len(posts))
+    for rel, prefix in TARGETS.items():
+        page = site_dir / rel
+        if not page.is_file():
+            continue
+
+        html = page.read_text(encoding="utf-8")
+        if RECENT_MARKER not in html and CATEGORY_MARKER not in html:
+            continue
+
+        html = html.replace(RECENT_MARKER, _render_posts(posts, prefix))
+        html = html.replace(
+            CATEGORY_MARKER, _render_categories(config, posts, prefix)
+        )
+        page.write_text(html, encoding="utf-8")
+        log.info("blog_index hook: injected into %s", rel)
