@@ -39,8 +39,12 @@ theme:
 
 nav:
   - Home: index.md
-  - Blog: blog/index.md
+  - Blog:
+      - blog/index.md
   - About: about.md
+
+hooks:
+  - hooks/blog_index.py
 
 plugins:
   - blog:
@@ -86,6 +90,7 @@ extra:
 extra_css:
   - stylesheets/nightfury_mkdocs_extra.css
   - stylesheets/nightfury_animations.css
+  - stylesheets/nightfury_components.css
 
 extra_javascript:
   - javascripts/nightfury_anim.js
