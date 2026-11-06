@@ -29,6 +29,7 @@ theme:
     - navigation.tracking
     - navigation.tabs
     - navigation.sections
+    - navigation.expand
     - navigation.footer
     - toc.integrate
     - search.highlight
@@ -62,8 +63,9 @@ plugins:
         - Security Engineering
         - DFIR
         - Adversary Emulation
+        - Cyber Deception
+        - Threat Intel & OSINT
         - Tools
-        - MISC
       authors: true
       authors_file: blog/.authors.yml
   - tags

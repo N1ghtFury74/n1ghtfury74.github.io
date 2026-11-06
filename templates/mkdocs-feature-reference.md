@@ -10,9 +10,9 @@ tags:
   - Resources
   - OSINT
   - CTI
-  - MISC
+  - Tools
 categories:
-  - MISC
+  - Tools
 ---
 
 # [Post Title] — MkDocs Material Feature Reference

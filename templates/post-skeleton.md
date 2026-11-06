@@ -12,7 +12,7 @@ tags:
   - KQL
   - SPL
 categories:
-  - MISC
+  - Tools
 draft: true
 ---
 

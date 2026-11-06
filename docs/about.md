@@ -47,39 +47,25 @@ hide:
 
 ## Skills &amp; Focus Areas
 
-<div class="nf-skills-grid">
-  <div class="nf-skills-group">
-    <p class="nf-skills-group__label">Detection &amp; Hunting</p>
-    <div class="nf-skills">
-      <span class="nf-skill-tag">Threat Hunting</span>
-      <span class="nf-skill-tag">Detection Engineering</span>
-      <span class="nf-skill-tag">SIEM / EDR</span>
-      <span class="nf-skill-tag">Security Content Dev</span>
-      <span class="nf-skill-tag">SOC Operations</span>
-    </div>
-  </div>
-  <div class="nf-skills-group">
-    <p class="nf-skills-group__label">Offensive &amp; Emulation</p>
-    <div class="nf-skills">
-      <span class="nf-skill-tag">Adversary Emulation</span>
-      <span class="nf-skill-tag">Red Team Ops</span>
-      <span class="nf-skill-tag">MITRE ATT&amp;CK</span>
-      <span class="nf-skill-tag">Malware Analysis</span>
-    </div>
-  </div>
-  <div class="nf-skills-group">
-    <p class="nf-skills-group__label">Response &amp; Intelligence</p>
-    <div class="nf-skills">
-      <span class="nf-skill-tag">DFIR</span>
-      <span class="nf-skill-tag">Incident Response</span>
-      <span class="nf-skill-tag">Threat Intelligence</span>
-    </div>
-  </div>
+<div class="nf-skills">
+  <span class="nf-skill-tag">Threat Hunting</span>
+  <span class="nf-skill-tag">Detection Engineering</span>
+  <span class="nf-skill-tag">Security Engineering</span>
+  <span class="nf-skill-tag">DFIR</span>
+  <span class="nf-skill-tag">Incident Response</span>
+  <span class="nf-skill-tag">Adversary Emulation</span>
+  <span class="nf-skill-tag">Threat Intelligence</span>
+  <span class="nf-skill-tag">Cyber Deception</span>
+  <span class="nf-skill-tag">Malware Analysis</span>
+  <span class="nf-skill-tag">MITRE ATT&amp;CK</span>
+  <span class="nf-skill-tag">SIEM / EDR</span>
+  <span class="nf-skill-tag">Security Content Dev</span>
+  <span class="nf-skill-tag">SOC Operations</span>
 </div>
 
 <div class="nf-tooling">
   <span class="nf-tooling__label">Tooling &amp; Platforms</span>
-  <span class="nf-tooling__items">CrowdStrike Falcon &nbsp;&middot;&nbsp; Elastic Stack &nbsp;&middot;&nbsp; Gurucul SIEM &nbsp;&middot;&nbsp; Cobalt Strike &nbsp;&middot;&nbsp; AWS &nbsp;&middot;&nbsp; Terraform &nbsp;&middot;&nbsp; Python &nbsp;&middot;&nbsp; PowerShell &nbsp;&middot;&nbsp; Bash &nbsp;&middot;&nbsp; C/C++</span>
+  <span class="nf-tooling__items">CrowdStrike Falcon &nbsp;&middot;&nbsp; Corelight NDR &nbsp;&middot;&nbsp; Microsoft Sentinel &nbsp;&middot;&nbsp; Elastic Stack &nbsp;&middot;&nbsp; Gurucul SIEM &nbsp;&middot;&nbsp; Cobalt Strike &nbsp;&middot;&nbsp; AWS &nbsp;&middot;&nbsp; Terraform &nbsp;&middot;&nbsp; Python &nbsp;&middot;&nbsp; PowerShell &nbsp;&middot;&nbsp; Bash &nbsp;&middot;&nbsp; C/C++</span>
 </div>
 
 ---
