@@ -43,8 +43,8 @@ description: >
         4. Pivots — connecting data sources on a shared value
     2. **Grounding it in trusted frameworks**
     3. **Wrap-up**
-    4. **References and further reading**
-    5. **Credits**
+    4. **Credits**
+    5. **References and further reading**
 
 ---
 
@@ -441,6 +441,19 @@ point at its own frameworks is a great deal easier to defend to the people fundi
 
 
 ---
+
+---
+
+## Credits
+
+!!! success "Want to go deeper?"
+    Follow **[Chris Sanders](https://chrissanders.org/)** and take his
+    **[Practical Threat Hunting](https://www.networkdefense.co/courses/hunting/)** course at
+    Applied Network Defense — this way of thinking is taught there properly, by one of the
+    best teachers in the field.
+
+---
+
 ## References and further reading
 
 Grouped by what you would reach for them *for*, rather than by publisher. Everything cited
@@ -505,22 +518,6 @@ starting from scratch.
     - **Rapid7** — [*Threat Hunting: Attack vs. Data*](https://information.rapid7.com/threat-hunting-attack-data.html) · **Qintel** — [*Hypothesis-Driven Threat Hunting*](https://www.qintel.com/article/hypothesis-driven-threat-hunting-turn-intelligence-into-testable-hunts) — the ABH/DBH split and hunt closure criteria, from two other angles.
 
 ---
-
----
-
-## Credits
-
-!!! success "Want to learn this properly? Go to the source"
-    If the way of thinking across these two parts was useful to you, learn it from the person
-    who teaches it best. **Chris Sanders' _Practical Threat Hunting_** at Applied Network
-    Defense is where the **attack-based and data-based** framings, the **five-step attack
-    dissection**, the **evidence realms** and the **GAPSS** toolbox are taught in full.
-
-    Sanders is one of the genuinely great teachers in this field, and a course does something
-    a blog post cannot: a post can show you the shape of a method, but a course walks you
-    through it with your hands on the data.
-
-    [:octicons-arrow-right-24: Practical Threat Hunting — Applied Network Defense](https://www.networkdefense.co/courses/hunting/)
 
 *[ABH]: Attack-Based Hunting
 *[DBH]: Data-Based Hunting
