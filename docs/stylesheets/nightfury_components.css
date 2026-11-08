@@ -272,19 +272,6 @@ body.nf-anim .md-content__inner {
    POST BODY — headings, images, tables, code
    ------------------------------------------------------------------ */
 
-/* Heading anchor fades in rather than appearing abruptly */
-.md-typeset .headerlink {
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  transform: translateX(-4px);
-}
-
-.md-typeset h1:hover .headerlink,
-.md-typeset h2:hover .headerlink,
-.md-typeset h3:hover .headerlink,
-.md-typeset h4:hover .headerlink {
-  transform: translateX(0);
-}
-
 /* Table rows pick up a tint on hover — helps when scanning the long
    decision tables in the WRAITH post */
 .md-typeset table:not([class]) tbody tr {
@@ -467,21 +454,6 @@ html {
    has asked for reduced motion. */
 html {
   scroll-behavior: smooth;
-}
-
-/* External links in body copy get a quiet outbound marker */
-.md-typeset a[href^="http"]:not(.nf-btn):not(.nf-cat-chip):not(.md-tag)::after {
-  content: "\2197";
-  display: inline-block;
-  margin-left: 0.15em;
-  font-size: 0.85em;
-  opacity: 0.55;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.md-typeset a[href^="http"]:not(.nf-btn):not(.nf-cat-chip):not(.md-tag):hover::after {
-  opacity: 1;
-  transform: translate(1px, -1px);
 }
 
 @media (prefers-reduced-motion: reduce) {
