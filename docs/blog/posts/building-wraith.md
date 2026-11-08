@@ -31,24 +31,24 @@ tags:
 
 <!-- more -->
 
-!!! abstract "At a glance"
+!!! abstract "At a Glance"
     - **What it is:** an offline Active Directory relationship engine for dead-disk forensics
     - **Inputs:** `ntds.dit` · `SYSTEM` hive · `SYSVOL` — nothing touches the network
     - **Outputs:** capability graph · per-entity dossiers · attack paths to Tier-0 · provenance for every claim
     - **Read time:** ~40 minutes · **Audience:** engineers, architects, tool builders
     - **Prerequisites:** none specific — Active Directory familiarity helps for Parts 2 and 4
 
-!!! info "Companion post"
+!!! info "Companion Post"
     ***Know what the attacker knows*** — the same tool from the hunter's side: why context
     evaluation is the hunt, and a walkthrough on real evidence.
 
     This post is the machine room. That one is the reason it exists.
 
-??? abstract "Table of contents — 10 parts"
+??? abstract "Table of Contents — 10 Parts"
 
 ---
 
-## What this is
+## What This Is
 
 WRAITH ingests the forensic artifacts of a domain controller — `ntds.dit`, the `SYSTEM` registry hive, `SYSVOL` — entirely offline, and reconstructs the attacker's privilege map: a capability graph, per-entity dossiers, attack paths to Tier-0, and a forensic provenance trail for every claim it makes. It sends zero packets to any target, ever.
 
@@ -85,9 +85,9 @@ Three things make it worth writing about as engineering rather than as a securit
 
 ---
 
-## Part 1 — Five constraints that decided everything
+## Part 1 — Five Constraints That Decided Everything
 
-!!! abstract "The five non-negotiables"
+!!! abstract "The Five Non-Negotiables"
     - **Offline guarantee** — no component may initiate network egress at runtime
     - **Provenance everywhere** — every row carries source file, image hash, object id, run id
     - **Secrets** — Argon2id + AES-256-GCM in a ciphertext-only store, never logged in plaintext
@@ -98,7 +98,7 @@ Most "technology choices" posts are a list of preferences. This one is a list of
 
 ![constraints to consequences](wraith-diagrams/02-constraints-to-consequences.svg)
 
-### Constraint 1 — The offline guarantee
+### Constraint 1 — The Offline Guarantee
 
 No component may initiate network egress at runtime. Build-time fetches must be vendored for air-gapped shipping.
 
@@ -110,7 +110,7 @@ No component may initiate network egress at runtime. Build-time fetches must be 
 - **A build-time enforcement script.** `ui/web/scripts/check-offline.mjs` greps the built bundle for `http(s)://` and fails the build if a runtime URL slips in. The guarantee is tested, not promised.
 - **Pure-Python wheels, strongly preferred.** Every dependency must vendor cleanly with no native toolchain. This rejected `libesedb`, `PyNaCl`, and `rustworkx` — each a perfectly good library, each a compiled dependency.
 
-### Constraint 2 — Provenance everywhere
+### Constraint 2 — Provenance Everywhere
 
 Every entity, edge, and finding carries `{source file, image SHA-256, source object id, directory timestamp, ingest run id}`, attached at creation.
 
@@ -128,7 +128,7 @@ provenance STRUCT(
 
 It also forced a fail-fast rule in code. The ingest-run object's `provenance_for()` raises `KeyError` if a source file was never registered — *a fact must not be producible without its provenance.* You cannot write an unprovenanced row by accident; the attempt raises.
 
-### Constraint 3 — Secrets encrypted, redacted, never logged in plaintext
+### Constraint 3 — Secrets Encrypted, Redacted, Never Logged in Plaintext
 
 **What it forced:** a separate, ciphertext-only secret store (`wraith/secrets/store.py`) distinct from the analytics store, and a specific crypto shape:
 
@@ -148,7 +148,7 @@ Identical inputs produce identical outputs.
 
 There is one deliberate exception, and it is a test: AES-GCM ciphertext **must** differ on every encryption (fresh nonce) while the decrypted plaintext stays stable. Determinism is a property of outputs, not of ciphertext — and a test asserts exactly that, so nobody "fixes" the nonce to make a determinism test pass.
 
-### Constraint 5 — Untrusted input
+### Constraint 5 — Untrusted Input
 
 Artifacts are untrusted. Validate paths, run least-privilege, never execute anything from an artifact directory.
 
@@ -160,14 +160,14 @@ artifact directories cannot shadow stdlib imports. Pass --allow-unisolated to
 override (development only).
 ```
 
-!!! danger "Why isolated mode is not optional"
+!!! danger "Why Isolated Mode Is Not Optional"
     An evidence directory containing a planted `json.py` would be imported by `import json`.
     `python -I` drops the script directory and user site-packages from `sys.path`, which is
     the only thing standing between untrusted artifacts and arbitrary code execution.
 
 It also forced a whole robustness surface on the upload path: zip-slip rejection, symlink and hardlink members skipped and counted, zip-bomb member caps, magic-byte sniffing, oversize rejection while streaming, and path containment checks — 24 dedicated tests on that layer alone.
 
-### The sixth rule, which is really the first
+### The Sixth Rule, Which Is Really the First
 
 Underneath those five sits the rule that shaped the dependency list:
 
@@ -181,9 +181,9 @@ Rights-GUIDs, UAC flags, well-known SIDs, `[MS-*]` constants: reuse freely. Impl
 
 ---
 
-## Part 2 — The whole flow
+## Part 2 — The Whole Flow
 
-!!! abstract "The pipeline at a glance"
+!!! abstract "The Pipeline at a Glance"
     - **Seven stages:** acquisition → ESE read → security descriptors → secrets → hives → GPO/SYSVOL → normalization → closure → edges
     - **Riskiest dependency:** the `ntds.dit` ESE reader, deliberately kept behind a swappable adapter
     - **The rule:** nothing downstream is built on an uncounted gap
@@ -198,7 +198,7 @@ Before breaking pieces open, here is the entire pipeline on one screen. Everythi
 
 ![the pipeline](wraith-diagrams/03-the-pipeline.svg)
 
-??? example "The same pipeline as plain text"
+??? example "The Same Pipeline as Plain Text"
 
     ```
       evidence dir ──▶ acquisition ──▶ ESE reader ──▶ structural parse ──┐
@@ -233,7 +233,7 @@ Before breaking pieces open, here is the entire pipeline on one screen. Everythi
 
 Now each stage, with the problem it exists to solve.
 
-### 2.1 Acquisition — the trust boundary
+### 2.1 Acquisition — The Trust Boundary
 
 **Problem:** the input is attacker-adjacent data from an unknown source, and every later claim must be traceable to a specific byte-exact artifact.
 
@@ -251,7 +251,7 @@ A note on the manifest format, because this is a forensics tool and the standard
 
 It also carries a **SHA-256 hash chain** (`prev_entry_hash` → `entry_hash`) for tamper evidence. That was not in the original design: a domain-expert review asked for tamper-evident custody records, which would have added columns to an already-frozen table. It was deferred as an explicit schema v1.1 proposal, documented honestly as a known integrity boundary, and landed later. The sequence matters — the frozen schema was not quietly edited.
 
-### 2.2 Reading `ntds.dit` — the riskiest dependency, behind an adapter
+### 2.2 Reading `ntds.dit` — The Riskiest Dependency, Behind an Adapter
 
 **Problem:** `ntds.dit` is an **ESE** database ("JET Blue") — the same engine behind Exchange and the registry. Parsing it means B-tree traversal, page layout, long-value chains, and tagged columns, correct enough to be trusted in a report.
 
@@ -265,7 +265,7 @@ One pin looks alarming and is worth explaining because it is a real engineering 
 
 **A limitation stated rather than hidden:** the design promised automatic ESE transaction-log *replay*. That is not achievable offline on Linux without Windows' `esentutl`. Research surfaced this and the promise was downgraded to **detect → warn → degrade**, which is what shipped. The real test DC is in a DirtyShutdown state, so this is not hypothetical.
 
-### 2.3 Security descriptors — parse with a library, interpret with your own code
+### 2.3 Security Descriptors — Parse with a Library, Interpret with Your Own Code
 
 **Problem:** `nTSecurityDescriptor` is a packed binary `[MS-DTYP]` structure, and the entire capability graph depends on reading it correctly.
 
@@ -273,7 +273,7 @@ One pin looks alarming and is worth explaining because it is a real engineering 
 
 The interpretation — which ACE means which capability — is original WRAITH code. That line is deliberate and it is where the licence rule bites. More in Part 6.
 
-### 2.4 Secrets — delegate the crypto chain, isolate the result
+### 2.4 Secrets — Delegate the Crypto Chain, Isolate the Result
 
 **Problem:** recovering hashes requires boot key (from the `SYSTEM` hive) → PEK → per-object decryption: a multi-step chain with format-exact crypto where a subtle error yields plausible garbage.
 
@@ -284,7 +284,7 @@ Delegated to Impacket's well-exercised `secretsdump` path, with `pycryptodomex` 
 
 That second point was nearly violated, and it is one of the best arguments in this post for separating code review from behavioural testing. A review found that secret columns — including latent cleartext LAPS passwords and PEK-encrypted hashes — were being persisted into the **unencrypted** canonical store via the staging table's raw attribute map. The normalizer was working perfectly; it was correctly normalising. Behavioural tests were green. Only an audit axis specifically asking *"can a secret reach plaintext storage?"* catches that. The fix was a `SECRET_ATTRIBUTE_DENYLIST`, with a regression test that proves the stripping is non-vacuous.
 
-### 2.5 Registry hives — the choice to add nothing
+### 2.5 Registry Hives — The Choice to Add Nothing
 
 **Problem:** three separate things need registry hives — the boot key from `SYSTEM`, the AD CS certificate-binding configuration, and local group membership from member-host `SAM` hives.
 
@@ -294,7 +294,7 @@ That second point was nearly violated, and it is one of the best arguments in th
 
 This is a small decision and it is the one I would point to as most characteristic. Every dependency is a supply-chain surface, a licence to audit, and a wheel to vendor for air-gapped shipping. The best dependency decision is usually the one you don't make.
 
-### 2.6 GPO and SYSVOL — zero new dependencies, by construction
+### 2.6 GPO and SYSVOL — Zero New Dependencies, by Construction
 
 **Problem:** three different file formats inside SYSVOL — `GptTmpl.inf`, `Groups.xml`, and the binary `Registry.pol`.
 
@@ -312,13 +312,13 @@ Three more small decisions in this layer, each of which is the kind of thing tha
 - **Precedence is modelled on Windows, not invented.** When `GptTmpl.inf` restricted-groups and a GPP `Groups.xml` target the same local group, restricted-groups wins and the superseded push is counted. Mirroring how Windows actually resolves the conflict is the only defensible answer.
 - **Local groups are never resolved by name.** Matching is by full alias SID, then by the trailing RID of `S-1-5-32-<RID>`. A bare group-name token is *not* guessed at, because there is no reliable offline name→RID map — it becomes a counted `member_name_unresolved`. Refusing to guess is the whole design.
 
-### 2.7 Normalization — where raw objects become typed entities
+### 2.7 Normalization — Where Raw Objects Become Typed Entities
 
 **Problem:** the parser emits raw rows keyed by internal database identifiers. Everything downstream needs stable, typed, SID-keyed entities with consistent scoping.
 
 The normalizer produces the canonical entity tables and, critically, decides what each object *is*. Its counted-gap taxonomy is the honest record of what it could not classify: `no_identity`, `unclassified`, `not_modeled`, `orphan_parent`, `missing_samaccountname`, `deleted_recoverable`, `deleted_recycled`, `gplink_unresolved`, `gplink_disabled`, `link_unresolved_endpoint`.
 
-### 2.8 Membership closure — a cheap table that buys O(1) answers
+### 2.8 Membership Closure — A Cheap Table That Buys O(1) Answers
 
 **Problem:** "who is effectively in Domain Admins?" is a transitive question over a cyclic graph, asked constantly.
 
@@ -338,7 +338,7 @@ Two design notes. The closure is **cycle-guarded** — AD group membership can a
 
 On the real test DC: 39 direct membership edges (25 from the link table, 11 synthesised from primary-group, 3 from special identities) expand to 70 effective pairs.
 
-### 2.9 The edge engine — the heart
+### 2.9 The Edge Engine — The Heart
 
 **Problem:** turn ACEs, UAC flags, trust attributes, and delegation settings into an attacker-direction capability graph, and be able to say *why* every edge exists.
 
@@ -350,13 +350,13 @@ Some classification rules that are easy to get wrong and are each pinned by a te
 - **Masks merge by OR-ing unsigned bits.** `access_mask` is stored as `BIGINT` holding a *clean unsigned* 32-bit value (0..4294967295), not a signed two's-complement reinterpretation. Bit 31 round-trips unsigned, with a test that says so.
 - **Deny ACEs, inherit-only ACEs, and noise trustees are skipped — and counted.** On the real DC: 52 deny ACEs skipped, 5,180 inherit-only, 3,850 noise trustees, 695 unmapped object types, 1 SD parse error, 13 unresolved `Contains` parents. Those numbers are asserted *exactly* by a test, so a drifting gap count fails the build.
 
-### 2.10 AD CS and host SAM — the artifact-dependent tiers
+### 2.10 AD CS and Host SAM — The Artifact-Dependent Tiers
 
 Which edges WRAITH can produce is determined by which artifacts it is given, not by a gap in its logic. SYSVOL yields GPO-derived rights; SAM hives yield local-administrator relationships; AD CS objects yield certificate topology and escalation paths.
 
 One result here is worth more than it looks: on the real DC, SYSVOL parsing produced **zero** AdminTo and zero privilege edges. That is a *true negative*, verified by root cause — there is no `[Group Membership]` section and no `Groups.xml` anywhere in those three GPOs. A live SharpHound run would also produce zero. Confirming parity on a negative result is a real validation, and distinguishing "nothing there" from "we failed to look" is exactly the discipline the rest of this post is about.
 
-### 2.11 The API and the web tier
+### 2.11 The API and the Web Tier
 
 A **read-only** FastAPI application over the canonical store, with Uvicorn bound to `127.0.0.1` only.
 
@@ -371,9 +371,9 @@ A **read-only** FastAPI application over the canonical store, with Uvicorn bound
 
 ---
 
-## Part 3 — The data layer
+## Part 3 — The Data Layer
 
-!!! info "The store"
+!!! info "The Store"
     - **Engine:** DuckDB — in-process, so there is no listening socket to contradict the offline claim
     - **Schema:** ten tables in four groups
     - **Provenance:** a native `STRUCT` inside every row rather than a join table
@@ -396,7 +396,7 @@ Framed as constraint → consequence rather than as a preference:
 
 **Rejected — Neo4j as the primary store:** GPL-class licence *and* a running server. That breaks the licence rule and the server-free posture simultaneously. Neo4j survives only as an optional BloodHound reference lane in a separate container, communicating over Bolt — a separate process, never an import. The licence shaped the architecture.
 
-### The schema — ten tables in four groups
+### The Schema — Ten Tables in Four Groups
 
 ![the schema](wraith-diagrams/04-the-schema.svg)
 
@@ -419,7 +419,7 @@ provenance STRUCT(...)                  -- provenance, in-row
 
 The scoping block is on every table from the first module, on a single-forest tool, because retrofitting a scope column across a frozen schema later is the kind of migration that never happens cleanly.
 
-### The relationship model
+### The Relationship Model
 
 ![the edge model](wraith-diagrams/05-the-edge-model.svg)
 
@@ -445,7 +445,7 @@ Four design points an engineer will ask about:
 3. **`derivation` is provenance for the *inference*.** The provenance struct answers "which artifact did this come from?" `derivation` answers "why do you claim this edge exists?" Those are different questions, and a responder will ask the second one. It is also part of the primary key, so two edges between the same pair for different reasons are distinct facts rather than a collision.
 4. **One table for every edge kind.** Adding a kind is data, not a migration.
 
-### What the graph actually looks like
+### What the Graph Actually Looks Like
 
 On the real test DC (`c137.local`, from the public *Stolen Szechuan Sauce* CTF image — public training data, which is why it can be named here): **390 nodes, 30,302 edges, 15 distinct edge kinds.**
 
@@ -465,14 +465,14 @@ Be honest about that shape, because a careful reader will spot it immediately: *
 
 ---
 
-## Part 4 — Graph analysis, and a bug worth describing
+## Part 4 — Graph Analysis, and a Bug Worth Describing
 
-!!! abstract "The graph layer"
+!!! abstract "The Graph Layer"
     - **Engine:** networkx over the edge table — pure Python, no compiled dependency to vendor
     - **Question it answers:** who can reach Tier-0, and by which chain
     - **Worth your time:** the projection bug below, which produced confident wrong answers
 
-### Pathfinding: networkx over the edge table
+### Pathfinding: networkx over the Edge Table
 
 Attack-path queries run in **networkx**, built in-process from the edge table. SQL stores and scans; a graph library traverses. Nobody pretends SQL is a traversal engine.
 
@@ -480,9 +480,9 @@ Attack-path queries run in **networkx**, built in-process from the edge table. S
 
 The path engine **bounds work, not just output** — a crafted request with `max_hops=9999, max_paths=99999` is capped rather than hanging or exhausting memory. That was a review finding on a read-only API: read-only is not the same as safe.
 
-### The projection bug
+### The Projection Bug
 
-!!! bug "Confident wrong answers, not a crash"
+!!! bug "Confident Wrong Answers, Not a Crash"
     A projection that collapsed multi-edges produced attack paths that looked valid and
     were not. Nothing threw; the suite stayed green. This is the failure mode the whole
     design is built against, and it still got through — which is why Part 6 ends with
@@ -506,9 +506,9 @@ Verified live after the fix: default graph **0** raw nodes, `tier0_only` **0**, 
 
 ---
 
-## Part 5 — Every choice, with its rejection
+## Part 5 — Every Choice, with Its Rejection
 
-!!! note "How to read this part"
+!!! note "How to Read This Part"
     Each row is a decision *plus* the alternative that was rejected *plus* the specific wrong
     answer that rejection prevents. Licences appear wherever they actually changed the outcome
     rather than as an afterthought.
@@ -546,7 +546,7 @@ Two licence notes recorded so a future audit is not misled: `cryptography` is du
 
 One more note on dropping SQLite: no capability was actually lost, because DuckDB can `ATTACH` and read SQLite files directly. Removing an option costs nothing when the remaining option subsumes it.
 
-### The small decisions
+### The Small Decisions
 
 "Architecture" is mostly a pile of small rulings. These are the ones I would defend in a review, because each prevents a specific, nameable wrong answer.
 
@@ -572,9 +572,9 @@ Two from the frontend, included because they are measured rather than asserted:
 
 ---
 
-## Part 6 — How it was built: a team of agents, one architect
+## Part 6 — How It Was Built: A Team of Agents, One Architect
 
-!!! info "The build method"
+!!! info "The Build Method"
     - **Team:** nine specialised agents under a single human architect
     - **Tool grants:** scoped per agent, which in practice functions as an org chart
     - **Review:** three reviewers asking three deliberately different questions
@@ -586,7 +586,7 @@ I did not write the implementation. I wrote the constraints, locked the architec
 
 ![the agent team](wraith-diagrams/06-the-agent-team.svg)
 
-### Tool grants as an org chart
+### Tool Grants as an Org Chart
 
 This is the design idea I would most like other people to steal.
 
@@ -604,7 +604,7 @@ Three consequences fall straight out of the tool grants rather than out of instr
 - **The coder and tester have no web access at all.** Sourcing runs exclusively through the researcher. That is the offline guarantee expressed as an organisational boundary — the agents writing runtime code cannot reach the network even at design time, so they cannot casually introduce a dependency that assumes one.
 - **The domain expert has no `Bash`.** It cannot run the tests. It must reason about correctness from primary sources — `[MS-ADTS]`, `[MS-DRSR]`, `[MS-GPOL]`, the rights-GUID definitions — rather than being reassured by a green suite. Which turns out to matter enormously.
 
-### The rhythm
+### The Rhythm
 
 > **Research → lock decisions → build ONE module → test it fully → gate → next module.**
 
@@ -620,7 +620,7 @@ research → lock → build ONE module → code review (quality · safety · lic
 
 The gating is deliberately **lean**: one review round and one consolidated fix pass per module, representative-sample validation rather than exhaustive loops. Unbounded review cycles are their own failure mode.
 
-### Three reviewers, three different questions
+### Three Reviewers, Three Different Questions
 
 The separation looks redundant until you see what each one catches. Each definition explicitly disclaims the other two's jurisdiction:
 
@@ -638,7 +638,7 @@ On the AD CS escalation module, **the tester PASSED.** The tests were green. The
 
 Read that again, because it is the load-bearing argument: *the tests were green because they were derived from the same wrong specification as the code.* Behavioural testing cannot catch a specification error. Code review cannot either — the code was clean. Only an independent semantic check against primary sources can. Review and tests alone would have shipped a certificate engine that misleads operators.
 
-### What the process caught
+### What the Process Caught
 
 Across 19 gate records, the final verdict is PASS in all 19 — but **17 of the 19 record an adverse verdict earlier in the pipeline** that forced a fix first. Only membership and NTDS-secrets passed every stage first time. Tally: 2 outright tester FAILs, 11 reviewer CHANGES-REQUESTED, 7 domain-expert ISSUES.
 
@@ -649,7 +649,7 @@ A sample, because the specifics are the evidence:
 - **Five truth defects that made the tool report less.** `AddSelf` was missing from the add-member right set — a principal with `AddSelf` on a privileged group self-elevates to Tier-0, and it was invisible to the one query meant to catch it. Protected Users was being treated as a privileged group when it is a *defensive* one, inflating "all privileged" and hiding Protected-Users shadow admins. Three more queries were over-broad. Net effect on the real DC: `reset-password 12→4`, `WriteSPN 14→5`, `shadow-credentials 13→4`, `admincount-orphans 10→0`. **Four of five corrections deleted false positives from the operator's screen.** A tool that revises its findings downward is a tool worth trusting.
 - **A tester-versus-reviewer disagreement, adjudicated and recorded.** An unreadable SAM value left a machine SID null, which silently disabled a local-versus-domain filter, leaking a host's local accounts as false domain-wide administrator nodes. The tester called it fail-safe behaviour. It was ruled a real false-node leak — fabricating graph nodes silently is never fail-safe. The disagreement and the ruling are both in the gate record.
 
-### The licence catch that changed the architecture
+### The Licence Catch That Changed the Architecture
 
 The original design specification instructed the team to *"extract the GUID→edge table from SharpHound source verbatim."*
 
@@ -659,13 +659,13 @@ The researcher refused, and the reasoning is worth quoting as a model of the dis
 
 That distinction — facts are reusable, implementations are not — then recurs as an architectural force. Neo4j is GPL-3.0, so it only ever runs as a separate container over Bolt, never linked. And `ldap3` is LGPL-3.0, which was adjudicated and recorded: unmodified, pip-imported, separable, and in fact a *dead* dependency never loaded on the offline path, because WRAITH never speaks LDAP.
 
-### The paper trail
+### The Paper Trail
 
 25 research decision records, 15 module briefs, 19 gate records, 18 handbook chapters — 11,895 lines of decision documentation. A research record carries its own status line that progresses from "for owner sign-off" to "research-locked", a candidate-comparison table with licences, an explicit confidence marker on each recommendation, a closing *"decisions this unblocks"* line, and — importantly — a *"choices I'm unsure of, please rule"* section where the researcher declines to decide.
 
 Locked decisions are **amended in place, dated and attributed**, never quietly re-litigated. A gate record encodes its whole pipeline history in the verdict line, not just the outcome: *"PASS (research-locked + reviewer + tester FAIL → fixed → re-verified)"*.
 
-### Where the method failed
+### Where the Method Failed
 
 Three honest failures, because a methodology post that only reports success is marketing.
 
@@ -679,7 +679,7 @@ Three honest failures, because a methodology post that only reports success is m
 
 ## Part 7 — Testing
 
-!!! success "Three layers and a gate"
+!!! success "Three Layers and a Gate"
     - **Layer 1** — unit / golden
     - **Layer 2** — reference / independent re-derivation
     - **Layer 3** — property / robustness
@@ -691,11 +691,11 @@ That sentence is the testing strategy's reason for existing. **47 test files, 83
 
 ![the test layers](wraith-diagrams/07-the-test-layers.svg)
 
-### Layer 1 — unit / golden
+### Layer 1 — Unit / Golden
 
 Small, pure functions against known-answer fixtures. The edge engine, ACE classifier, membership builders and decoders are small and pure *precisely so* they can be tested this way: crafted `SR_SECURITY_DESCRIPTOR` bytes with known ACEs, SHA-256 against FIPS 180-4 vectors, decoder golden tests.
 
-### Layer 2 — reference / independent re-derivation
+### Layer 2 — Reference / Independent Re-Derivation
 
 The structural trick here: **gate suites are written by a different agent than the implementation, and explicitly refuse to trust the coder's own tests.** From a gate suite's own docstring:
 
@@ -705,7 +705,7 @@ Twelve modules carry both a coder sanity suite and a tester gate suite. For hunt
 
 The export's parity check is an accounting identity rather than a diff: **30,303 edges read → 4,931 exported → 25,372 dropped → 0 unmapped**, with `exported + Σdropped == total` asserted per edge kind and globally, plus an assertion tripwire inside the export builder itself.
 
-### Layer 3 — property / robustness
+### Layer 3 — Property / Robustness
 
 Malformed, truncated and hostile inputs must degrade to **counted gaps** — never crash, never silently mislead.
 
@@ -721,7 +721,7 @@ The discipline extends to the operator-facing layer. A hunt that matches nothing
 
 44 determinism and idempotence tests across 29 of the 47 files. The pattern is two independent full runs compared byte-for-byte: the whole edge computation, the membership closure, the normalizer, the export *including its zip archive*, all 56 hunter queries, the graph slices, and the dossier summaries.
 
-### The gate
+### The Gate
 
 A module is not done because its tests pass. It is done on a written PASS verdict plus my sign-off. A gate document records the verdict, every stage's result, what was built, the observed real-DC facts, the counted-gap taxonomy, the findings fixed that cycle, and the honest validation status. The documentation puts it well:
 
@@ -729,9 +729,9 @@ A module is not done because its tests pass. It is done on a written PASS verdic
 
 ---
 
-## Part 8 — The GOAD run: stress test and parity test
+## Part 8 — The GOAD Run: Stress Test and Parity Test
 
-!!! example "Two separate claims"
+!!! example "Two Separate Claims"
     - **Stress test** — does it survive a large multi-domain forest?
     - **Parity test** — does it agree with the reference implementation?
     - These are **not** the same claim, and the divergence between them was predicted in advance
@@ -742,7 +742,7 @@ The next validation step is a run against **GOAD** — Game of Active Directory,
 
 ![GOAD stress and parity](wraith-diagrams/08-goad-stress-and-parity.svg)
 
-### Claim 1 — the stress test
+### Claim 1 — The Stress Test
 
 Does the engine hold up on a domain far larger and messier than the one it was built against?
 
@@ -756,7 +756,7 @@ GOAD is a genuine scale and complexity step up, not a bigger copy of the same th
 
 The measurements that matter are the boring ones: wall-clock per pass, peak memory on the closure and the edge build, store size, and whether determinism still holds — two full runs, byte-identical — at ten or a hundred times the current graph size.
 
-### Claim 2 — the differential parity test
+### Claim 2 — The Differential Parity Test
 
 Do two independent implementations agree about the same domain?
 
@@ -766,7 +766,7 @@ SharpHound collecting live from GOAD is a second implementation of the same conc
 
 This is the same logic as the AD CS failure in Part 6, applied one level up. There, a green test suite was green *because the tests and the code were derived from the same wrong specification.* An independent oracle is the only thing that breaks that circularity. Self-validation has exactly the same blind spot, and GOAD is how it gets closed.
 
-### The expected divergence — predicted in advance
+### The Expected Divergence — Predicted in Advance
 
 Writing down what you expect to differ *before* running the comparison is what separates a test from a fishing trip. All three buckets are predictable now:
 
@@ -780,11 +780,11 @@ A fourth bucket is the one that would actually matter: **both tools claim an edg
 
 The acceptance bar is set in the tester's own mandate — **Tier-1 edge parity ≥ 98%** — with every item in the remaining 2% required to land in a named bucket above, with a reason. An unexplained divergence is a defect in one of the two tools, and it is not permitted to stay unexplained.
 
-### What is already tested as load, today
+### What Is Already Tested as Load, Today
 
 Separately from GOAD, and so the distinction stays clean: the API already asserts bounded work. Slice and path endpoints are tested for bounded time and bounded memory against the real 30,000-edge store, and the pathfinder caps work rather than output, so a request crafted with `max_hops=9999, max_paths=99999` is capped rather than hanging or exhausting memory. Those are load claims and they are tested. They are **not** parity claims, and presenting them as parity would be exactly the conflation this section exists to avoid.
 
-### What is validated on real data, and what is not
+### What Is Validated on Real Data, and What Is Not
 
 This is published deliberately, because a responder needs to know which findings rest on real validation:
 
@@ -792,13 +792,13 @@ This is published deliberately, because a responder needs to know which findings
 
 **Synthetic-only — implemented, tested only against crafted fixtures:** the entire AD CS surface (topology and every ESC class), RBCD and constrained delegation, gMSA and LAPS password reads, SID history, forest trusts, GPO local-group derived admin rights, and member-host AdminTo emission.
 
-!!! warning "The largest caveat, stated in full"
+!!! warning "The Largest Caveat, Stated in Full"
     **AD CS findings are unvalidated until a CA artifact is ingested and a parity gate is
     run against it.**
 
 The test DC has no usable AD CS. The code is built, reviewed, domain-validated and synthetically tested — and it has never seen a real certificate authority. In the API, deferred queries carry `supported=false` and `data_confidence="synthetic-only"` in the response itself, so the honesty reaches the operator rather than stopping at the documentation.
 
-### Four more limits
+### Four More Limits
 
 - **There is no CI.** The project file lists GitHub Actions; it does not exist. Gates are run locally. The suite is written to be CI-safe — real-data tests are skip-guarded so they run without evidence — but the pipeline is aspirational.
 - **No property-based testing library.** Layer 3 is property-*asserting*: hand-enumerated adversarial inputs plus asserted invariants. It is not generative fuzzing, and calling it that would be false.
@@ -807,9 +807,9 @@ The test DC has no usable AD CS. The code is built, reviewed, domain-validated a
 
 ---
 
-## What I would do differently
+## What I Would Do Differently
 
-!!! tip "With hindsight"
+!!! tip "With Hindsight"
 
     **Commit history.** The entire project — 25 research records, 19 gates, the full implementation — lives in essentially one commit. The decision trail is excellent and the *version* trail is absent. Those are not substitutes for each other, and I had the wrong one.
 
@@ -825,19 +825,19 @@ The test DC has no usable AD CS. The code is built, reviewed, domain-validated a
 
 The through-line, if there is one: **in forensics the dangerous bug is not the crash, it is the confident wrong answer.** Nearly every engineering decision in this project follows from taking that seriously — in-process storage so there is no server to contradict the offline claim, content-derived primary keys so re-derivation is idempotent, provenance in every row so every claim is traceable, counted gaps so a degraded branch announces itself, and three independent reviewers because tests derived from a wrong specification pass.
 
-!!! quote "The finding I did not expect"
+!!! quote "The Finding I Did Not Expect"
     A green test suite tells you the code matches the specification.
 
     It tells you nothing at all about whether the specification is true.
 
 ---
 
-## References and further reading
+## References and Further Reading
 
 Licences are noted where they affected a decision, because licence hygiene is a
 running theme of this post rather than an afterthought.
 
-=== "Reference implementation"
+=== "Reference Implementation"
     Studied for its concepts, never for its code.
 
     - **BloodHound CE / SharpHound** (SpecterOps) — the reference for the edge model, the attacker-lens graph, and the rights-GUID→edge logic: [github.com/SpecterOps/BloodHound](https://github.com/SpecterOps/BloodHound) · **GPL-3.0**, which is precisely why only the public facts were reused and the mapper written from scratch.
@@ -871,7 +871,7 @@ running theme of this post rather than an afterthought.
     - **CASE / UCO** — the forensic exchange ontology the manifest field names are kept mappable onto: [caseontology.org](https://caseontology.org/)
     - **WCAG 2.1** — the AA contrast ratios the dark theme was measured against: [w3.org/WAI/WCAG21](https://www.w3.org/WAI/WCAG21/quickref/)
 
-=== "Test data"
+=== "Test Data"
     The labs and images every validated claim rests on.
 
     - **Stolen Szechuan Sauce** (DFIR Madness) — the public training DC image used as the real-data fixture throughout: [dfirmadness.com](https://dfirmadness.com/)

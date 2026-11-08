@@ -46,7 +46,7 @@ hide:
 
 ---
 
-## Skills &amp; Focus Areas
+## Skills &Amp; Focus Areas
 
 <div class="nf-skills">
   <span class="nf-skill-tag">Threat Hunting</span>
@@ -174,7 +174,7 @@ hide:
 
 ---
 
-## Get In Touch
+## Get in Touch
 
 <div class="nf-contact-grid" markdown>
 

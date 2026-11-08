@@ -465,3 +465,42 @@ html {
     display: none;
   }
 }
+
+/* ------------------------------------------------------------------
+   DENSE TABLES
+
+   The forensic and reference tables carry several columns of short,
+   structured values -- timestamps, event IDs, file paths. Material's
+   default cell padding is tuned for prose, so those columns run into
+   each other and a value like an inline code span ends up glued to the
+   bold text beside it.
+   ------------------------------------------------------------------ */
+
+.md-typeset table:not([class]) th,
+.md-typeset table:not([class]) td {
+  padding: 0.62rem 0.85rem;
+  /* Multi-line cells should line up from the top, not float in the
+     middle of the tallest row in the line. */
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.md-typeset table:not([class]) th {
+  /* A header that wraps mid-phrase is harder to scan than one that
+     scrolls, and the table already scrolls horizontally. */
+  white-space: nowrap;
+}
+
+/* An inline code span is a single value. Breaking `phpshell2.php`
+   across two lines makes it unreadable, and leaving no gap between it
+   and the next word makes two values look like one. */
+.md-typeset table:not([class]) code {
+  white-space: nowrap;
+  margin-inline: 0.1em;
+}
+
+/* No blanket nowrap on the first column: an audit of all 29 tables in the
+   blog found eight whose first column is prose, one of them 100 characters
+   long. Forcing those onto a single line pushes the table far past the page
+   and makes the scroll worse than the wrap. Timestamps are kept intact at
+   source instead, with non-breaking spaces inside the value. */
