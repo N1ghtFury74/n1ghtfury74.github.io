@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" font-family="'Kalam', 'Comic Sans MS', cursive" role="img" aria-label="The web shell chain">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&amp;display=swap');</style>
+    <filter id="sk" x="-2%" y="-3%" width="104%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <marker id="mg" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#495057" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mr" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#c92a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mgr" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#2f9e44" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mb" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#1f4bd8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mo" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#e8590c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mp" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#6741d9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mm" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#868e96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <g filter="url(#sk)">
+    <rect x="22" y="76" width="228" height="64" rx="7" fill="#f3f0ff" stroke="#6741d9" stroke-width="2.2"/>
+    <rect x="22" y="156" width="228" height="214" rx="7" fill="#ffffff" stroke="#495057" stroke-width="2"/>
+    <rect x="22" y="386" width="228" height="40" rx="7" fill="#ffffff" stroke="#6741d9" stroke-width="2" stroke-dasharray="5 4"/>
+    <line x1="251" y1="108" x2="262" y2="108" stroke="#495057" stroke-width="2" marker-end="url(#mg)"/>
+    <rect x="263" y="76" width="228" height="64" rx="7" fill="#fff5f5" stroke="#c92a2a" stroke-width="2.2"/>
+    <rect x="263" y="156" width="228" height="214" rx="7" fill="#ffffff" stroke="#495057" stroke-width="2"/>
+    <rect x="263" y="386" width="228" height="40" rx="7" fill="#ffffff" stroke="#c92a2a" stroke-width="2" stroke-dasharray="5 4"/>
+    <line x1="492" y1="108" x2="503" y2="108" stroke="#495057" stroke-width="2" marker-end="url(#mg)"/>
+    <rect x="504" y="76" width="228" height="64" rx="7" fill="#fff5f5" stroke="#c92a2a" stroke-width="2.2"/>
+    <rect x="504" y="156" width="228" height="214" rx="7" fill="#ffffff" stroke="#495057" stroke-width="2"/>
+    <rect x="504" y="386" width="228" height="40" rx="7" fill="#ffffff" stroke="#c92a2a" stroke-width="2" stroke-dasharray="5 4"/>
+    <line x1="733" y1="108" x2="744" y2="108" stroke="#495057" stroke-width="2" marker-end="url(#mg)"/>
+    <rect x="745" y="76" width="228" height="64" rx="7" fill="#fff4e6" stroke="#e8590c" stroke-width="2.2"/>
+    <rect x="745" y="156" width="228" height="214" rx="7" fill="#ffffff" stroke="#495057" stroke-width="2"/>
+    <rect x="745" y="386" width="228" height="40" rx="7" fill="#ffffff" stroke="#e8590c" stroke-width="2" stroke-dasharray="5 4"/>
+    <rect x="22" y="446" width="956" height="92" rx="6" fill="#f1f3f5" stroke="#495057" stroke-width="2"/>
+  </g>
+  <text x="22" y="32" font-size="20" font-weight="700" fill="#1e1e1e" text-anchor="start">The web shell chain</text>
+  <text x="22" y="53" font-size="12.5" font-weight="400" fill="#868e96" text-anchor="start">from throwaway shells to a reverse connection — 3 Sep unless marked; all times UTC</text>
+  <text x="136.0" y="101" font-size="14.5" font-weight="700" fill="#6741d9" text-anchor="middle">1. tmp*.php</text>
+  <text x="136.0" y="122" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">web root · via SQLi</text>
+  <text x="34" y="182" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">2 Sep 11:25:52  tmpukudk.php</text>
+  <text x="34" y="214" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">2 Sep 11:25:53  tmpbiwuc.php</text>
+  <text x="34" y="246" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">2 Sep 11:26:23  both deleted</text>
+  <text x="34" y="278" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">06:52:24  tmpudvfh.php</text>
+  <text x="34" y="310" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">06:52:24  tmpbrjvl.php</text>
+  <text x="34" y="342" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">06:59:38  both deleted</text>
+  <text x="136.0" y="411" font-size="11" font-weight="700" fill="#6741d9" text-anchor="middle">sqlmap stager + backdoor pairs</text>
+  <text x="377.0" y="101" font-size="14.5" font-weight="700" fill="#c92a2a" text-anchor="middle">2. phpshell.php</text>
+  <text x="377.0" y="122" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">DVWA/hackable/uploads</text>
+  <text x="275" y="182" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">07:10:56  POST to upload form</text>
+  <text x="275" y="214" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">07:16:13  ?cmd=dir</text>
+  <text x="275" y="246" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">07:17:49  ?cmd=dir C:\</text>
+  <text x="275" y="278" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">07:17:58  ?cmd=mkdir abc</text>
+  <text x="275" y="310" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">07:18:02  ?cmd=dir</text>
+  <text x="377.0" y="411" font-size="11" font-weight="700" fill="#c92a2a" text-anchor="middle">GET ?cmd= → visible in the log</text>
+  <text x="618.0" y="101" font-size="14.5" font-weight="700" fill="#c92a2a" text-anchor="middle">3. c99.php</text>
+  <text x="618.0" y="122" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">C:\xampp\htdocs\DVWA\</text>
+  <text x="516" y="182" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">07:14:48  webshells.zip (USN)</text>
+  <text x="516" y="214" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">07:14:57  DVWA dir modified</text>
+  <text x="516" y="246" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">07:20:59  GET c99.php</text>
+  <text x="516" y="278" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">07:21:28  POST act=cmd (13,100 B)</text>
+  <text x="516" y="310" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">07:21:37  POST act=cmd (14,176 B)</text>
+  <text x="516" y="342" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">VT 44/61 · SHA-256 4320d95c…</text>
+  <text x="618.0" y="411" font-size="11" font-weight="700" fill="#c92a2a" text-anchor="middle">no upload request: off-HTTP drop</text>
+  <text x="859.0" y="101" font-size="14.5" font-weight="700" fill="#e8590c" text-anchor="middle">4. phpshell2.php</text>
+  <text x="859.0" y="122" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">DVWA/hackable/uploads</text>
+  <text x="757" y="182" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">07:31:14  GET /dvwa/</text>
+  <text x="757" y="214" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">07:31:18  GET upload page</text>
+  <text x="757" y="246" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">07:31:30  POST to upload form</text>
+  <text x="757" y="278" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">07:31:54  GET phpshell2.php</text>
+  <text x="757" y="310" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">             → 200, 2 bytes</text>
+  <text x="757" y="342" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">last request in access.log</text>
+  <text x="859.0" y="411" font-size="11" font-weight="700" fill="#e8590c" text-anchor="middle">reverse-connection stager</text>
+  <text x="36" y="470" font-size="13" font-weight="700" fill="#1e1e1e" text-anchor="start">Reading the chain</text>
+  <text x="36" y="490" font-size="11" font-weight="400" fill="#495057" text-anchor="start">Each step buys the operator something: proof of execution (tmp*) → a shell that survives (phpshell) → a full file manager</text>
+  <text x="36" y="506" font-size="11" font-weight="400" fill="#495057" text-anchor="start">and command console whose commands travel in POST bodies (c99) → a channel outside HTTP entirely (phpshell2).</text>
+  <text x="36" y="522" font-size="11" font-weight="400" fill="#495057" text-anchor="start">Each step also hides more from access.log — which is exactly why the investigation had to move to the file system and memory.</text>
+</svg>

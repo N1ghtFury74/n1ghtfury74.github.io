@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 590" font-family="'Kalam', 'Comic Sans MS', cursive" role="img" aria-label="Investigation path">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&amp;display=swap');</style>
+    <filter id="sk" x="-2%" y="-3%" width="104%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <marker id="mg" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#495057" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mr" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#c92a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mgr" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#2f9e44" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mb" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#1f4bd8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mo" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#e8590c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mp" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#6741d9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mm" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#868e96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+  <rect width="1000" height="590" fill="#ffffff"/>
+  <g filter="url(#sk)">
+    <rect x="22" y="230" width="150" height="92" rx="7" fill="#eef2ff" stroke="#0b3d66" stroke-width="2"/>
+    <rect x="196" y="230" width="150" height="92" rx="7" fill="#eef2ff" stroke="#0b3d66" stroke-width="2"/>
+    <line x1="172" y1="276" x2="192" y2="276" stroke="#495057" stroke-width="2" marker-end="url(#mg)"/>
+    <path d="M346,276 C362,276 362,130 384,130" fill="none" stroke="#495057" stroke-width="2" marker-end="url(#mg)"/>
+    <path d="M346,276 C362,276 362,276 384,276" fill="none" stroke="#495057" stroke-width="2" marker-end="url(#mg)"/>
+    <rect x="388" y="88" width="186" height="84" rx="7" fill="#ffffff" stroke="#495057" stroke-width="2"/>
+    <rect x="600" y="88" width="186" height="84" rx="7" fill="#ffffff" stroke="#495057" stroke-width="2"/>
+    <line x1="574" y1="130" x2="596" y2="130" stroke="#495057" stroke-width="2" marker-end="url(#mg)"/>
+    <ellipse cx="888" cy="130" rx="92" ry="34" fill="#f1f3f5" stroke="#868e96" stroke-width="2"/>
+    <line x1="786" y1="130" x2="792" y2="130" stroke="#495057" stroke-width="2" marker-end="url(#mg)"/>
+    <rect x="388" y="234" width="186" height="84" rx="7" fill="#ebfbee" stroke="#2f9e44" stroke-width="2"/>
+    <rect x="600" y="234" width="186" height="84" rx="7" fill="#ebfbee" stroke="#2f9e44" stroke-width="2"/>
+    <rect x="812" y="234" width="168" height="84" rx="7" fill="#ebfbee" stroke="#2f9e44" stroke-width="2"/>
+    <line x1="574" y1="276" x2="596" y2="276" stroke="#2f9e44" stroke-width="2" marker-end="url(#mgr)"/>
+    <line x1="786" y1="276" x2="808" y2="276" stroke="#2f9e44" stroke-width="2" marker-end="url(#mgr)"/>
+    <rect x="812" y="372" width="168" height="84" rx="7" fill="#f3f0ff" stroke="#6741d9" stroke-width="2"/>
+    <rect x="600" y="372" width="186" height="84" rx="7" fill="#f3f0ff" stroke="#6741d9" stroke-width="2"/>
+    <rect x="388" y="372" width="186" height="84" rx="7" fill="#f3f0ff" stroke="#6741d9" stroke-width="2"/>
+    <line x1="896" y1="318" x2="896" y2="368" stroke="#6741d9" stroke-width="2" marker-end="url(#mp)"/>
+    <line x1="812" y1="414" x2="790" y2="414" stroke="#6741d9" stroke-width="2" marker-end="url(#mp)"/>
+    <line x1="600" y1="414" x2="578" y2="414" stroke="#6741d9" stroke-width="2" marker-end="url(#mp)"/>
+    <rect x="22" y="500" width="552" height="62" rx="7" fill="#b2f2bb" stroke="#14532d" stroke-width="2.2"/>
+    <path d="M388,414 C300,414 300,480 300,496" fill="none" stroke="#14532d" stroke-width="2" marker-end="url(#mgr)"/>
+  </g>
+  <text x="22" y="32" font-size="20" font-weight="700" fill="#1e1e1e" text-anchor="start">Investigation path</text>
+  <text x="22" y="53" font-size="12.5" font-weight="400" fill="#868e96" text-anchor="start">two hypotheses tested in parallel; every arrow is a pivot chosen by what the last step found</text>
+  <text x="97.0" y="254" font-size="12.5" font-weight="700" fill="#0b3d66" text-anchor="middle">Prepare evidence</text>
+  <text x="97.0" y="273" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">AIM write-temporary</text>
+  <text x="97.0" y="288" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">KAPE !SANS_Triage</text>
+  <text x="97.0" y="303" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">memory → MemProcFS</text>
+  <text x="271.0" y="254" font-size="12.5" font-weight="700" fill="#0b3d66" text-anchor="middle">Profile the host</text>
+  <text x="271.0" y="273" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">OS · TZ · network</text>
+  <text x="271.0" y="288" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">accounts (SAM vs</text>
+  <text x="271.0" y="303" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">ProfileList)</text>
+  <text x="266" y="346" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="start">two hypotheses, tested side by side</text>
+  <text x="481.0" y="112" font-size="12.5" font-weight="700" fill="#1e1e1e" text-anchor="middle">H-OS: Windows-level</text>
+  <text x="481.0" y="131" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">Hayabusa (Sigma) +</text>
+  <text x="481.0" y="146" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">EvtxECmd / Timeline Explorer</text>
+  <text x="693.0" y="112" font-size="12.5" font-weight="700" fill="#1e1e1e" text-anchor="middle">4625 burst, 23 Aug</text>
+  <text x="693.0" y="131" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">user 'Student' from 10.20.0.118</text>
+  <text x="693.0" y="146" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">no matching 4624</text>
+  <text x="888" y="126" font-size="12.5" font-weight="700" fill="#495057" text-anchor="middle">ruled out</text>
+  <text x="888" y="143" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">lab noise on build day</text>
+  <text x="481.0" y="258" font-size="12.5" font-weight="700" fill="#2f9e44" text-anchor="middle">H-WEB: web application</text>
+  <text x="481.0" y="277" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">Application.evtx →</text>
+  <text x="481.0" y="292" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">XAMPP + MySQL 5.6.25</text>
+  <text x="693.0" y="258" font-size="12.5" font-weight="700" fill="#2f9e44" text-anchor="middle">access.log → CSV</text>
+  <text x="693.0" y="277" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">stack by User-Agent</text>
+  <text x="693.0" y="292" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">and source IP</text>
+  <text x="896.0" y="258" font-size="12.5" font-weight="700" fill="#2f9e44" text-anchor="middle">Attacks found</text>
+  <text x="896.0" y="277" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">XSS · exec · LFI</text>
+  <text x="896.0" y="292" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">sqlmap · uploads</text>
+  <text x="593" y="335" font-size="10.5" font-weight="400" fill="#2f9e44" text-anchor="start">pivot: UA = sqlmap, Iceweasel</text>
+  <text x="896.0" y="396" font-size="12.5" font-weight="700" fill="#6741d9" text-anchor="middle">Files deleted</text>
+  <text x="896.0" y="415" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">FTK, PhotoRec: nothing</text>
+  <text x="896.0" y="430" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">→ $I30 + USN journal</text>
+  <text x="693.0" y="396" font-size="12.5" font-weight="700" fill="#6741d9" text-anchor="middle">Memory</text>
+  <text x="693.0" y="415" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">httpd.exe strings: POST bodies</text>
+  <text x="693.0" y="430" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">cmdscan: console history</text>
+  <text x="481.0" y="396" font-size="12.5" font-weight="700" fill="#6741d9" text-anchor="middle">Registry + EVTX</text>
+  <text x="481.0" y="415" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">SAM: user1 / hacker</text>
+  <text x="481.0" y="430" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">09:00:39 fail in both</text>
+  <text x="652" y="474" font-size="10.5" font-weight="400" fill="#6741d9" text-anchor="start">pivot: POST bodies missing from the log</text>
+  <text x="388" y="474" font-size="10.5" font-weight="400" fill="#6741d9" text-anchor="start">pivot: account names + times</text>
+  <text x="298" y="526" font-size="13.5" font-weight="700" fill="#14532d" text-anchor="middle">One UTC timeline → root cause → ATT&amp;CK + Diamond</text>
+  <text x="298" y="546" font-size="11" font-weight="400" fill="#495057" text-anchor="middle">every claim tied to an artefact and checked against a second one</text>
+</svg>

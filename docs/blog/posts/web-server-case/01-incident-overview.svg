@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 500" font-family="'Kalam', 'Comic Sans MS', cursive" role="img" aria-label="The incident on one page">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&amp;display=swap');</style>
+    <filter id="sk" x="-2%" y="-3%" width="104%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <marker id="mg" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#495057" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mr" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#c92a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mgr" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#2f9e44" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mb" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#1f4bd8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mo" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#e8590c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mp" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#6741d9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mm" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#868e96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+  <rect width="920" height="500" fill="#ffffff"/>
+  <g filter="url(#sk)">
+    <rect x="22" y="78" width="236" height="158" rx="7" fill="#fff5f5" stroke="#c92a2a" stroke-width="2.2"/>
+    <rect x="22" y="268" width="236" height="148" rx="7" fill="#fff4e6" stroke="#e8590c" stroke-width="2.2"/>
+    <rect x="318" y="78" width="290" height="338" rx="9" fill="#eef2ff" stroke="#1f4bd8" stroke-width="3"/>
+    <rect x="336" y="138" width="254" height="56" rx="7" fill="#ffffff" stroke="#495057" stroke-width="2"/>
+    <rect x="336" y="206" width="254" height="56" rx="7" fill="#ffffff" stroke="#495057" stroke-width="2"/>
+    <rect x="336" y="274" width="254" height="56" rx="7" fill="#ffffff" stroke="#495057" stroke-width="2"/>
+    <rect x="336" y="342" width="254" height="56" rx="7" fill="#ffffff" stroke="#495057" stroke-width="2"/>
+    <line x1="262" y1="120" x2="330" y2="160" stroke="#c92a2a" stroke-width="2" marker-end="url(#mr)"/>
+    <line x1="262" y1="160" x2="330" y2="226" stroke="#c92a2a" stroke-width="2" marker-end="url(#mr)"/>
+    <line x1="262" y1="200" x2="330" y2="296" stroke="#c92a2a" stroke-width="2" marker-end="url(#mr)" stroke-dasharray="6 4"/>
+    <line x1="262" y1="360" x2="330" y2="370" stroke="#e8590c" stroke-width="2" marker-end="url(#mo)"/>
+    <line x1="262" y1="290" x2="330" y2="240" stroke="#e8590c" stroke-width="2" marker-end="url(#mo)" stroke-dasharray="6 4"/>
+    <rect x="652" y="78" width="248" height="58" rx="7" fill="#fff5f5" stroke="#c92a2a" stroke-width="2"/>
+    <rect x="652" y="146" width="248" height="58" rx="7" fill="#fff5f5" stroke="#c92a2a" stroke-width="2"/>
+    <rect x="652" y="214" width="248" height="58" rx="7" fill="#f3f0ff" stroke="#6741d9" stroke-width="2"/>
+    <rect x="652" y="282" width="248" height="58" rx="7" fill="#f3f0ff" stroke="#6741d9" stroke-width="2"/>
+    <rect x="652" y="350" width="248" height="58" rx="7" fill="#f3f0ff" stroke="#6741d9" stroke-width="2"/>
+    <line x1="612" y1="247" x2="646" y2="247" stroke="#495057" stroke-width="2.5" marker-end="url(#mg)"/>
+  </g>
+  <text x="22" y="32" font-size="20" font-weight="700" fill="#1e1e1e" text-anchor="start">The incident on one page</text>
+  <text x="22" y="53" font-size="12.5" font-weight="400" fill="#868e96" text-anchor="start">who touched the server, through which layer, and what they left behind</text>
+  <text x="36" y="102" font-size="15" font-weight="700" fill="#c92a2a" text-anchor="start">Remote operator</text>
+  <text x="36" y="124.0" font-size="11.5" font-weight="400" fill="#495057" text-anchor="start">192.168.56.102 (host-only lab net)</text>
+  <text x="36" y="140.675" font-size="11.5" font-weight="400" fill="#495057" text-anchor="start">Kali: Iceweasel browser</text>
+  <text x="36" y="157.35" font-size="11.5" font-weight="400" fill="#495057" text-anchor="start">sqlmap 1.0-dev-nongit-20150902</text>
+  <text x="36" y="174.025" font-size="11.5" font-weight="400" fill="#495057" text-anchor="start">Python-urllib/2.7 (sqlmap uploads)</text>
+  <text x="36" y="190.7" font-size="11.5" font-weight="400" fill="#495057" text-anchor="start">all traffic over HTTP to DVWA</text>
+  <text x="36" y="292" font-size="15" font-weight="700" fill="#e8590c" text-anchor="start">On the server itself</text>
+  <text x="36" y="314.0" font-size="11.5" font-weight="400" fill="#495057" text-anchor="start">interactive console (cmd.exe)</text>
+  <text x="36" y="330.675" font-size="11.5" font-weight="400" fill="#495057" text-anchor="start">Internet Explorer from ::1</text>
+  <text x="36" y="347.35" font-size="11.5" font-weight="400" fill="#495057" text-anchor="start">failed console logon 09:00:39</text>
+  <text x="36" y="364.025" font-size="11.5" font-weight="400" fill="#495057" text-anchor="start">net user / netsh typed by hand</text>
+  <text x="36" y="380.7" font-size="11.5" font-weight="400" fill="#495057" text-anchor="start">(cmdscan history)</text>
+  <text x="463" y="102" font-size="15" font-weight="700" fill="#1f4bd8" text-anchor="middle">WIN-L0ZZQ76PMUF</text>
+  <text x="463" y="120" font-size="11" font-weight="400" fill="#495057" text-anchor="middle">192.168.56.101 · PST (UTC-7)</text>
+  <text x="463" y="161" font-size="12.5" font-weight="700" fill="#1e1e1e" text-anchor="middle">Apache httpd + PHP (mod_php)</text>
+  <text x="463" y="180" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">web shells run inside httpd.exe</text>
+  <text x="463" y="229" font-size="12.5" font-weight="700" fill="#1e1e1e" text-anchor="middle">DVWA — security level: low</text>
+  <text x="463" y="248" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">XSS · brute · CSRF · exec · LFI · SQLi · upload</text>
+  <text x="463" y="297" font-size="12.5" font-weight="700" fill="#1e1e1e" text-anchor="middle">MySQL 5.6.25 (XAMPP)</text>
+  <text x="463" y="316" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">FILE privilege → INTO OUTFILE</text>
+  <text x="463" y="365" font-size="12.5" font-weight="700" fill="#1e1e1e" text-anchor="middle">Windows Server 2008 SP1 x86</text>
+  <text x="463" y="384" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">SAM · local groups · firewall</text>
+  <text x="268" y="112" font-size="10" font-weight="400" fill="#c92a2a" text-anchor="start">HTTP</text>
+  <text x="664" y="102" font-size="12.5" font-weight="700" fill="#c92a2a" text-anchor="start">2 local accounts</text>
+  <text x="664" y="121" font-size="10.5" font-weight="400" fill="#495057" text-anchor="start">user1 · hacker → Remote Desktop Users</text>
+  <text x="664" y="170" font-size="12.5" font-weight="700" fill="#c92a2a" text-anchor="start">RDP allowed in firewall</text>
+  <text x="664" y="189" font-size="10.5" font-weight="400" fill="#495057" text-anchor="start">netsh firewall … type=remotedesktop</text>
+  <text x="664" y="238" font-size="12.5" font-weight="700" fill="#6741d9" text-anchor="start">2 sqlmap --os-shell sessions</text>
+  <text x="664" y="257" font-size="10.5" font-weight="400" fill="#495057" text-anchor="start">tmpu*.php stager + tmpb*.php backdoor</text>
+  <text x="664" y="306" font-size="12.5" font-weight="700" fill="#6741d9" text-anchor="start">2 persistent web shells</text>
+  <text x="664" y="325" font-size="10.5" font-weight="400" fill="#495057" text-anchor="start">phpshell.php (?cmd=) · c99.php</text>
+  <text x="664" y="374" font-size="12.5" font-weight="700" fill="#6741d9" text-anchor="start">Reverse-connection stager</text>
+  <text x="664" y="393" font-size="10.5" font-weight="400" fill="#495057" text-anchor="start">phpshell2.php → operator</text>
+  <text x="22" y="452" font-size="12" font-weight="700" fill="#1e1e1e" text-anchor="start">Hostile remote activity: 2015-09-02 07:10:41 → 2015-09-03 07:31:54 UTC</text>
+  <text x="22" y="474" font-size="11.5" font-weight="400" fill="#868e96" text-anchor="start">Memory captured 2015-09-03 10:03 UTC · disk imaged after a reboot on 2015-09-12 (see evidence timing)</text>
+</svg>

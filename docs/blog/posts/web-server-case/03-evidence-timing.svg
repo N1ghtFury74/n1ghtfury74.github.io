@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 380" font-family="'Kalam', 'Comic Sans MS', cursive" role="img" aria-label="Evidence timing: two snapshots, nine days apart">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&amp;display=swap');</style>
+    <filter id="sk" x="-2%" y="-3%" width="104%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <marker id="mg" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#495057" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mr" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#c92a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mgr" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#2f9e44" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mb" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#1f4bd8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mo" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#e8590c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mp" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#6741d9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mm" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#868e96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+  <rect width="1000" height="380" fill="#ffffff"/>
+  <g filter="url(#sk)">
+    <line x1="50" y1="200" x2="960" y2="200" stroke="#495057" stroke-width="2.2"/>
+    <rect x="50.0" y="150" width="65.0" height="40" rx="4" fill="#f1f3f5" stroke="#868e96" stroke-width="2"/>
+    <rect x="496.27314814814815" y="150" width="43.995370370370324" height="40" rx="4" fill="#fff5f5" stroke="#c92a2a" stroke-width="2.2"/>
+    <line x1="544.8125" y1="270" x2="544.8125" y2="206" stroke="#1f4bd8" stroke-width="2.5" marker-end="url(#mb)"/>
+    <rect x="474.8125" y="272" width="168" height="62" rx="7" fill="#eef2ff" stroke="#1f4bd8" stroke-width="2"/>
+    <line x1="948.625" y1="270" x2="948.625" y2="206" stroke="#e8590c" stroke-width="2.5" marker-end="url(#mo)"/>
+    <rect x="752.625" y="272" width="220" height="76" rx="7" fill="#fff4e6" stroke="#e8590c" stroke-width="2"/>
+    <rect x="950.625" y="150" width="34" height="40" rx="4" fill="#fff4e6" stroke="#e8590c" stroke-width="2"/>
+  </g>
+  <text x="22" y="32" font-size="20" font-weight="700" fill="#1e1e1e" text-anchor="start">Evidence timing: two snapshots, nine days apart</text>
+  <text x="22" y="53" font-size="12.5" font-weight="400" fill="#868e96" text-anchor="start">memory shows the host at 3 Sep 10:03 UTC; the disk shows it after a reboot and logon on 12 Sep</text>
+  <line x1="50.0" y1="195" x2="50.0" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="93.33333333333333" y1="195" x2="93.33333333333333" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="136.66666666666666" y1="195" x2="136.66666666666666" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="180.0" y1="195" x2="180.0" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="223.33333333333331" y1="195" x2="223.33333333333331" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="266.66666666666663" y1="195" x2="266.66666666666663" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="310.0" y1="195" x2="310.0" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="353.3333333333333" y1="195" x2="353.3333333333333" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="396.66666666666663" y1="195" x2="396.66666666666663" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="440.0" y1="195" x2="440.0" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="483.3333333333333" y1="195" x2="483.3333333333333" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="526.6666666666667" y1="195" x2="526.6666666666667" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="570.0" y1="195" x2="570.0" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="613.3333333333334" y1="195" x2="613.3333333333334" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="656.6666666666666" y1="195" x2="656.6666666666666" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="700.0" y1="195" x2="700.0" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="743.3333333333333" y1="195" x2="743.3333333333333" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="786.6666666666666" y1="195" x2="786.6666666666666" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="830.0" y1="195" x2="830.0" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="873.3333333333334" y1="195" x2="873.3333333333334" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="916.6666666666666" y1="195" x2="916.6666666666666" y2="205" stroke="#868e96" stroke-width="1"/>
+  <line x1="960.0" y1="195" x2="960.0" y2="205" stroke="#868e96" stroke-width="1"/>
+  <text x="50.0" y="222" font-size="11" font-weight="400" fill="#868e96" text-anchor="middle">23 Aug</text>
+  <text x="223.33333333333331" y="222" font-size="11" font-weight="400" fill="#868e96" text-anchor="middle">27 Aug</text>
+  <text x="396.66666666666663" y="222" font-size="11" font-weight="400" fill="#868e96" text-anchor="middle">31 Aug</text>
+  <text x="483.3333333333333" y="222" font-size="11" font-weight="400" fill="#868e96" text-anchor="middle">2 Sep</text>
+  <text x="656.6666666666666" y="222" font-size="11" font-weight="400" fill="#868e96" text-anchor="middle">6 Sep</text>
+  <text x="916.6666666666666" y="222" font-size="11" font-weight="400" fill="#868e96" text-anchor="middle">12 Sep</text>
+  <text x="50.0" y="126" font-size="11" font-weight="400" fill="#495057" text-anchor="start">lab build: XAMPP, DVWA,</text>
+  <text x="50.0" y="140" font-size="11" font-weight="400" fill="#495057" text-anchor="start">InstallDate 24 Aug 06:52</text>
+  <text x="518.2708333333333" y="126" font-size="13" font-weight="700" fill="#c92a2a" text-anchor="middle">incident</text>
+  <text x="518.2708333333333" y="140" font-size="11" font-weight="400" fill="#c92a2a" text-anchor="middle">2 Sep 07:10 → 3 Sep 07:31</text>
+  <text x="484.8125" y="294" font-size="12.5" font-weight="700" fill="#1f4bd8" text-anchor="start">memory captured</text>
+  <text x="484.8125" y="311" font-size="10.5" font-weight="400" fill="#495057" text-anchor="start">FTK Imager · 3 Sep 10:03</text>
+  <text x="484.8125" y="325" font-size="10.5" font-weight="400" fill="#495057" text-anchor="start">≈ 2.5 h after last shell</text>
+  <text x="762.625" y="294" font-size="12.5" font-weight="700" fill="#e8590c" text-anchor="start">host used again, 12 Sep</text>
+  <text x="762.625" y="311" font-size="10.5" font-weight="400" fill="#495057" text-anchor="start">17:42:25 boot after unclean stop (6008)</text>
+  <text x="762.625" y="325" font-size="10.5" font-weight="400" fill="#495057" text-anchor="start">18:19:18 Administrator logon (SAM)</text>
+  <text x="762.625" y="339" font-size="10.5" font-weight="400" fill="#495057" text-anchor="start">ProfileList + Tcpip keys rewritten</text>
+  <text x="978.625" y="126" font-size="13" font-weight="700" fill="#e8590c" text-anchor="end">disk</text>
+  <text x="978.625" y="140" font-size="11" font-weight="400" fill="#e8590c" text-anchor="end">imaged after this</text>
+  <text x="50" y="372" font-size="11.5" font-weight="700" fill="#1e1e1e" text-anchor="start">Rule used in this report: on disk, anything later than 3 Sep 10:03 UTC is handling noise, never attacker activity.</text>
+</svg>

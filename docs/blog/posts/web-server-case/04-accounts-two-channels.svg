@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 482" font-family="'Kalam', 'Comic Sans MS', cursive" role="img" aria-label="Two accounts, two channels, 19 seconds apart">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&amp;display=swap');</style>
+    <filter id="sk" x="-2%" y="-3%" width="104%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <marker id="mg" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#495057" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mr" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#c92a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mgr" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#2f9e44" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mb" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#1f4bd8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mo" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#e8590c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mp" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#6741d9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mm" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#868e96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+  <rect width="1000" height="482" fill="#ffffff"/>
+  <g filter="url(#sk)">
+    <rect x="22" y="76" width="610" height="180" rx="9" fill="#fff4e6" stroke="#e8590c" stroke-width="2"/>
+    <rect x="38" y="112" width="132" height="132" rx="7" fill="#ffffff" stroke="#495057" stroke-width="2"/>
+    <line x1="170" y1="168" x2="192" y2="168" stroke="#495057" stroke-width="2" marker-end="url(#mg)"/>
+    <rect x="196" y="112" width="420" height="132" rx="7" fill="#ffffff" stroke="#495057" stroke-width="2"/>
+    <rect x="22" y="274" width="610" height="168" rx="9" fill="#fff5f5" stroke="#c92a2a" stroke-width="2"/>
+    <rect x="38" y="310" width="132" height="112" rx="7" fill="#ffffff" stroke="#495057" stroke-width="2"/>
+    <line x1="170" y1="366" x2="192" y2="366" stroke="#495057" stroke-width="2" marker-end="url(#mg)"/>
+    <rect x="196" y="310" width="420" height="120" rx="7" fill="#ffffff" stroke="#495057" stroke-width="2"/>
+    <rect x="668" y="92" width="312" height="92" rx="7" fill="#ffffff" stroke="#e8590c" stroke-width="2.4"/>
+    <rect x="668" y="302" width="312" height="92" rx="7" fill="#ffffff" stroke="#c92a2a" stroke-width="2.4"/>
+    <line x1="632" y1="160" x2="664" y2="140" stroke="#e8590c" stroke-width="2" marker-end="url(#mo)"/>
+    <line x1="632" y1="358" x2="664" y2="348" stroke="#c92a2a" stroke-width="2" marker-end="url(#mr)"/>
+    <rect x="668" y="202" width="312" height="88" rx="7" fill="#f3f0ff" stroke="#6741d9" stroke-width="2"/>
+  </g>
+  <text x="22" y="32" font-size="20" font-weight="700" fill="#1e1e1e" text-anchor="start">Two accounts, two channels, 19 seconds apart</text>
+  <text x="22" y="53" font-size="12.5" font-weight="400" fill="#868e96" text-anchor="start">the console and the web shell both reach net.exe; SAM, Security.evtx and memory tie each account to its channel</text>
+  <text x="38" y="100" font-size="14" font-weight="700" fill="#e8590c" text-anchor="start">Console on the server (interactive cmd.exe)</text>
+  <text x="104" y="134" font-size="13" font-weight="700" fill="#1e1e1e" text-anchor="middle">09:00:39</text>
+  <text x="104" y="153" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">failed console logon</text>
+  <text x="104" y="168" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">4625 type 2 (EVTX)</text>
+  <text x="104" y="183" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">= SAM pwd-fail time</text>
+  <text x="208" y="132" font-size="11.5" font-weight="700" fill="#495057" text-anchor="start">cmdscan history (memory)</text>
+  <text x="208" y="151.0" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">net user user1 user1 /add            ✗ rejected</text>
+  <text x="208" y="166.5" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">net user user1 root@psut /add        ✗ rejected</text>
+  <text x="208" y="182.0" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">net user user1 Root@psut /add        ✓</text>
+  <text x="208" y="197.5" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">net localgroup "Remote Desktop Users" user1 /add</text>
+  <text x="208" y="213.0" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">netsh firewall set service type=remotedesktop</text>
+  <text x="208" y="228.5" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">      mode=enable scope=subnet</text>
+  <text x="38" y="298" font-size="14" font-weight="700" fill="#c92a2a" text-anchor="start">Web: DVWA command injection from 192.168.56.102</text>
+  <text x="104" y="332" font-size="13" font-weight="700" fill="#1e1e1e" text-anchor="middle">POST</text>
+  <text x="104" y="351" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">/dvwa/vulnerabilities/</text>
+  <text x="104" y="366" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">exec/ — body is NOT</text>
+  <text x="104" y="381" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">in access.log</text>
+  <text x="208" y="330" font-size="11.5" font-weight="700" fill="#495057" text-anchor="start">POST bodies recovered from httpd.exe memory</text>
+  <text x="208" y="349.0" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">ip=192.168.56.102 &amp;&amp; net user hacker hacker /add</text>
+  <text x="208" y="364.5" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">ip=192.168.56.102 &amp;&amp; net localgroup</text>
+  <text x="208" y="380.0" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">   "Remote Desktop Users" hacker /add</text>
+  <text x="208" y="395.5" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">(the call that set hacker's final password</text>
+  <text x="208" y="411.0" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace"> was not recovered — see NT hash →)</text>
+  <text x="684" y="116" font-size="13.5" font-weight="700" fill="#e8590c" text-anchor="start">user1 · RID 1005</text>
+  <text x="684" y="136" font-size="11" font-weight="400" fill="#495057" text-anchor="start">created 2015-09-02 09:05:06 UTC</text>
+  <text x="684" y="153" font-size="11" font-weight="400" fill="#495057" text-anchor="start">Remote Desktop Users · never logged on</text>
+  <text x="684" y="326" font-size="13.5" font-weight="700" fill="#c92a2a" text-anchor="start">hacker · RID 1006</text>
+  <text x="684" y="346" font-size="11" font-weight="400" fill="#495057" text-anchor="start">created 2015-09-02 09:05:25 UTC</text>
+  <text x="684" y="363" font-size="11" font-weight="400" fill="#495057" text-anchor="start">Remote Desktop Users · never logged on</text>
+  <text x="684" y="225" font-size="12.5" font-weight="700" fill="#6741d9" text-anchor="start">same NT hash on both accounts</text>
+  <text x="684" y="244" font-size="10.5" font-weight="400" fill="#1e1e1e" text-anchor="start" font-family="'Red Hat Mono', Consolas, monospace">817875ce4794a9262159186413772644</text>
+  <text x="684" y="262" font-size="10.5" font-weight="400" fill="#495057" text-anchor="start">= MD4(UTF-16LE "Root@psut") — recomputed</text>
+  <text x="684" y="278" font-size="10.5" font-weight="400" fill="#495057" text-anchor="start">no profile → absent from ProfileList</text>
+  <text x="22" y="468" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="start">Times UTC. ✗ = the account did not take this password (final hash proves which one did); weak passwords fail the server's default complexity policy.</text>
+</svg>

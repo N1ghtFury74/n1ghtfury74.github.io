@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 760" font-family="'Kalam', 'Comic Sans MS', cursive" role="img" aria-label="Incident timeline (UTC)">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&amp;display=swap');</style>
+    <filter id="sk" x="-2%" y="-3%" width="104%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <marker id="mg" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#495057" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mr" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#c92a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mgr" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#2f9e44" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mb" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#1f4bd8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mo" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#e8590c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mp" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#6741d9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mm" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#868e96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+  <rect width="1000" height="760" fill="#ffffff"/>
+  <g filter="url(#sk)">
+    <line x1="170" y1="244" x2="975" y2="244" stroke="#495057" stroke-width="2"/>
+    <line x1="170" y1="613" x2="975" y2="613" stroke="#495057" stroke-width="2"/>
+  </g>
+  <text x="22" y="32" font-size="20" font-weight="700" fill="#1e1e1e" text-anchor="start">Incident timeline (UTC)</text>
+  <text x="22" y="53" font-size="12.5" font-weight="400" fill="#868e96" text-anchor="start">two working days; numbered marks match the list under each day · lanes separate who acted</text>
+  <text x="22" y="92" font-size="15" font-weight="700" fill="#1e1e1e" text-anchor="start">Wednesday 2 September 2015</text>
+  <line x1="170" y1="118" x2="975" y2="118" stroke="#dee2e6" stroke-width="1"/>
+  <text x="160" y="122" font-size="10.5" font-weight="700" fill="#e8590c" text-anchor="end">local console / ::1</text>
+  <line x1="170" y1="152" x2="975" y2="152" stroke="#dee2e6" stroke-width="1"/>
+  <text x="160" y="156" font-size="10.5" font-weight="700" fill="#c92a2a" text-anchor="end">remote 192.168.56.102</text>
+  <line x1="170" y1="186" x2="975" y2="186" stroke="#dee2e6" stroke-width="1"/>
+  <text x="160" y="190" font-size="10.5" font-weight="700" fill="#6741d9" text-anchor="end">accounts · files</text>
+  <line x1="170" y1="220" x2="975" y2="220" stroke="#dee2e6" stroke-width="1"/>
+  <text x="160" y="224" font-size="10.5" font-weight="700" fill="#1f4bd8" text-anchor="end">response</text>
+  <line x1="170.0" y1="240" x2="170.0" y2="248" stroke="#495057" stroke-width="1"/>
+  <text x="170.0" y="262" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">05:00</text>
+  <line x1="285.0" y1="240" x2="285.0" y2="248" stroke="#495057" stroke-width="1"/>
+  <text x="285.0" y="262" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">06:00</text>
+  <line x1="400.0" y1="240" x2="400.0" y2="248" stroke="#495057" stroke-width="1"/>
+  <text x="400.0" y="262" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">07:00</text>
+  <line x1="515.0" y1="240" x2="515.0" y2="248" stroke="#495057" stroke-width="1"/>
+  <text x="515.0" y="262" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">08:00</text>
+  <line x1="630.0" y1="240" x2="630.0" y2="248" stroke="#495057" stroke-width="1"/>
+  <text x="630.0" y="262" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">09:00</text>
+  <line x1="745.0" y1="240" x2="745.0" y2="248" stroke="#495057" stroke-width="1"/>
+  <text x="745.0" y="262" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">10:00</text>
+  <line x1="860.0" y1="240" x2="860.0" y2="248" stroke="#495057" stroke-width="1"/>
+  <text x="860.0" y="262" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">11:00</text>
+  <line x1="975.0" y1="240" x2="975.0" y2="248" stroke="#495057" stroke-width="1"/>
+  <text x="975.0" y="262" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">12:00</text>
+  <circle cx="285.0" cy="118" r="8.5" fill="#ffffff" stroke="#e8590c" stroke-width="2"/>
+  <text x="285.0" y="121.8" font-size="9.5" font-weight="700" fill="#e8590c" text-anchor="middle">1</text>
+  <circle cx="419.2" cy="152" r="8.5" fill="#ffffff" stroke="#c92a2a" stroke-width="2"/>
+  <text x="419.1666666666667" y="155.8" font-size="9.5" font-weight="700" fill="#c92a2a" text-anchor="middle">2</text>
+  <circle cx="614.7" cy="152" r="8.5" fill="#ffffff" stroke="#c92a2a" stroke-width="2"/>
+  <text x="614.6666666666667" y="155.8" font-size="9.5" font-weight="700" fill="#c92a2a" text-anchor="middle">3</text>
+  <circle cx="630.0" cy="118" r="8.5" fill="#ffffff" stroke="#e8590c" stroke-width="2"/>
+  <text x="630.0" y="121.8" font-size="9.5" font-weight="700" fill="#e8590c" text-anchor="middle">4</text>
+  <circle cx="639.6" cy="186" r="8.5" fill="#ffffff" stroke="#6741d9" stroke-width="2"/>
+  <text x="639.5833333333334" y="189.8" font-size="9.5" font-weight="700" fill="#6741d9" text-anchor="middle">5</text>
+  <circle cx="658.6" cy="186" r="8.5" fill="#ffffff" stroke="#6741d9" stroke-width="2"/>
+  <text x="658.5833333333334" y="189.8" font-size="9.5" font-weight="700" fill="#6741d9" text-anchor="middle">6</text>
+  <circle cx="683.7" cy="118" r="8.5" fill="#ffffff" stroke="#e8590c" stroke-width="2"/>
+  <text x="683.6666666666666" y="121.8" font-size="9.5" font-weight="700" fill="#e8590c" text-anchor="middle">7</text>
+  <circle cx="689.4" cy="152" r="8.5" fill="#ffffff" stroke="#c92a2a" stroke-width="2"/>
+  <text x="689.4166666666667" y="155.8" font-size="9.5" font-weight="700" fill="#c92a2a" text-anchor="middle">8</text>
+  <circle cx="691.3" cy="186" r="8.5" fill="#ffffff" stroke="#6741d9" stroke-width="2"/>
+  <text x="691.3333333333334" y="189.8" font-size="9.5" font-weight="700" fill="#6741d9" text-anchor="middle">9</text>
+  <circle cx="708.4" cy="152" r="8.5" fill="#ffffff" stroke="#c92a2a" stroke-width="2"/>
+  <text x="708.4166666666667" y="155.8" font-size="9.5" font-weight="700" fill="#c92a2a" text-anchor="middle">10</text>
+  <circle cx="727.4" cy="152" r="8.5" fill="#ffffff" stroke="#c92a2a" stroke-width="2"/>
+  <text x="727.4166666666667" y="155.8" font-size="9.5" font-weight="700" fill="#c92a2a" text-anchor="middle">11</text>
+  <circle cx="888.8" cy="152" r="8.5" fill="#ffffff" stroke="#c92a2a" stroke-width="2"/>
+  <text x="888.75" y="155.8" font-size="9.5" font-weight="700" fill="#c92a2a" text-anchor="middle">12</text>
+  <circle cx="907.9" cy="186" r="8.5" fill="#ffffff" stroke="#6741d9" stroke-width="2"/>
+  <text x="907.9166666666666" y="189.8" font-size="9.5" font-weight="700" fill="#6741d9" text-anchor="middle">13</text>
+  <circle cx="926.9" cy="186" r="8.5" fill="#ffffff" stroke="#6741d9" stroke-width="2"/>
+  <text x="926.9166666666666" y="189.8" font-size="9.5" font-weight="700" fill="#6741d9" text-anchor="middle">14</text>
+  <text x="22.0" y="288" font-size="11" font-weight="700" fill="#e8590c" text-anchor="start">1.</text>
+  <text x="44.0" y="288" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">06:00:04  DVWA PHPIDS self-test link, from ::1</text>
+  <text x="22.0" y="307" font-size="11" font-weight="700" fill="#c92a2a" text-anchor="start">2.</text>
+  <text x="44.0" y="307" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">07:10:41  first request from 192.168.56.102 (Iceweasel)</text>
+  <text x="22.0" y="326" font-size="11" font-weight="700" fill="#c92a2a" text-anchor="start">3.</text>
+  <text x="44.0" y="326" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">08:52:29  command-injection module (exec) first hit</text>
+  <text x="22.0" y="345" font-size="11" font-weight="700" fill="#e8590c" text-anchor="start">4.</text>
+  <text x="44.0" y="345" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">09:00:39  failed console logon (4625 type 2)</text>
+  <text x="22.0" y="364" font-size="11" font-weight="700" fill="#6741d9" text-anchor="start">5.</text>
+  <text x="44.0" y="364" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">09:05:06  user1 created (console)</text>
+  <text x="22.0" y="383" font-size="11" font-weight="700" fill="#6741d9" text-anchor="start">6.</text>
+  <text x="44.0" y="383" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">09:05:25  hacker created (command injection)</text>
+  <text x="22.0" y="402" font-size="11" font-weight="700" fill="#e8590c" text-anchor="start">7.</text>
+  <text x="44.0" y="402" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">09:28:30  cmd.exe PID 1972 opened on the desktop</text>
+  <text x="500.0" y="288" font-size="11" font-weight="700" fill="#c92a2a" text-anchor="start">8.</text>
+  <text x="522.0" y="288" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">09:31:16  LFI reads etc\hosts</text>
+  <text x="500.0" y="307" font-size="11" font-weight="700" fill="#6741d9" text-anchor="start">9.</text>
+  <text x="522.0" y="307" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">09:32       data.txt written in Administrator profile</text>
+  <text x="500.0" y="326" font-size="11" font-weight="700" fill="#c92a2a" text-anchor="start">10.</text>
+  <text x="522.0" y="326" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">09:33:23  LFI reads data.txt back</text>
+  <text x="500.0" y="345" font-size="11" font-weight="700" fill="#c92a2a" text-anchor="start">11.</text>
+  <text x="522.0" y="345" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">09:38:04  last LFI probe (phpMyAdmin)</text>
+  <text x="500.0" y="364" font-size="11" font-weight="700" fill="#c92a2a" text-anchor="start">12.</text>
+  <text x="522.0" y="364" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">11:15:40  sqlmap starts</text>
+  <text x="500.0" y="383" font-size="11" font-weight="700" fill="#6741d9" text-anchor="start">13.</text>
+  <text x="522.0" y="383" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">11:25:52  os-shell #1: tmpukudk / tmpbiwuc</text>
+  <text x="500.0" y="402" font-size="11" font-weight="700" fill="#6741d9" text-anchor="start">14.</text>
+  <text x="522.0" y="402" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">11:26:23  os-shell #1 cleaned up</text>
+  <text x="22" y="461" font-size="15" font-weight="700" fill="#1e1e1e" text-anchor="start">Thursday 3 September 2015</text>
+  <line x1="170" y1="487" x2="975" y2="487" stroke="#dee2e6" stroke-width="1"/>
+  <text x="160" y="491" font-size="10.5" font-weight="700" fill="#e8590c" text-anchor="end">local console / ::1</text>
+  <line x1="170" y1="521" x2="975" y2="521" stroke="#dee2e6" stroke-width="1"/>
+  <text x="160" y="525" font-size="10.5" font-weight="700" fill="#c92a2a" text-anchor="end">remote 192.168.56.102</text>
+  <line x1="170" y1="555" x2="975" y2="555" stroke="#dee2e6" stroke-width="1"/>
+  <text x="160" y="559" font-size="10.5" font-weight="700" fill="#6741d9" text-anchor="end">accounts · files</text>
+  <line x1="170" y1="589" x2="975" y2="589" stroke="#dee2e6" stroke-width="1"/>
+  <text x="160" y="593" font-size="10.5" font-weight="700" fill="#1f4bd8" text-anchor="end">response</text>
+  <line x1="170.0" y1="609" x2="170.0" y2="617" stroke="#495057" stroke-width="1"/>
+  <text x="170.0" y="631" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">06:00</text>
+  <line x1="331.0" y1="609" x2="331.0" y2="617" stroke="#495057" stroke-width="1"/>
+  <text x="331.0" y="631" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">07:00</text>
+  <line x1="492.0" y1="609" x2="492.0" y2="617" stroke="#495057" stroke-width="1"/>
+  <text x="492.0" y="631" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">08:00</text>
+  <line x1="653.0" y1="609" x2="653.0" y2="617" stroke="#495057" stroke-width="1"/>
+  <text x="653.0" y="631" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">09:00</text>
+  <line x1="814.0" y1="609" x2="814.0" y2="617" stroke="#495057" stroke-width="1"/>
+  <text x="814.0" y="631" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">10:00</text>
+  <line x1="975.0" y1="609" x2="975.0" y2="617" stroke="#495057" stroke-width="1"/>
+  <text x="975.0" y="631" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">11:00</text>
+  <circle cx="309.5" cy="521" r="8.5" fill="#ffffff" stroke="#c92a2a" stroke-width="2"/>
+  <text x="309.5333333333333" y="524.8" font-size="9.5" font-weight="700" fill="#c92a2a" text-anchor="middle">1</text>
+  <circle cx="309.5" cy="555" r="8.5" fill="#ffffff" stroke="#6741d9" stroke-width="2"/>
+  <text x="309.5333333333333" y="558.8" font-size="9.5" font-weight="700" fill="#6741d9" text-anchor="middle">2</text>
+  <circle cx="328.5" cy="555" r="8.5" fill="#ffffff" stroke="#6741d9" stroke-width="2"/>
+  <text x="328.5333333333333" y="558.8" font-size="9.5" font-weight="700" fill="#6741d9" text-anchor="middle">3</text>
+  <circle cx="357.8" cy="521" r="8.5" fill="#ffffff" stroke="#c92a2a" stroke-width="2"/>
+  <text x="357.83333333333337" y="524.8" font-size="9.5" font-weight="700" fill="#c92a2a" text-anchor="middle">4</text>
+  <circle cx="368.6" cy="555" r="8.5" fill="#ffffff" stroke="#6741d9" stroke-width="2"/>
+  <text x="368.56666666666666" y="558.8" font-size="9.5" font-weight="700" fill="#6741d9" text-anchor="middle">5</text>
+  <circle cx="376.8" cy="521" r="8.5" fill="#ffffff" stroke="#c92a2a" stroke-width="2"/>
+  <text x="376.83333333333337" y="524.8" font-size="9.5" font-weight="700" fill="#c92a2a" text-anchor="middle">6</text>
+  <circle cx="395.8" cy="521" r="8.5" fill="#ffffff" stroke="#c92a2a" stroke-width="2"/>
+  <text x="395.83333333333337" y="524.8" font-size="9.5" font-weight="700" fill="#c92a2a" text-anchor="middle">7</text>
+  <circle cx="414.8" cy="521" r="8.5" fill="#ffffff" stroke="#c92a2a" stroke-width="2"/>
+  <text x="414.83333333333337" y="524.8" font-size="9.5" font-weight="700" fill="#c92a2a" text-anchor="middle">8</text>
+  <circle cx="822.1" cy="589" r="8.5" fill="#ffffff" stroke="#1f4bd8" stroke-width="2"/>
+  <text x="822.0500000000001" y="592.8" font-size="9.5" font-weight="700" fill="#1f4bd8" text-anchor="middle">9</text>
+  <text x="22.0" y="657" font-size="11" font-weight="700" fill="#c92a2a" text-anchor="start">1.</text>
+  <text x="44.0" y="657" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">06:52:19  sqlmap resumes</text>
+  <text x="22.0" y="676" font-size="11" font-weight="700" fill="#6741d9" text-anchor="start">2.</text>
+  <text x="44.0" y="676" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">06:52:24  os-shell #2: tmpudvfh / tmpbrjvl</text>
+  <text x="22.0" y="695" font-size="11" font-weight="700" fill="#6741d9" text-anchor="start">3.</text>
+  <text x="44.0" y="695" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">06:59:38  os-shell #2 cleaned up (no commands)</text>
+  <text x="22.0" y="714" font-size="11" font-weight="700" fill="#c92a2a" text-anchor="start">4.</text>
+  <text x="44.0" y="714" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">07:10:56  phpshell.php uploaded</text>
+  <text x="22.0" y="733" font-size="11" font-weight="700" fill="#6741d9" text-anchor="start">5.</text>
+  <text x="44.0" y="733" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">07:14:48  webshells.zip; 07:14:57 c99.php lands in DVWA</text>
+  <text x="500.0" y="657" font-size="11" font-weight="700" fill="#c92a2a" text-anchor="start">6.</text>
+  <text x="522.0" y="657" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">07:16:13  phpshell: dir, dir C:\, mkdir abc (→ 07:18:02)</text>
+  <text x="500.0" y="676" font-size="11" font-weight="700" fill="#c92a2a" text-anchor="start">7.</text>
+  <text x="522.0" y="676" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">07:20:59  c99.php opened; act=cmd POSTs (→ 07:21:37)</text>
+  <text x="500.0" y="695" font-size="11" font-weight="700" fill="#c92a2a" text-anchor="start">8.</text>
+  <text x="522.0" y="695" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">07:31:30  phpshell2.php uploaded; run at 07:31:54</text>
+  <text x="500.0" y="714" font-size="11" font-weight="700" fill="#1f4bd8" text-anchor="start">9.</text>
+  <text x="522.0" y="714" font-size="11" font-weight="400" fill="#1e1e1e" text-anchor="start">10:03:37  memory captured (FTK Imager)</text>
+</svg>

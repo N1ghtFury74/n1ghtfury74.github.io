@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" font-family="'Kalam', 'Comic Sans MS', cursive" role="img" aria-label="How sqlmap --os-shell turned SQL injection into commands">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&amp;display=swap');</style>
+    <filter id="sk" x="-2%" y="-3%" width="104%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <marker id="mg" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#495057" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mr" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#c92a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mgr" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#2f9e44" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mb" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#1f4bd8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mo" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#e8590c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mp" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#6741d9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="mm" markerWidth="12" markerHeight="12" refX="7" refY="5" orient="auto"><path d="M1,1 L10,5 L1,9" fill="none" stroke="#868e96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+  <rect width="1000" height="640" fill="#ffffff"/>
+  <g filter="url(#sk)">
+    <rect x="35" y="70" width="190" height="52" rx="7" fill="#fff5f5" stroke="#c92a2a" stroke-width="2"/>
+    <rect x="425" y="70" width="190" height="52" rx="7" fill="#eef2ff" stroke="#1f4bd8" stroke-width="2"/>
+    <rect x="765" y="70" width="190" height="52" rx="7" fill="#f3f0ff" stroke="#6741d9" stroke-width="2"/>
+    <line x1="136" y1="160" x2="514" y2="160" stroke="#c92a2a" stroke-width="2" marker-end="url(#mr)"/>
+    <line x1="526" y1="196" x2="854" y2="196" stroke="#6741d9" stroke-width="2" marker-end="url(#mp)"/>
+    <line x1="136" y1="280" x2="514" y2="280" stroke="#c92a2a" stroke-width="2" marker-end="url(#mr)"/>
+    <line x1="136" y1="334" x2="514" y2="334" stroke="#c92a2a" stroke-width="2" marker-end="url(#mr)"/>
+    <line x1="136" y1="388" x2="514" y2="388" stroke="#c92a2a" stroke-width="2" marker-end="url(#mr)"/>
+    <line x1="136" y1="442" x2="514" y2="442" stroke="#c92a2a" stroke-width="2" marker-end="url(#mr)"/>
+    <line x1="136" y1="496" x2="514" y2="496" stroke="#c92a2a" stroke-width="2" marker-end="url(#mr)"/>
+    <rect x="22" y="572" width="956" height="56" rx="6" fill="#f1f3f5" stroke="#495057" stroke-width="2"/>
+  </g>
+  <text x="22" y="32" font-size="20" font-weight="700" fill="#1e1e1e" text-anchor="start">How sqlmap --os-shell turned SQL injection into commands</text>
+  <text x="22" y="53" font-size="12.5" font-weight="400" fill="#868e96" text-anchor="start">reconstructed request by request from access.log — session 1 times shown (2 Sep 2015, UTC)</text>
+  <text x="130" y="92" font-size="13.5" font-weight="700" fill="#c92a2a" text-anchor="middle">sqlmap</text>
+  <text x="130" y="110" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">192.168.56.102</text>
+  <line x1="130" y1="122" x2="130" y2="560" stroke="#868e96" stroke-width="1" stroke-dasharray="4 5"/>
+  <text x="520" y="92" font-size="13.5" font-weight="700" fill="#1f4bd8" text-anchor="middle">Apache + PHP</text>
+  <text x="520" y="110" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">web root C:\xampp\htdocs\</text>
+  <line x1="520" y1="122" x2="520" y2="560" stroke="#868e96" stroke-width="1" stroke-dasharray="4 5"/>
+  <text x="860" y="92" font-size="13.5" font-weight="700" fill="#6741d9" text-anchor="middle">MySQL 5.6.25</text>
+  <text x="860" y="110" font-size="10.5" font-weight="400" fill="#495057" text-anchor="middle">FILE privilege</text>
+  <line x1="860" y1="122" x2="860" y2="560" stroke="#868e96" stroke-width="1" stroke-dasharray="4 5"/>
+  <text x="325.0" y="152" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="middle" font-family="'Red Hat Mono', Consolas, monospace">GET …/sqli/?id=2' … INTO OUTFILE '…/tmpukudk.php'</text>
+  <text x="12" y="164" font-size="10.5" font-weight="700" fill="#c92a2a" text-anchor="start">11:25:52</text>
+  <text x="690.0" y="188" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="middle" font-family="'Red Hat Mono', Consolas, monospace">query runs</text>
+  <text x="690.0" y="212" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">MySQL writes the hex blob as a file</text>
+  <text x="534" y="240" font-size="11" font-weight="700" fill="#6741d9" text-anchor="start">tmpukudk.php = stager: "sqlmap file uploader"</text>
+  <text x="325.0" y="272" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="middle" font-family="'Red Hat Mono', Consolas, monospace">403 /xampp/htdocs/… · 404 /htdocs/… · 200 /tmpukudk.php</text>
+  <text x="325.0" y="296" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">sqlmap probes until it finds the URL of the file</text>
+  <text x="12" y="284" font-size="10.5" font-weight="700" fill="#c92a2a" text-anchor="start">11:25:52</text>
+  <text x="325.0" y="326" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="middle" font-family="'Red Hat Mono', Consolas, monospace">POST multipart → stager   (UA Python-urllib/2.7)</text>
+  <text x="325.0" y="350" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">stager saves backdoor tmpbiwuc.php</text>
+  <text x="325.0" y="380" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="middle" font-family="'Red Hat Mono', Consolas, monospace">GET /tmpbiwuc.php?cmd=echo command execution test</text>
+  <text x="325.0" y="404" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">200 · 36 bytes — sqlmap's own self-test</text>
+  <text x="12" y="392" font-size="10.5" font-weight="700" fill="#c92a2a" text-anchor="start">11:25:53</text>
+  <text x="325.0" y="434" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="middle" font-family="'Red Hat Mono', Consolas, monospace">GET /tmpbiwuc.php?cmd=dir</text>
+  <text x="325.0" y="458" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">the operator's only command in session 1</text>
+  <text x="12" y="446" font-size="10.5" font-weight="700" fill="#c92a2a" text-anchor="start">11:26:04</text>
+  <text x="325.0" y="488" font-size="10" font-weight="400" fill="#1e1e1e" text-anchor="middle" font-family="'Red Hat Mono', Consolas, monospace">?cmd=del /F /Q …tmpukudk.php, then …tmpbiwuc.php</text>
+  <text x="325.0" y="512" font-size="10.5" font-weight="400" fill="#868e96" text-anchor="middle">sqlmap cleans up when the os-shell exits</text>
+  <text x="12" y="500" font-size="10.5" font-weight="700" fill="#c92a2a" text-anchor="start">11:26:23</text>
+  <text x="36" y="593" font-size="11.5" font-weight="700" fill="#1e1e1e" text-anchor="start">Session 1 · 2 Sep 11:25:52 → 11:26:23 · tmpukudk.php + tmpbiwuc.php · commands: dir</text>
+  <text x="36" y="614" font-size="11.5" font-weight="700" fill="#1e1e1e" text-anchor="start">Session 2 · 3 Sep 06:52:24 → 06:59:38 · tmpudvfh.php + tmpbrjvl.php · commands: none (7 min idle, then clean-up)</text>
+</svg>
