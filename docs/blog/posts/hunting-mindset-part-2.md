@@ -17,23 +17,47 @@ description: >
 
 <!-- more -->
 
+!!! warning "Start with Part 1"
+    This is the **second of two parts**, and it assumes the vocabulary the first one builds —
+    **ABH** and **DBH**, the anomaly types, the evidence realms. Part 1 is where a hunt gets
+    *planned*; this part is where it meets the data.
+
+    Both hunting models decompose into three questions — *what am I looking for? · where am I
+    likely to find it? · how can I manipulate the data to see it?*
+    **Part 1 answered the first two. This part is the third.**
+
+<div class="grid cards" markdown>
+
+-   :material-numeric-1-circle: **Part 1 — The Mindset**
+
+    ---
+
+    The mental models, what an anomaly actually *is*, and how to pick and dissect the attack
+    you are going to hunt.
+
+    **Answers:** *what am I looking for?* · *where will I find it?*
+
+    [:octicons-arrow-right-24: Read Part 1](../../15/hunting-mindset/)
+
+-   :material-numeric-2-circle: **Part 2 — Working the Data**
+
+    ---
+
+    The **GAPSS** toolbox — search, aggregation, statistics and pivots — worked until the
+    thing you are looking for shows itself.
+
+    **Answers:** *how do I manipulate the data to see it?*
+
+    **You are here.**
+
+</div>
+
 !!! abstract "At a glance"
     - **This is Part 2 of two.** [Part 1](../../15/hunting-mindset/) covered *what to hunt and why*. This one covers *how to work the data*
     - **The one question it answers:** *how can I manipulate the data to see it?* — the third question of every hunt, and the only one that is identical in both hunting models
     - **The toolbox:** **GAPSS** — Graph, Aggregations, Pivots, Statistics, Search
     - **Level:** intermediate · **Audience:** SOC analysts, threat hunters, detection engineers
     - **Prerequisites:** [Part 1](../../15/hunting-mindset/), or comfort with the ABH/DBH framing and the anomaly types
-
-!!! info "Where this picks up"
-    **Part 1** established the models, the anomaly vocabulary, and the two ways into a hunt —
-    attack-based and data-based. It ended with a technique chosen from the groups you track
-    and a list of manifestations worth hunting.
-
-    Both hunting models decompose into three questions: *what am I looking for? · where am I
-    likely to find it? · how can I manipulate the data to see it?* Part 1 answered the first
-    two. **This part is the third**, and it is where planning turns into hunting.
-
-    [:octicons-arrow-right-24: Part 1 — The Threat Hunting Mindset](../../15/hunting-mindset/)
 
 ??? abstract "Table of contents — Part 2"
     1. **The hunting step itself: data transformation** — the **GAPSS** toolbox

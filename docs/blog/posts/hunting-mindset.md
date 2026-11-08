@@ -17,6 +17,38 @@ description: >
 
 <!-- more -->
 
+!!! info "This is Part 1 of two"
+    Part 1 is the thinking: how hunting is structured, what an anomaly is, and how to turn a
+    chosen attack into a list of things to go looking for.
+    **[Part 2](../../16/hunting-mindset-working-the-data/)** is the doing — the
+    transformations that make what you are looking for actually visible.
+
+<div class="grid cards" markdown>
+
+-   :material-numeric-1-circle: **Part 1 — The Mindset**
+
+    ---
+
+    The mental models, what an anomaly actually *is*, and how to pick and dissect the attack
+    you are going to hunt.
+
+    **Answers:** *what am I looking for?* · *where will I find it?*
+
+    **You are here.**
+
+-   :material-numeric-2-circle: **Part 2 — Working the Data**
+
+    ---
+
+    The **GAPSS** toolbox — search, aggregation, statistics and pivots — worked until the
+    thing you are looking for shows itself.
+
+    **Answers:** *how do I manipulate the data to see it?*
+
+    [:octicons-arrow-right-24: Read Part 2](../../16/hunting-mindset-working-the-data/)
+
+</div>
+
 !!! abstract "At a glance"
     - **This is Part 1 of two.** It covers *what to hunt and why* — the models, the anomaly vocabulary, and how to turn an attack into a hunt
     - **Part 2** covers *how to work the data* — the GAPSS transformations that actually surface the thing
