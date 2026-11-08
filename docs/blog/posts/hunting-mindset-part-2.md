@@ -376,7 +376,7 @@ point at its own frameworks is a great deal easier to defend to the people fundi
 
     [:octicons-arrow-right-24: The Cyber Hunting Maturity Model](https://medium.com/@sqrrldata/the-cyber-hunting-maturity-model-6d506faa8ad5)
 
--   :material-mountain: **PEAK**
+-   :material-summit: **PEAK**
 
     ---
 
@@ -450,7 +450,7 @@ starting from scratch.
 === "The mindset"
     Where the way of thinking in this post comes from.
 
-    - **Chris Sanders — _Practical Threat Hunting_** (Applied Network Defense) — **the primary source for this post.** The ABH/DBH split, the five-step attack dissection and the evidence realms all come from here, and most of these notes began as course notes: [networkdefense.co/courses/hunting](https://www.networkdefense.co/courses/hunting/)
+    - **Chris Sanders — _Practical Threat Hunting_** (Applied Network Defense) — **start here if you want to go deeper.** The ABH/DBH split, the five-step attack dissection and the evidence realms are all taught in full, with your hands on the data: [networkdefense.co/courses/hunting](https://www.networkdefense.co/courses/hunting/)
     - **Chris Sanders** — the standing reference on hunting cognition. *The Mind of a Hunter: A Cognitive, Data-Driven Approach* (SANS Threat Hunting & IR Summit 2017), [*Deconstructing the Analyst Mindset*](https://www.sans.org/presentations/keynote-deconstructing-the-analyst-mindset) (SANS CTI Summit keynote), [*Leveraging Curiosity to Enhance Analytic Technique*](https://www.sans.org/presentations/leveraging-curiosity-to-enhance-analytic-technique), and [*Investigation Theory: A Cognitive Approach*](https://www.slideshare.net/slideshow/art-into-science-2017-investigation-theory-a-cognitive-approach/71384306). His research on analyst cognition is the evidence base for the claim that the investigative skillset is universal across DF/IR/SOC.
     - [*Huntpedia: Your Guide to Expert-Level Threat Hunting*](https://www.slideshare.net/slideshow/huntpedia-249837834/249837834) (Sqrrl) — the essay collection that argues hunting is a discipline rather than a talent.
     - [*Turning the Hunted into the Hunter via Threat Hunting*](https://arxiv.org/pdf/2204.11076) (arXiv) — an academic survey of the hunting lifecycle; the source of the "hunting is scientific in nature" framing.
@@ -510,21 +510,17 @@ starting from scratch.
 
 ## Credits
 
-!!! success "Where this came from"
-    The backbone of both parts — **attack-based and data-based hunting**, the **five-step
-    attack dissection**, the **evidence realms**, the **GAPSS** toolbox, and much of the
-    structure holding them together — comes from **Chris Sanders' _Practical Threat
-    Hunting_** at Applied Network Defense.
+!!! success "Want to learn this properly? Go to the source"
+    If the way of thinking across these two parts was useful to you, learn it from the person
+    who teaches it best. **Chris Sanders' _Practical Threat Hunting_** at Applied Network
+    Defense is where the **attack-based and data-based** framings, the **five-step attack
+    dissection**, the **evidence realms** and the **GAPSS** toolbox are taught in full.
 
-    It is the course that turned this mindset from something I could sense into something I
-    could demonstrate, and most of the notes behind this write-up started life as notes from
-    it. If any of the framing across these two parts landed for you, go and take it — a
-    course goes deeper than a blog post can, and this is the deeper version.
+    Sanders is one of the genuinely great teachers in this field, and a course does something
+    a blog post cannot: a post can show you the shape of a method, but a course walks you
+    through it with your hands on the data.
 
     [:octicons-arrow-right-24: Practical Threat Hunting — Applied Network Defense](https://www.networkdefense.co/courses/hunting/)
-
-    The worked detail, the intelligence and coverage-heatmap section, and the sourcing
-    throughout are mine — as is anything either part gets wrong.
 
 *[ABH]: Attack-Based Hunting
 *[DBH]: Data-Based Hunting

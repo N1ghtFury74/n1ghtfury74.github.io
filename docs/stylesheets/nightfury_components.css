@@ -22,6 +22,14 @@
   text-align: left;
 }
 
+/* The homepage shows a single latest post. On its own in an auto-fit grid a
+   card stretches the full content width and stops reading as a card, so cap
+   it and centre it. :only-child needs no :has() support to do the job. */
+.nf-post-grid > .nf-post-card:only-child {
+  max-width: 640px;
+  margin-inline: auto;
+}
+
 .nf-post-card {
   display: flex;
   flex-direction: column;

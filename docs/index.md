@@ -20,7 +20,7 @@ hide:
 
 <div class="nf-section" markdown>
 
-## Latest Posts { #recent-posts .nf-section__title }
+## Latest Post { #recent-posts .nf-section__title }
 
 <!-- nf:recent-posts -->
 

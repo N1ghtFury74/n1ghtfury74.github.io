@@ -35,7 +35,7 @@ from mkdocs.plugins import event_priority
 
 log = logging.getLogger("mkdocs.hooks.blog_index")
 
-RECENT_LIMIT = 6
+RECENT_LIMIT = 1
 RECENT_MARKER = "<!-- nf:recent-posts -->"
 CATEGORY_MARKER = "<!-- nf:categories -->"
 
