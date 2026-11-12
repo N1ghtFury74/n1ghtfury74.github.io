@@ -92,7 +92,7 @@ Concretely, Part 4 is about **finding the observations that start investigative 
 
 This part is built in layers, and it rewards being read top to bottom the first time — after that, each section stands alone as a reference. The arc is deliberate. We start with the **mental models** that give hunting its structure, so the rest has something to hang on. We then get concrete about **doing attack-based hunting**, with the attack-dissection framework that turns a threat-intel report into a hunt. From there we shift to the data side — **knowing and valuing your evidence**, then the **mechanics of transforming that data** (the GAPSS toolbox), which is how you actually execute the third question of every hunt. Finally we turn to **reading what surfaces** — anomaly detection — and close by grounding everything in well-known frameworks. In one line: *models → which attack to hunt → how to hunt it → know your data → transform the data → read the anomalies.*
 
-![master hunting workflow](mindset-diagrams/master-hunting-workflow.png)
+[![The hunting workflow this part builds in layers, meant to be read top to bottom once and used as a reference afterwards](mindset-diagrams/04-hunting-workflow.png){ loading=lazy }](mindset-diagrams/04-hunting-workflow.png){ title="Open the full-resolution diagram" }
 
 ---
 
@@ -111,10 +111,6 @@ That is the whole argument for this part. A **mental model** is a reusable struc
 
 So Part 4 is a tour of the models that make hunting a discipline rather than a talent.
 
-??? info "Sources & Further Reading"
-    - [*Huntpedia: Your Guide to Expert-Level Threat Hunting*](https://www.slideshare.net/slideshow/huntpedia-249837834/249837834) (Sqrrl) — the essay collection that argues the case for hunting as a discipline rather than a talent.
-    - Chris Sanders — **the standing reference on the hunting mindset.** *The Mind of a Hunter: A Cognitive, Data-Driven Approach* (SANS Threat Hunting & IR Summit 2017) asks the question this whole post is built on: whether hunting genuinely differs from an alert-driven investigation, and what changes in the analyst's head when it does. Follow it with [*Deconstructing the Analyst Mindset*](https://www.sans.org/presentations/keynote-deconstructing-the-analyst-mindset) (SANS CTI Summit keynote), [*Leveraging Curiosity to Enhance Analytic Technique*](https://www.sans.org/presentations/leveraging-curiosity-to-enhance-analytic-technique) (SANS), and [*Investigation Theory: A Cognitive Approach*](https://www.slideshare.net/slideshow/art-into-science-2017-investigation-theory-a-cognitive-approach/71384306) (Art into Science 2017). His research on analyst cognition is the evidence base for the claim that the investigative skillset is universal across DF/IR/SOC — which is what Model 3 asserts.
-    - [*Turning the Hunted into the Hunter via Threat Hunting*](https://arxiv.org/pdf/2204.11076) (arXiv) — an academic survey of the hunting lifecycle; useful for the "hunting is scientific in nature" framing.
 
 ---
 
@@ -136,7 +132,7 @@ An attack is not an abstraction. It is a set of **tangible events occurring in s
 
 The reframe that changes everything: when you find evidence of an attack, you are inserting yourself into a timeline that **already exists**. You rarely land at the beginning. You land somewhere in the middle, holding a single event, and your job is to discover the rest — what came before (how they got in) and what came after (what they did next). And real incidents are usually not one clean line but several **parallel timelines** braided together: multiple hosts, multiple sessions, multiple concurrent objectives.
 
-![attack timeline](mindset-diagrams/attack-timeline.png)
+[![The attack timeline: you land mid-sequence on the evidence you found, then reconstruct the earlier steps that show how they got in and the later steps that show what they did, while other timelines run in parallel](mindset-diagrams/01-attack-timeline.png){ loading=lazy }](mindset-diagrams/01-attack-timeline.png){ title="Open the full-resolution diagram" }
 
 How do you actually walk the timeline? Every event is backed by evidence sitting in a large shared pool — the logs and artifacts from Parts 2 and 3. The working assumption of a good hunter is deliberately optimistic:
 
@@ -145,11 +141,6 @@ How do you actually walk the timeline? Every event is backed by evidence sitting
     investigative question to surface it.
 
 Find one event, ask a question, pull the matching evidence, get an answer, and that answer places the next event on the timeline. Then ask the next question. Hunting is what first inserts you into the timeline; investigation walks it outward from there.
-
-??? info "Sources & Further Reading"
-    - Lockheed Martin — [*Cyber Kill Chain*](https://www.lockheedmartin.com/en-us/capabilities/cyber/cyber-kill-chain.html) — the canonical "attack as an ordered sequence of stages" model.
-    - Caltagirone, Pendergast & Betz — [*The Diamond Model of Intrusion Analysis*](https://apps.dtic.mil/sti/pdfs/ADA586960.pdf) (full 61-page paper, DTIC) — see the *activity thread* chapter, which is the formal treatment of braided parallel timelines.
-    - [MITRE ATT&CK](https://attack.mitre.org/) — the technique catalogue you walk the timeline against.
 
 
 ---
@@ -162,11 +153,6 @@ The engine is a small loop: **Observation → Question ↔ Hypothesis ↔ Answer
 
 One rule matters more than the rest: **an investigation cannot start without an observation.** No observation, no question, no investigation. That single constraint is why *finding* observations is so valuable — and why proactively producing them is the entire point of hunting.
 
-??? info "Sources & Further Reading"
-    - Chris Sanders — [*Investigation Theory: A Cognitive Approach*](https://www.slideshare.net/slideshow/art-into-science-2017-investigation-theory-a-cognitive-approach/71384306) — the observation → question → hypothesis → answer loop, with the cognitive research behind it.
-    - Chris Sanders — [*Leveraging Curiosity to Enhance Analytic Technique*](https://www.sans.org/presentations/leveraging-curiosity-to-enhance-analytic-technique) (SANS) — on question generation as the engine of an investigation.
-    - [The OODA loop](https://en.wikipedia.org/wiki/OODA_loop) — Boyd's observe–orient–decide–act cycle, the ancestor of every loop in this section.
-
 
 ---
 
@@ -174,13 +160,9 @@ One rule matters more than the rest: **an investigation cannot start without an 
 
 Here's the quietly powerful part: that same Observation → Question → Hypothesis → Answer → Conclusion engine underlies **every** defensive discipline. Network security monitoring, incident response, host forensics, malware analysis, and hunting all run the identical loop. The *only* thing that differs is where the initial observation comes from.
 
-![investigation loop](mindset-diagrams/investigation-loop.png)
+[![The investigation reasoning loop of observation, question, hypothesis, answer and conclusion, the same engine underneath every defensive discipline](mindset-diagrams/03-investigation-reasoning-loop.png){ loading=lazy }](mindset-diagrams/03-investigation-reasoning-loop.png){ title="Open the full-resolution diagram" }
 
 An initial observation is simply any event that launches an investigation, and it can arrive from many places: an IDS alert, a malware sample, a third-party notification, a user-reported anomaly, or — the one we care about — a **hunting observation**. Whatever the source, the rest is the same: ask investigative questions, review evidence, validate hypotheses, reach a conclusion. Observation is where everything starts.
-
-??? info "Sources & Further Reading"
-    - Chris Sanders — [chrissanders.org](https://chrissanders.org) — his doctoral work on the analyst mindset found the investigative skillset to be broadly universal across DF/IR/SOC, which is exactly this model's claim.
-    - [*Turning the Hunted into the Hunter via Threat Hunting*](https://arxiv.org/pdf/2204.11076) (arXiv) — places hunting inside the same hypothesis-testing frame as the other defensive disciplines.
 
 
 ---
@@ -192,11 +174,6 @@ Hunting and investigation are two different mental modes, and good practitioners
 Hunting is **human-based detection**. An IDS alert is automated detection; a hunting observation is a human noticing that something is off. The switch is captured in two questions. In hunting mode you ask *"what looks weird?"* The moment something does, you flip into investigation mode and ask *"how do I confirm it?"*
 
 This is why **a good hunter is usually a good investigator** — you cannot cleanly separate the finding from the confirming, and the two skills sharpen each other.
-
-??? info "Sources & Further Reading"
-    - SOC Prime — [*Threat Hunting Basics: Getting Manual*](https://socprime.com/blog/threat-hunting-basics-getting-manual) — on why alert-driven work and hunting are different modes of attention.
-    - Chris Sanders — [*Leveraging Curiosity to Enhance Analytic Technique*](https://www.sans.org/presentations/leveraging-curiosity-to-enhance-analytic-technique) (SANS) — on the questioning stance that distinguishes the two modes.
-    - Splunk — [*Hypothesis-Driven Hunting with the PEAK Framework*](https://www.splunk.com/en_us/blog/security/peak-hypothesis-driven-threat-hunting.html) — the ABLE model for making "what looks weird?" into something testable.
 
 
 ---
@@ -212,11 +189,6 @@ An adversary makes progress by establishing **relationships** — with users, ho
 But you can't observe a relationship directly. You observe the **individual behaviors** that represent it. "The attacker now controls a privileged local account" is not a thing you can query; the behaviors that represent it are — an account was created (`4720`), it was added to Administrators (`4732`), and it logged on (`4624`). Detection and hunting operate on those behaviors.
 
 The practical consequence is a method: name the relationships first, and each relationship's set of possible anomalies becomes your "what am I looking for?" list. Naming the relationships is the pivot that turns anomaly-hunting from guesswork into a near-mechanical enumeration.
-
-??? info "Sources & Further Reading"
-    - Caltagirone, Pendergast & Betz — [*The Diamond Model of Intrusion Analysis*](https://apps.dtic.mil/sti/pdfs/ADA586960.pdf) — the formal version of this model: an event is adversary, capability, infrastructure and victim *plus the edges between them*.
-    - [*A practitioner's guide to the Diamond Model*](https://www.vectra.ai/topics/diamond-model-of-intrusion-analysis) — a shorter read if the paper is too much.
-    - David J. Bianco — [*The Pyramid of Pain*](http://detect-respond.blogspot.com/2013/03/the-pyramid-of-pain.html) · [SANS version](https://www.sans.org/tools/the-pyramid-of-pain/) — the same lesson from the detection side: behaviours cost the adversary more than atomic indicators.
 
 
 ---
@@ -236,7 +208,7 @@ Frame every hunt as **"Has [specific attack] happened on my network?"** Then dec
 
     Every section after this one is an answer to one of these three.
 
-![abh process](mindset-diagrams/abh-process.png)
+[![Attack-based hunting: decomposing one big question into what am I looking for, where am I likely to find it, and how can I manipulate the data to see it, ending in a hunting observation handed to the investigation loop](mindset-diagrams/05-attack-based-hunting.png){ loading=lazy }](mindset-diagrams/05-attack-based-hunting.png){ title="Open the full-resolution diagram" }
 
 #### Worked Example — Malicious Account Creation
 
@@ -254,13 +226,7 @@ Notice the same three questions repeating for every anomaly, and notice how many
 
 Because a signature catches *one* attack — "alert when `svch0st.exe` executes" — but attackers rename, recompile, and mistype. You want the whole **family of variations**, so you hunt the manifestation, not the string. Invert the question: instead of *"does this match known-bad?"* ask *"what is abnormally rare across my fleet?"* Stack every executed binary by name and by hash, sort by least-frequency-of-occurrence, and the singletons float up — the dumper that ran on exactly one host betrays itself by its rarity, no matter what it's named.
 
-![signatures vs hunting](mindset-diagrams/signatures-vs-hunting.png)
-
-??? info "Sources & Further Reading"
-    - Rapid7 — [*Threat Hunting: Attack vs. Data*](https://information.rapid7.com/threat-hunting-attack-data.html) — a walkthrough of the same ABH/DBH split used here.
-    - Qintel — [*Hypothesis-Driven Threat Hunting: Turn Intelligence Into Testable Hunts*](https://www.qintel.com/article/hypothesis-driven-threat-hunting-turn-intelligence-into-testable-hunts) — on anchoring a hunt to a specific technique and defining closure criteria before you query.
-    - Splunk — [*Hypothesis-Driven Hunting with the PEAK Framework*](https://www.splunk.com/en_us/blog/security/peak-hypothesis-driven-threat-hunting.html) — PEAK's hypothesis-driven hunt type is ABH under another name.
-    - [OTRF — Threat Hunter Playbook](https://github.com/OTRF/ThreatHunter-Playbook) · [docs](https://threathunterplaybook.com) — ABH worked end-to-end, as runnable notebooks organised by ATT&CK tactic.
+[![A signature catches one attack, while hunting catches the whole family of behaviours behind it](mindset-diagrams/preview_06-signatures-vs-hunting.png){ loading=lazy }](mindset-diagrams/preview_06-signatures-vs-hunting.png){ title="Open the full-resolution diagram" }
 
 
 ---
@@ -277,7 +243,7 @@ The process mirrors ABH with three data-shaped questions. Pick a source and ask:
 
 There's a clean flip of the ABH framing here. In ABH we said attacks are about evolving relationships, and detection works on the individual behaviors that represent them. In DBH the sentence turns around: **data represents individual behaviors, and detection is about understanding the relationships those behaviors represent.** It is the same reality approached from opposite ends — ABH pushes down from the attack toward the data, DBH reasons up from the data toward the attack. Master both and they meet in the middle.
 
-![abh dbh two angles](mindset-diagrams/abh-dbh-two-angles.png)
+[![ABH and DBH as two directions along one chain of attack, relationships, behaviours and data source: ABH starts from the attack and finds where it lands in data, DBH starts from the data and reasons up to the attack](mindset-diagrams/04-abh-dbh-two-angles.png){ loading=lazy }](mindset-diagrams/04-abh-dbh-two-angles.png){ title="Open the full-resolution diagram" }
 
 #### A Worked Source: Windows Process Creation (EID 4688)
 
@@ -285,11 +251,6 @@ Process-creation logs make the point concretely. Ask *"does anything in EID 4688
 
 Two of those come with a warning worth publishing, because they're where beginners generate noise. Standard-deviation-on-time hunts have to account for **automated processes, backups, and update windows** — they run off-hours legitimately and will otherwise bury your real outliers. And the "never-before-run-by-this-user" hunt does not scale to the whole fleet — there are too many innocent firsts; you scope it to **sensitive users**, the ones with a history of compromise or with broad access. Similarly, aggregate-by-path is best pointed at a small, high-value segment rather than the entire estate.
 
-??? info "Sources & Further Reading"
-    - Splunk — [*Baseline Hunting with the PEAK Framework*](https://www.splunk.com/en_us/blog/security/peak-baseline-hunting) — PEAK's baseline/EDA hunt is DBH: start from the data, group like systems, then investigate what deviates.
-    - Intel 471 — [*How to Threat Hunt: A Beginner's Guide*](https://www.intel471.com/blog/how-to-threat-hunt-a-beginners-guide) — includes the proxy user-agent stacking example used in this section.
-    - [*Threat Hunting with Sysmon 101, part 2 — process creation*](https://11x256.github.io/threat_hunting/Threat-Hunting-2-sysmon-event-structure/) · [part 3 — command line](https://11x256.github.io/threat_hunting/Threat-Hunting-3-command-line-investigation/) — a single data source worked the DBH way, field by field. Note its warning to pivot on process **GUID** rather than PID, since PIDs are reused.
-    - Splunk — [*Peeping Through Windows (Logs): Using Sysmon & Event Codes for Threat Hunting*](https://www.splunk.com/en_us/blog/security/a-salacious-soliloquy-on-sysmon.html) — what each Sysmon event code is actually good for.
 
 ---
 
@@ -311,7 +272,7 @@ The single most important idea: **an anomaly is always relative to the entity an
 
 Nearly every anomaly falls into one of two categories, and they map to a simple distinction: the threat actor *itself*, versus the threat actor's *relationships*. A **subject anomaly** is unexpected data directly within the evidence describing an action — the actor is wrong *on its own*, by its own properties, considered without any relations. `Svch0st.exe`, with a zero where the "o" should be, is wrong all by itself. A **context anomaly** is unexpected data in relation to the other data surrounding an action — the actor is normal in isolation but wrong in its *relation to the scene*. Two instances of `wininit.exe` is the example: one is normal, and only knowing that makes the second one suspicious. Or, put visually: a zebra isn't an anomaly — a zebra standing in a downtown street is. Subject looks at the actor; context looks at the actor's relationship to everything around it.
 
-![subject vs context anomaly](mindset-diagrams/subject-vs-context-anomaly.png)
+[![Subject anomalies describe the threat actor itself, context anomalies describe its relationship to its surroundings](mindset-diagrams/preview_11-subject-vs-context.png){ loading=lazy }](mindset-diagrams/preview_11-subject-vs-context.png){ title="Open the full-resolution diagram" }
 
 ### The Eye Test
 
@@ -332,11 +293,6 @@ Before any statistics there's the **eye test** — simply, *what doesn't belong?
 
 To put a bow on it: anomaly detection is built on experience and pattern recognition; you can't pre-define every anomaly, but these frequently-seen types — plus the eye test — get you moving until that instinct is automatic. And nearly all of them collapse into just two buckets: **subject**, the actor itself, and **context**, the actor's relation to the scene. Those two, together with the mental models earlier in this post, are the working kit for reasoning about anything weird you turn up in an investigation.
 
-??? info "Sources & Further Reading"
-    - Splunk — [*Baseline Hunting with the PEAK Framework*](https://www.splunk.com/en_us/blog/security/peak-baseline-hunting) — the formal treatment of context anomalies: group like systems, baseline each group separately, then investigate the deviations.
-    - Intel 471 — [*Threat Hunting Tactics & Techniques*](https://www.intel471.com/blog/threat-hunting-tactics-techniques) — anomaly categories tied to specific telemetry.
-    - Mark Baggett — [*Detecting Random (DGA)*](https://isc.sans.edu/diary/19893) — the *content formatting* and *unexpected randomness* types, with an honest account of their false-positive rate. Note the commenter's point that legitimate CDN hostnames look random too.
-    - David J. Bianco — [*The Pyramid of Pain*](http://detect-respond.blogspot.com/2013/03/the-pyramid-of-pain.html) — why the behavioural anomalies in this list are worth more than the atomic ones.
 
 ---
 
@@ -375,17 +331,6 @@ Two things follow from working this way. Hunts stop being a sequence of whatever
 
 The rest of this section assumes that choice is made. Attack dissection is what you do to the technique the heatmap handed you.
 
-??? info "Sources & Further Reading"
-    - Katie Nickels — [*Getting Started with ATT&CK: Threat Intelligence*](https://medium.com/mitre-attack/getting-started-with-attack-cti-4eb205be4b2f) (MITRE ATT&CK on Medium) — mapping intelligence to ATT&CK so groups can be compared and techniques ranked. The practical starting point for this section.
-    - [*Using ATT&CK to Advance Cyber Threat Intelligence — Part 1*](https://medium.com/mitre-attack/using-att-ck-to-advance-cyber-threat-intelligence-part-1-c5ad14d59724) (MITRE ATT&CK on Medium) — the group-overlay move worked explicitly: where two tracked groups share techniques, those are the highest-priority ones to detect.
-    - [ATT&CK Groups](https://attack.mitre.org/groups/) — the per-group technique attributions the layers are built from.
-    - [mitre-attack/attack-navigator](https://github.com/mitre-attack/attack-navigator) — layers, scoring and layer combination. Note that layers being combined must target the same ATT&CK version and domain, or the overlay is meaningless.
-    - [rabobank-cdc/DeTT&CT](https://github.com/rabobank-cdc/DeTTECT) — built precisely because Navigator alone has no multi-level scoring and no separation between *visibility* and *detection*. Exports JSON layers straight into Navigator.
-    - Marcus Bakker — [*DeTT&CT: Mapping your Blue Team to MITRE ATT&CK*](https://marcus-bakker.squarespace.com/blog/2019/5/dettact-mapping-your-blue-team-to-mitre-attack) · NVISO — [*DeTT&CT: Mapping detection to MITRE ATT&CK*](https://blog.nviso.eu/2022/03/09/dettct-mapping-detection-to-mitre-attck/) — the author's own introduction, and a walkthrough of putting it into practice.
-    - Katie Nickels — [*MITRE ATT&CK: The Play at Home Edition*](https://i.blackhat.com/USA-19/Wednesday/us-19-Nickels-MITRE-ATTACK-The-Play-At-Home-Edition.pdf) (Black Hat USA 2019) — how different teams use ATT&CK to track threats, with the prioritisation argument laid out.
-    - Splunk — [*Introducing the PEAK Threat Hunting Framework*](https://www.splunk.com/en_us/blog/security/peak-threat-hunting-framework.html) — PEAK's *Prepare* stage is this section under another name.
-    - A caution worth carrying: heatmaps go stale as techniques are added, revised and deprecated, and a wall of coloured boxes with no statement of *what* provides each colour is decoration rather than analysis.
-
 
 ### What You're Trying to Get Out of an Attack
 
@@ -401,22 +346,12 @@ The process takes any input — a threat-intel report, a colleague's tip, a stra
 4. **Map the steps to evidence.**
 5. **Identify the anomaly types.**
 
-![attack dissection process](mindset-diagrams/attack-dissection-process.png)
-
-??? info "Sources & Further Reading"
-    - [MITRE ATT&CK](https://attack.mitre.org/) — the entry point for every dissection; the value is in the procedure examples and references, not the technique page itself.
-    - Qintel — [*Hypothesis-Driven Threat Hunting*](https://www.qintel.com/article/hypothesis-driven-threat-hunting-turn-intelligence-into-testable-hunts) — turning a report into something with a defined pass/fail.
-    - [OTRF — Threat Hunter Playbook](https://github.com/OTRF/ThreatHunter-Playbook) — what a finished dissection looks like when it is written down to be re-run.
+[![The attack dissection process: collect examples, identify entities, relationships and steps, optionally simulate the attack, map the steps to evidence, and identify anomaly types, the same five steps for any input](mindset-diagrams/08-attack-dissection-process.png){ loading=lazy }](mindset-diagrams/08-attack-dissection-process.png){ title="Open the full-resolution diagram" }
 
 
 ### Step 1 — Collect Examples
 
 You have to examine a large corpus of material to understand an attack properly, and the best starting point is **MITRE ATT&CK**. Treat it the way a good researcher treats Wikipedia — as a jumping-off point, never the destination. You're not doing real research until you're digging into the references. In practice: determine the ATT&CK technique(s) the report maps to, then follow their procedure examples and references outward to build a knowledge base. Beyond ATT&CK, most of the best material in this field lives on blogs and in direct interaction, and Twitter/X is a surprisingly good way to find it — practitioners share pcaps, Sigma rules, and context that never makes it into a polished write-up, and researching the *author* of a report often surfaces even more. Read the source report first just for context, jot down questions as they occur to you (a question as small as *is plink publicly available?* earns its place in the margin), and accept that you won't extract everything on the first pass — often it's the third read, after you've done the surrounding research, that the attack finally clicks.
-
-??? info "Sources & Further Reading"
-    - [MITRE ATT&CK](https://attack.mitre.org/) — specifically [T1021.001 Remote Services: RDP](https://attack.mitre.org/techniques/T1021/001/), [T1572 Protocol Tunneling](https://attack.mitre.org/techniques/T1572/) and [T1136 Create Account](https://attack.mitre.org/techniques/T1136/), the techniques worked in this post.
-    - [The ThreatHunting Project](https://www.threathunting.net/) — a curated index of public hunting procedures to mine for examples.
-    - [OTRF — Security-Datasets](https://github.com/OTRF/Security-Datasets) — pre-recorded telemetry for techniques, so you can study the manifestation without running the attack.
 
 
 ### Step 2 — Identify Entities, Relationships, and Steps
@@ -437,7 +372,7 @@ Interrogate the **victim**:
 - What access will a successful attack provide? (a denial of service, command execution, RDP)
 - What information could be disclosed if it succeeds? (RAM, disk, network traffic)
 
-![dissect questions](mindset-diagrams/dissect-questions.png)
+[![The questions that dissect an attack: on the attacker side the tooling needed, its position relative to the victim and what it must know or guess; on the victim side the software and version, open ports, settings, what a success grants and what information is disclosed](mindset-diagrams/02-dissecting-attack-questions.png){ loading=lazy }](mindset-diagrams/02-dissecting-attack-questions.png){ title="Open the full-resolution diagram" }
 
 #### Worked Example: RDP Tunneling
 
@@ -464,11 +399,7 @@ With the entities and relationships pinned down, the attack collapses into a cle
 
 In one breath — **prerequisites:** a foothold and valid credentials on the attacker's side; a Windows host with 3389 and outbound internet on the victim's side. **Result:** interactive RDP that evades the perimeter. Casting an attack as this kind of high-level overview is precisely what makes its nuances visible — and any detail you *can't* resolve from reading is exactly the kind of thing you'd settle by simulating the attack in the next step.
 
-![rdp tunneling overview](mindset-diagrams/rdp-tunneling-overview.png)
-
-??? info "Sources & Further Reading"
-    - Mandiant — [*Bypassing Network Restrictions Through RDP Tunneling*](https://cloud.google.com/blog/topics/threat-intelligence/bypassing-network-restrictions-through-rdp-tunneling) — the primary source for the worked example in this section.
-    - Caltagirone, Pendergast & Betz — [*The Diamond Model of Intrusion Analysis*](https://apps.dtic.mil/sti/pdfs/ADA586960.pdf) — the adversary/victim interrogation here is the Diamond's four vertices asked as questions.
+[![The RDP reverse tunnel in overview: a foothold and valid credentials on the attacker side, and a Windows host with 3389 and outbound internet on the victim side](mindset-diagrams/preview_02-rdp-reverse-tunnel.png){ loading=lazy }](mindset-diagrams/preview_02-rdp-reverse-tunnel.png){ title="Open the full-resolution diagram" }
 
 
 ### Step 3 — Simulate the Attack (Optional)
@@ -481,14 +412,7 @@ There are two flavors. In a **full simulation** you perform the entire attack yo
 
 The framing that keeps a simulation honest is to treat it as a **controlled experiment**, where your lab network and its logging instrumentation are the dependent variable — the thing you're measuring. The procedure is disciplined: clear existing evidence, start the clock, perform the attack, stop the clock, and then stop the evidence-collection processes (the Windows Event Log Service, Linux `rsyslog`, the packet capture). Said another way, the simulated attack is the **stimulus** and the host and network evidence is the **response** you measure — and bounding it with a start-and-stop clock is what lets you isolate *only* the evidence the attack produced. Each run answers one concrete question, such as *"what shows up when the attacker enables RDP on the victim?"*
 
-![simulation experiment](mindset-diagrams/simulation-experiment.png)
-
-??? info "Sources & Further Reading"
-    - [Atomic Red Team](https://github.com/redcanaryco/atomic-red-team) (Red Canary) — small, ATT&CK-mapped tests; the fastest way to generate real telemetry for one technique.
-    - Red Canary — [*Finding false negatives with Atomic Red Team*](https://redcanary.com/blog/testing-and-validation/atomic-red-team/false-negatives/) — the "run it, then measure what you did **not** catch" discipline this step is built on. Note the caveat that default atomic commands can trip signatures, so you may be measuring the string rather than the behaviour.
-    - [Security Onion](https://securityonionsolutions.com/) — for the artifact-replay flavour: push someone else's pcap through a monitored stack.
-    - [DetectionLab](https://github.com/clong/DetectionLab) (Chris Long) — the pre-instrumented lab referenced above. Check its current maintenance status before building on it.
-    - [OTRF — Security-Datasets](https://github.com/OTRF/Security-Datasets) — when you want the evidence without detonating anything.
+[![Simulating an attack as a controlled experiment, with the lab network and its logging instrumentation as the apparatus](mindset-diagrams/preview_07-controlled-simulation.png){ loading=lazy }](mindset-diagrams/preview_07-controlled-simulation.png){ title="Open the full-resolution diagram" }
 
 
 ### Step 4 — Map the Steps to Evidence
@@ -504,15 +428,9 @@ Mapped out, RDP tunneling turns into a step-by-step evidence plan:
 
 Notice that this mapping deliberately spans all three evidence realms, which is exactly what "map to evidence" is supposed to force. On **disk/host** you have the Windows event IDs (2005, 4688, 21/25, 4624) and the execution artifacts (ShimCache, Amcache, Prefetch, the registry keys plink and PortProxy leave behind). On the **network** you have the outbound connection to a low port and the `mstshash` cookie in the packet payload. And in **memory** you'd find the live tunnel process itself — plink or the netsh helper — with its revealing command-line arguments, its open network connections, and any named pipes it created, none of which may survive on disk. If a step seems to touch only one realm, that's usually a sign you haven't decomposed it far enough.
 
-![rdp map to evidence](mindset-diagrams/rdp-map-to-evidence.png)
+[![The RDP tunneling steps mapped to evidence across all three realms, which is what mapping to evidence is meant to force](mindset-diagrams/01-rdp-steps-to-evidence.png){ loading=lazy }](mindset-diagrams/01-rdp-steps-to-evidence.png){ title="Open the full-resolution diagram" }
 
 That last tell is worth flagging here and unpacking in the next step, because it shows how much sits inside a single step: the `Cookie: mstshash=` string in RDP's early **X.224 connection-request** phase is readable in cleartext, which is why "traffic logs" in this plan specifically means payload-inspecting telemetry rather than flow records. Step 5 takes it apart properly. (It's the same source/destination artifact picture you would build for any lateral-movement technique — the mapping simply makes each step's evidence explicit.)
-
-??? info "Sources & Further Reading"
-    - Malware Archaeology — [*Windows Logging Cheat Sheets*](https://www.malwarearchaeology.com/cheat-sheets) — which event IDs exist, and which you have to switch on first. This is the "write down every evidence source you actually have" list.
-    - [olafhartong/sysmon-modular](https://github.com/olafhartong/sysmon-modular) — an ATT&CK-annotated Sysmon config; reading the rule modules is itself a map of technique → evidence.
-    - [SwiftOnSecurity/sysmon-config](https://github.com/SwiftOnSecurity/sysmon-config) — the well-commented baseline config that sysmon-modular builds on.
-    - [Zeek](https://zeek.org/) — the network half of the map: protocol logs that see payload, which flow records never will (this is what makes the `mstshash` tell reachable).
 
 
 ### Step 5 — Identify Anomaly Types
@@ -547,22 +465,15 @@ Finally, the **loopback authentication**, which is the weirdest and most decisiv
 
 Every one of these was chosen because it maps to a *specific step* of the dissected attack — the firewall change and process execution that enable and stage the tunnel, the outbound tunnel relationship, and the loopback-sourced RDP connection at the end. That's the entire point of dissecting an attack: the steps hand you the exact anomalies to hunt.
 
-![rdp anomaly mapping](mindset-diagrams/rdp-anomaly-mapping.png)
-![port convention anomaly](mindset-diagrams/port-convention-anomaly.png)
+[![Each RDP tunneling tell mapped back to the dissected step it came from: the firewall change and process execution that stage the tunnel, the outbound tunnel relationship, and the loopback-sourced logon at the end](mindset-diagrams/10-rdp-step-anomaly-mapping.png){ loading=lazy }](mindset-diagrams/10-rdp-step-anomaly-mapping.png){ title="Open the full-resolution diagram" }
 
-??? info "Sources & Further Reading"
-    - SOC Prime — [*Threat Hunting Basics: Getting Manual*](https://socprime.com/blog/threat-hunting-basics-getting-manual) — on choosing which manifestations are worth a hunt, and its warning that chasing every rare value burns the day on false positives.
-    - Intel 471 — [*Threat Hunting Tactics & Techniques*](https://www.intel471.com/blog/threat-hunting-tactics-techniques) — anomaly categories mapped onto concrete telemetry.
-    - Splunk — [*Baseline Hunting with the PEAK Framework*](https://www.splunk.com/en_us/blog/security/peak-baseline-hunting) — the formal version of "you cannot call something abnormal until you have measured normal".
+[![Port patterns behind an RDP tunnel: a victim host reaching out to a low service port it never normally initiates, an unusual high-to-low connection](mindset-diagrams/08-port-patterns-and-rdp-tunnels.png){ loading=lazy }](mindset-diagrams/08-port-patterns-and-rdp-tunnels.png){ title="Open the full-resolution diagram" }
 
 
-### Wrapping up Attack Dissection
+### Wrapping Up Attack Dissection
 
 Two things to carry out of this section. First, **every** method of hunting rests on understanding how attacks manifest in evidence — that understanding feeds attack-based hunting directly and data-based hunting indirectly — and the **five-step dissection** (collect examples → identify entities, relationships, and steps → simulate → map to evidence → identify anomaly types) is the repeatable way to build it. Second, two habits are what make it real: work toward being genuinely comfortable **simulating attacks**, and strive to understand an attack well enough to **explain it to non-technical management**. Neither of those arrives on its own; both take deliberate practice — and being able to explain an attack simply is both the proof that you understand it and, in practice, the thing that gets a hunting program understood, trusted, and funded.
 
-??? info "Sources & Further Reading"
-    - David J. Bianco — [*Things That Make You Go HMM*](https://speakerdeck.com/davidjbianco/things-that-make-you-go-hmm-using-a-simple-hunting-maturity-model-to-establish-and-improve-your-threat-hunting-program) — on building a hunting capability that survives the departure of its best hunter.
-    - [*Huntpedia*](https://www.slideshare.net/slideshow/huntpedia-249837834/249837834) — several chapters on communicating hunting results upward, which is the "explain it to management" half of this section.
 
 ---
 
@@ -579,20 +490,13 @@ The five models so far were about how investigation and hunting *work*. These la
 
 To hunt across a source you first have to understand it, and to plan coverage you need a map of where evidence even lives. Group it into realms — **Network** (connection/flow logs, HTTP transactions, DNS, VPN access), **Disk** (Windows and *nix logs, Sysmon, app-server auth, mail transactions, the registry), **Threat Intel** (passive DNS, reputation, sandbox — what the world knows about the adversary), and **Friendly Intel** (user roles, asset roles, installed apps — "know yourself"), with **Memory** sitting in the center because it corroborates all of them. Today you'd add a fifth working realm, **Cloud** — audit and sign-in logs where a growing share of attacks now manifest.
 
-![evidence realms](mindset-diagrams/evidence-realms.png)
+[![Evidence realms: network, cloud, disk, threat intel and friendly intel arranged around memory, which sits at the centre because it corroborates every other realm](mindset-diagrams/03-evidence-realms.png){ loading=lazy }](mindset-diagrams/03-evidence-realms.png){ title="Open the full-resolution diagram" }
 
 What separates a skilled hunter from a typical analyst is a deeper understanding of the *value* each source represents. When you meet a new data source — or want to go deeper on a familiar one — interrogate it: where does the data come from, what behaviors does it represent, what attack techniques manifest here, what fields exist, and what other sources can I pivot to from here (take one field and chase it across another dataset)? Two questions matter more than they first appear. Is this **intentional evidence** — a log designed to be read — or a byproduct never meant as evidence, like ShimCache, that carries real interpretation caveats? And is coverage **universal** or partial — do you have PCAP for the whole estate or just one subnet? The hunter's discipline is to know the limitations, because **evidence does not always manifest the way you expect, every time.** The way you learn what to expect is to **simulate** the attack against the source and watch what it actually produces.
 
 #### The Bridge to Parts 2.1 And 2.2
 
 This is where the mindset snaps onto the rest of the series. Parts 2.1 and 2.2 catalogued Windows and Linux artifacts at scale; DBH is the lens that turns each of those artifacts into a hunt. The plan for those companion posts is a "perfect match": walk every evidence source we collect and ask, for each, *how is this good for hunting?* — which fields carry evidence, what's anomalous, how to surface it. Windows and Linux won't look identical, but it's the **same mindset** applied to different data. The evidence realms are the table of contents; the DBH process is the method applied to each row.
-
-??? info "Sources & Further Reading"
-    - Malware Archaeology — [*Windows Logging Cheat Sheets*](https://www.malwarearchaeology.com/cheat-sheets) — the disk/host realm, including which logs are off by default.
-    - [Zeek](https://zeek.org/) — the network realm; protocol-aware logs rather than flow records.
-    - [olafhartong/sysmon-modular](https://github.com/olafhartong/sysmon-modular) · [SwiftOnSecurity/sysmon-config](https://github.com/SwiftOnSecurity/sysmon-config) — endpoint coverage, with the trade-off between completeness and volume made explicit in the configs themselves.
-    - [OTRF — Security-Datasets](https://github.com/OTRF/Security-Datasets) — the practical way to answer "what does this source actually produce when the attack runs?" without a lab.
-    - [Security Onion](https://securityonionsolutions.com/) — a single distribution that demonstrates most of the realms side by side.
 
 
 ---
@@ -611,12 +515,6 @@ A hunt that *did* find something gets recorded twice: once as a new detection �
 
 That is what keeps a hunting programme organised: intelligence decides what matters, the heatmap records what you can see and what you have already looked for, and every completed hunt updates it. The models in this post are how you execute one hunt well. This is how a hundred of them add up to something.
 
-
-??? info "Sources & Further Reading"
-    - Sqrrl — [*The Cyber Hunting Maturity Model*](https://medium.com/@sqrrldata/the-cyber-hunting-maturity-model-6d506faa8ad5) — HMM0–HMM4; the hunt-then-automate arc is what separates HMM3 from HMM4.
-    - Sqrrl — [*A Framework for Cyber Threat Hunting*](https://www.threathunting.net/files/framework-for-threat-hunting-whitepaper.pdf) — the original whitepaper behind the hunting loop and the maturity model.
-    - Splunk — [*Introducing the PEAK Threat Hunting Framework*](https://www.splunk.com/en_us/blog/security/peak-threat-hunting-framework.html) — the *Act with Knowledge* stage is this model: a hunt's output is a detection, a baseline, or documented knowledge.
-    - [SigmaHQ/sigma](https://github.com/SigmaHQ/sigma) — the usual vehicle for turning a finished hunt into a portable detection.
 
 ---
 
@@ -646,6 +544,7 @@ starting from scratch.
 
 === "The Mindset"
     Where the way of thinking in this post comes from.
+    - **Chris Sanders** — [chrissanders.org](https://chrissanders.org) — his doctoral work on the analyst mindset found the investigative skillset to be broadly universal across DF, IR and SOC work, which is exactly this model's claim.
 
     - **Chris Sanders — _Practical Threat Hunting_** (Applied Network Defense) — **start here if you want to go deeper.** The ABH/DBH split, the five-step attack dissection and the evidence realms are all taught in full, with your hands on the data: [networkdefense.co/courses/hunting](https://www.networkdefense.co/courses/hunting/)
     - **Chris Sanders** — the standing reference on hunting cognition. *The Mind of a Hunter: A Cognitive, Data-Driven Approach* (SANS Threat Hunting & IR Summit 2017), [*Deconstructing the Analyst Mindset*](https://www.sans.org/presentations/keynote-deconstructing-the-analyst-mindset) (SANS CTI Summit keynote), [*Leveraging Curiosity to Enhance Analytic Technique*](https://www.sans.org/presentations/leveraging-curiosity-to-enhance-analytic-technique), and [*Investigation Theory: A Cognitive Approach*](https://www.slideshare.net/slideshow/art-into-science-2017-investigation-theory-a-cognitive-approach/71384306). His research on analyst cognition is the evidence base for the claim that the investigative skillset is universal across DF/IR/SOC.
@@ -691,7 +590,7 @@ starting from scratch.
     - [*ent*](https://www.fourmilab.ch/random/) (Fourmilab) — the entropy tool used in the examples above.
     - **Carter Bullard** — [*Producer–Consumer Ratio*](http://qosient.com/argus/presentations/Argus.FloCon.2014.PCR.Presentation.pdf) (FloCon 2014), the origin of PCR · **David J. Bianco** — [*Detecting Data Staging & Exfil Using the PCR Shift*](http://detect-respond.blogspot.com/2016/09/detecting-data-staging-exfil-using-PCR-shift.html), baseline PCR against current PCR.
     - [olafhartong/sysmon-modular](https://github.com/olafhartong/sysmon-modular) · [SwiftOnSecurity/sysmon-config](https://github.com/SwiftOnSecurity/sysmon-config) — ATT&CK-annotated endpoint coverage; reading the rule modules is itself a technique → evidence map.
-    - [*Threat Hunting with Sysmon 101*](https://11x256.github.io/threat_hunting/Threat-Hunting-2-sysmon-event-structure/) — one data source worked field by field, with the warning to pivot on process **GUID** rather than PID, since PIDs are reused and will silently break a chain. · Splunk — [*Using Sysmon & Event Codes for Threat Hunting*](https://www.splunk.com/en_us/blog/security/a-salacious-soliloquy-on-sysmon.html).
+    - [*Threat Hunting with Sysmon 101*](https://11x256.github.io/threat_hunting/Threat-Hunting-2-sysmon-event-structure/) · [part 3 — command line](https://11x256.github.io/threat_hunting/Threat-Hunting-3-command-line-investigation/) — one data source worked field by field, with the warning to pivot on process **GUID** rather than PID, since PIDs are reused and will silently break a chain. · Splunk — [*Using Sysmon & Event Codes for Threat Hunting*](https://www.splunk.com/en_us/blog/security/a-salacious-soliloquy-on-sysmon.html).
     - **Intel 471** — [*Threat Hunting Tactics & Techniques*](https://www.intel471.com/blog/threat-hunting-tactics-techniques) · [*How to Threat Hunt: A Beginner's Guide*](https://www.intel471.com/blog/how-to-threat-hunt-a-beginners-guide) — stack counting and query refinement on real examples.
 
 === "Collections"

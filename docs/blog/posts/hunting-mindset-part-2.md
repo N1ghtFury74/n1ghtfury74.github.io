@@ -97,12 +97,7 @@ Why does perspective get its own step? Because a hunter fails in three ways — 
     Get strong at **Search, Pivot and Aggregation** first. The other two are for confirming
     and communicating, not for finding.
 
-![gapss transformations](mindset-diagrams/gapss-transformations.png)
-
-??? info "Sources & Further Reading"
-    - Intel 471 — [*Threat Hunting Tactics & Techniques*](https://www.intel471.com/blog/threat-hunting-tactics-techniques) — the transformation moves described independently of any one platform.
-    - SOC Prime — [*Threat Hunting Basics: Getting Manual*](https://socprime.com/blog/threat-hunting-basics-getting-manual) — on manual data work as the thing alerting cannot replace.
-    - [OTRF — Threat Hunter Playbook](https://threathunterplaybook.com) — these transformations as real, executable queries rather than descriptions.
+[![The GAPSS data transformations that make up the hunting step itself](mindset-diagrams/02-gapss-data-transformations.png){ loading=lazy }](mindset-diagrams/02-gapss-data-transformations.png){ title="Open the full-resolution diagram" }
 
 
 ### Search — The Workhorse
@@ -117,7 +112,7 @@ The refinement can carry a whole hunt. *Has PowerShell malware run on my network
 
 One more distinction, and it's really the hunting/investigation context switch in another guise. When you're **finding anomalies** — hunting, which is exploratory — you generally **start broad and reduce** as needed. When you're **investigating** a specific anomaly you already have, you **start narrow and expand** as needed, because a tight search lands you directly on the specific answer you're chasing. Same person, same tools, opposite opening move, depending on which mode you're in.
 
-![search broad vs narrow](mindset-diagrams/search-broad-vs-narrow.png)
+[![Hunting searches broad while investigation searches narrow, and the two need different queries](mindset-diagrams/preview_04-hunt-broad-investigate-narrow.png){ loading=lazy }](mindset-diagrams/preview_04-hunt-broad-investigate-narrow.png){ title="Open the full-resolution diagram" }
 
 ### Getting Fluent in Your Search Tool
 
@@ -142,7 +137,7 @@ Two last techniques are worth knowing because they show up the moment your hunts
 
 Pull it together and the lesson is the same one we started with: you can learn any search *syntax* in an afternoon. Real fluency is knowing your tool's backend, its data types, and its quirks well enough that you know what to search for — and that you can trust what it hands back.
 
-![typed data search](mindset-diagrams/typed-data-search.png)
+[![How typed data is held by the search backend, which is what makes a query fast or slow](mindset-diagrams/preview_01-typed-data-backend.png){ loading=lazy }](mindset-diagrams/preview_01-typed-data-backend.png){ title="Open the full-resolution diagram" }
 
 ### Matching Parts, Ranges, and Patterns
 
@@ -170,16 +165,10 @@ One more silent gap lives a layer above the engine, in **field mapping**. SIEMs 
 
 Step back and all of this becomes a checklist you can apply to any search platform someone hands you. There are five areas. The **backend** — its data storage model, its typed data, and whether you're filtering or querying. The **syntax** — basic structure, compound queries, Boolean operators, subsearch and nested search, escaped characters, and comparison operators. **Partial matching** — wildcards, prefix, suffix, and regular expressions. **Additional features** — ranges and exists searches. And **output** — transformations and formats. Work through those five for any tool and the blank search bar over a mountain of data stops being intimidating.
 
-![search mastery framework](mindset-diagrams/search-mastery-framework.png)
-![sampling vs bloom](mindset-diagrams/sampling-vs-bloom.png)
+[![A framework for mastering any search tool, independent of which product it is](mindset-diagrams/preview_05-search-tool-mastery.png){ loading=lazy }](mindset-diagrams/preview_05-search-tool-mastery.png){ title="Open the full-resolution diagram" }
+[![Sampling against bloom filters as two ways a search backend trades accuracy for speed](mindset-diagrams/preview_03-sampling-vs-bloom.png){ loading=lazy }](mindset-diagrams/preview_03-sampling-vs-bloom.png){ title="Open the full-resolution diagram" }
 
 And that is the whole reason this detour into search mattered: fluency in the tool is what finally lets you execute the third question of every hunt — *how do I manipulate the data to see it?* — well enough that the anomaly actually shows itself.
-
-??? info "Sources & Further Reading"
-    - [SigmaHQ/sigma](https://github.com/SigmaHQ/sigma) — the clearest demonstration that each platform speaks a dialect: one rule, compiled out to SPL, KQL, EQL, Lucene and more. Reading the backends is a fast way to see where each tool's expressiveness ends.
-    - [OTRF — Threat Hunter Playbook](https://threathunterplaybook.com) — the same hunt expressed as queries you can run, which is the quickest cure for search-bar paralysis.
-    - [Zeek](https://zeek.org/) — worth knowing that Zeek logs a connection only when it closes; that is exactly the kind of backend "nuance" this section warns about.
-    - Intel 471 — [*How to Threat Hunt: A Beginner's Guide*](https://www.intel471.com/blog/how-to-threat-hunt-a-beginners-guide) — query refinement worked through on real examples.
 
 
 ### Aggregation — Taking in the Lay of the Land
@@ -188,7 +177,7 @@ If search is how you pull data, **aggregation** is how you make sense of a lot o
 
 The simplest form is a **unique term plus count**. Take a field full of values — `chrome.exe`, `powershell.exe`, `chrome.exe`, `powershell.exe`, `powershell.exe`, `certutil.exe` — group the unique ones, count each, and sort, and you get three `powershell.exe`, two `chrome.exe`, one `certutil.exe`. That's the whole idea, and it scales to millions of rows — at which point the single `certutil.exe` is the row you care about.
 
-![aggregation example](mindset-diagrams/aggregation-example.png)
+[![Aggregation as grouping unique values, counting them and sorting, turning a raw field into counts per value](mindset-diagrams/06-aggregation-count-sort.png){ loading=lazy }](mindset-diagrams/06-aggregation-count-sort.png){ title="Open the full-resolution diagram" }
 
 Aggregation isn't limited to one field. Group by a **combination** of fields and you count unique *pairs* — user and process together (two `jdoe`+`powershell.exe`, two `svc-backup`+`chrome.exe`, one `jdoe`+`certutil.exe`), or source IP together with destination IP, and you can keep adding fields as the question demands. The pair is often where the signal is: neither `jdoe` nor `certutil.exe` is remarkable alone. And the math doesn't have to be a count: a **unique term plus sum** lets you total another field per group — sum the bytes transferred and aggregate that by host, and you've built a "top talkers" list in one move.
 
@@ -230,7 +219,7 @@ Here's the part that ties it back to everything before it: **aggregation is alwa
 
 The clearest way to see this is a real workflow, peeling back one layer at a time. You **search** HTTP data for a single branch office. You **aggregate** the unique MIME types with a count, sorted least-frequent-first, to bring the oddities to the top. You **search** those outlier values to get context on what they are. Some turn out to be normal IT-department activity, so you **add an exclusion** for that to your aggregation and run it again — and with the known-good removed, a new layer of outliers rises into view. You **search** those for context, find another cluster of legitimate processes, and **add exclusions** for them too. Each pass strips away a layer of known-legitimate clutter, and each time, the genuinely anomalous values stand out a little more sharply. That back-and-forth — search, aggregate, exclude, repeat — is the everyday rhythm of hunting.
 
-![aggregation search loop](mindset-diagrams/aggregation-search-loop.png)
+[![Aggregation and search peeling back the layers in turn, each pass stripping known-legitimate clutter so the genuinely anomalous values rise to the top](mindset-diagrams/07-aggregation-search-loop.png){ loading=lazy }](mindset-diagrams/07-aggregation-search-loop.png){ title="Open the full-resolution diagram" }
 
 #### Aggregation and the Third Question
 
@@ -248,12 +237,6 @@ A handful of aggregations come up again and again, split across the two hunting 
 
 To sum up the technique: aggregations are critical in hunting because they let you take in the lay of the land and gain a high-altitude view of your data, you'll reach for one in nearly every expedition you run, and the three forms worth mastering first are **unique term + count**, **multiple unique terms + count or sum**, and **unique term + sum**.
 
-??? info "Sources & Further Reading"
-    - SOC Prime — [*Threat Hunting Basics: Getting Manual*](https://socprime.com/blog/threat-hunting-basics-getting-manual) — stacking under its many names (stack counting, data stacking, pivot tables), plus the warning that triaging every least-common value is a time sink.
-    - Intel 471 — [*Threat Hunting Tactics & Techniques*](https://www.intel471.com/blog/threat-hunting-tactics-techniques) — stack counting as a primary hunting technique, with the user-agent example.
-    - [*Threat Hunting with Sysmon 101, part 3*](https://11x256.github.io/threat_hunting/Threat-Hunting-3-command-line-investigation/) — the parent/child aggregation worked in practice, including excluding `chrome.exe → chrome.exe` to clear the noise.
-    - [OTRF — Threat Hunter Playbook](https://threathunterplaybook.com) — aggregations written as notebooks, so the exclusion-and-rerun loop is visible step by step.
-
 
 ### Statistics — Quantifying What "Normal" Looks Like
 
@@ -269,7 +252,7 @@ The everyday question an average answers is a hunting question in disguise: *wha
 
 So the discipline is to match the measure to the **distribution** of your data, and to actually look at that distribution first. Is authentication spread evenly across every user, or is this an app where a few service accounts do most of the logging in? The shape decides which "average" is honest: in a symmetric distribution the mean and median coincide; in a right-skewed one the median sits left of the mean; in a left-skewed one the mean sits left of the median.
 
-![stats mean median mode](mindset-diagrams/stats-mean-median-mode.png)
+[![Mean, median and mode as three different answers to what you should expect to see in a field](mindset-diagrams/preview_08-mean-median-mode.png){ loading=lazy }](mindset-diagrams/preview_08-mean-median-mode.png){ title="Open the full-resolution diagram" }
 
 #### Standard Deviation: How Far Is Too Far?
 
@@ -277,7 +260,7 @@ Knowing the average invites the next question — *how far from it is far enough
 
 The reason it works is the shape of the bell curve: about 68% of all values fall within one standard deviation of the mean, about 95% within two, and about 99.7% within three. Density falls off a cliff as you move out — being one or two σ from the mean is mild and common, but being four, five, or six σ out is genuinely rare, and that rarity is the signal. The workflow is mechanical: take your value, compare it to the average, count how many standard deviations away it sits, and that count *is* the degree of the outlier. (As always: an outlier is a lead, not a verdict — rare is not the same as malicious, so you still dig.)
 
-![stats standard deviation](mindset-diagrams/stats-standard-deviation.png)
+[![Standard deviation as the measure of how far from normal is far enough to be worth looking at](mindset-diagrams/preview_10-standard-deviation.png){ loading=lazy }](mindset-diagrams/preview_10-standard-deviation.png){ title="Open the full-resolution diagram" }
 
 #### Entropy: Measuring Randomness
 
@@ -299,7 +282,7 @@ We're trained to think of endpoints as client and server, but **producer:consume
 
 A value near **+1** means the host is almost purely pushing data out — a file upload, or a beacon; around **+0.4** is a 70/30 export like sending email; **0.0** is a balanced exchange like NTP, ARP, or DHCP; **−0.5** is roughly 3:1 inbound, like normal HTTP browsing; and **−1.0** is a pure pull, a file download. That single ratio classifies a host's role and makes unexpected behavior pop.
 
-![pcr scale](mindset-diagrams/pcr-scale.png)
+[![The producer-consumer ratio scale, showing whether a host is mostly sending or mostly receiving](mindset-diagrams/pcr-scale.png){ loading=lazy }](mindset-diagrams/pcr-scale.png){ title="Open the full-resolution diagram" }
 
 The genuinely powerful use is the **PCR shift**: plot each host's *baseline* PCR (its normal balance) against its *current* PCR. A host that shifts sharply toward producing — up and off the line — is a candidate for **data exfiltration**; one that shifts the other way can indicate **data staging**. Two well-known references develop this: Carter Bullard's FloCon 2014 PCR presentation, and David Bianco's "Detecting Data Staging & Exfil Using the PCR Shift."
 
@@ -315,17 +298,9 @@ The genuinely powerful use is the **PCR shift**: plot each host's *baseline* PCR
 
 It's worth being precise about what statistics is and isn't for. You *can* use it to summarize data and take in the lay of the land, as a **step-one detection** that surfaces a lead, as a **step-two confirmation** when you've found something odd and need to know *to what extent* it's abnormal compared to everything else, and to inform your decisions. You *cannot* use it to automate the whole process or to make the decision for you. And keep a healthy skepticism about the "advanced statistics" vendors sell: much of it is just a more involved version of the fundamentals in this section, and the cost-versus-benefit of a lot of machine-learning and AI statistical products remains unproven. Master the fundamentals; treat the magic box with caution.
 
-![stats role in hunting](mindset-diagrams/stats-role-in-hunting.png)
+[![The role statistics play in hunting: describing what normal looks like so an outlier can be recognised](mindset-diagrams/preview_09-role-of-statistics.png){ loading=lazy }](mindset-diagrams/preview_09-role-of-statistics.png){ title="Open the full-resolution diagram" }
 
 The through-line for the whole technique: statistics gives you a different perspective and, above all, a way to quantify "normal" — so reach for it to confirm and prioritize leads on a narrowed scope, never as an autopilot.
-
-??? info "Sources & Further Reading"
-    - Mark Baggett — [*Detecting Random: Finding Algorithmically Chosen DNS Names (DGA)*](https://isc.sans.edu/diary/19893) (SANS ISC) — **read this before using entropy.** He tested `ent` on hostnames and found malicious names score about the same as normal ones, which is why he moved to character-pair frequency tables instead.
-    - [MarkBaggett/freq](https://github.com/MarkBaggett/freq) — the resulting tool, plus `freq_server` for scoring at query time. Build the frequency table from your own traffic, not a generic corpus.
-    - [*ent*](https://www.fourmilab.ch/random/) (Fourmilab) — the entropy tool used in the examples above.
-    - Carter Bullard — [*Producer–Consumer Ratio*](http://qosient.com/argus/presentations/Argus.FloCon.2014.PCR.Presentation.pdf) (FloCon 2014) — the origin of PCR.
-    - David J. Bianco — [*Detecting Data Staging & Exfil Using the PCR Shift*](http://detect-respond.blogspot.com/2016/09/detecting-data-staging-exfil-using-PCR-shift.html) — baseline PCR versus current PCR, which is the technique described here.
-    - [activecm/RITA](https://github.com/activecm/rita) · [*Threat Hunting Over the Network With Zeek and RITA*](https://www.activecountermeasures.com/threat-hunting-over-the-network-with-zeek-and-rita/) — statistical beacon scoring (0–1) over Zeek logs: a worked example of statistics applied to a *narrowed* scope.
 
 
 ### Pivots — Connecting Data Sources on a Shared Value
@@ -340,7 +315,7 @@ The value you pivot on doesn't have to stay inside your own telemetry, either. S
 
 Real pivoting rarely stops at one hop; it fans out into long chains with many directions, because every new source raises new questions and every question has its own pivot. Picture a real scenario: while hunting, you find a process whose *name* makes you suspicious. You pivot from the Sysmon process logs on its **MD5 hash** into Zeek/Bro file logs. From there a **connection ID** carries you to Bro HTTP logs, and the **domain** you find there pivots onward to DNS logs and OSINT. Meanwhile the **responder IP** branches off to PCAP, flow, and OSINT — and the domains you turn up in *those* pivot again. Each hop is driven by whatever value the current data happens to represent, and the discipline is choosing the right path: a wrong turn simply won't reach the destination, so you keep the question you're actually trying to answer in front of you the whole way.
 
-![pivot chain](mindset-diagrams/pivot-chain.png)
+[![Pivots form long chains, so the field you pivot on decides how far the chain can run before it breaks](mindset-diagrams/06-pivot-chain.png){ loading=lazy }](mindset-diagrams/06-pivot-chain.png){ title="Open the full-resolution diagram" }
 
 #### The Fields That Make Pivoting Work — Know These Cold
 
@@ -351,26 +326,15 @@ A pivot is only possible when the *same value* is recorded in both data sources,
 - **Domain** — proxy, Zeek, DNS, PCAP, plus external VirusTotal and domain-reputation services.
 - **File hash** — Sysmon, Zeek, EDR, plus external VirusTotal, sandbox, and application-whitelisting data.
 
-![pivot fields](mindset-diagrams/pivot-fields.png)
+[![The fields that make pivoting work, and what each one can and cannot carry you across](mindset-diagrams/07-pivot-fields.png){ loading=lazy }](mindset-diagrams/07-pivot-fields.png){ title="Open the full-resolution diagram" }
 
 The habit to build is reflexive: whenever you find a value, ask *"which of my data sources also records this?"* — because that set of sources is your pivot map, and cross-source correlation is one of the strongest moves a hunter has.
-
-??? info "Sources & Further Reading"
-    - [Zeek](https://zeek.org/) — the connection UID is the canonical pivot key: it threads one connection across `conn`, `http`, `dns`, `files` and `ssl` logs.
-    - [*Threat Hunting with Sysmon 101, part 2*](https://11x256.github.io/threat_hunting/Threat-Hunting-2-sysmon-event-structure/) — why you pivot on process GUID rather than PID, since PIDs get reused and will silently break a chain.
-    - [OTRF — Threat Hunter Playbook](https://threathunterplaybook.com) — multi-source pivots written out as joins you can read.
-    - Black Hills InfoSec — [*Detecting Malware Beacons With Zeek and RITA*](https://www.blackhillsinfosec.com/detecting-malware-beacons-with-zeek-and-rita/) — a pivot chain run end to end on video.
 
 
 ### The GAPSS Toolbox, Together
 
 That completes GAPSS — the five ways to transform data until an answer surfaces. **Graph** turns data into a picture; **Aggregations** group and count it to reveal the lay of the land; **Pivots** connect sources on a shared value to build the fuller picture; **Statistics** quantify what's normal so the abnormal stands out; and **Search** is the query underneath all of it. They were never a fixed sequence and they never work in isolation — you search to scope, aggregate to find the outliers, pivot to corroborate, and lean on statistics to confirm, looping between them as the investigation demands. In hunting specifically, Search, Pivots, and Aggregations carry most of the discovery. Whatever the mix, this is the machinery behind the third question of every hunt — *how do I manipulate the data to see it?* — and the moment that answer surfaces, the work turns back into *reading* it. That's where anomaly detection picks up.
 
-??? info "Sources & Further Reading"
-    - Intel 471 — [*Threat Hunting Tactics & Techniques*](https://www.intel471.com/blog/threat-hunting-tactics-techniques) — the closest public equivalent to this toolbox, platform-independent.
-    - [OTRF — Threat Hunter Playbook](https://threathunterplaybook.com) — search, aggregation and pivot chained together in a single runnable notebook, which is what this section describes in prose.
-    - Splunk — [*Introducing the PEAK Threat Hunting Framework*](https://www.splunk.com/en_us/blog/security/peak-threat-hunting-framework.html) — where these transformations sit inside a full hunt lifecycle.
-    - [SigmaHQ/sigma](https://github.com/SigmaHQ/sigma) — once a transformation reliably surfaces the thing, this is how it stops being a manual hunt.
 
 ---
 
@@ -438,15 +402,8 @@ point at its own frameworks is a great deal easier to defend to the people fundi
 
 </div>
 
-![pyramid of pain](mindset-diagrams/pyramid-of-pain.png)
+[![The Pyramid of Pain, ranking indicator types by how much it costs an attacker when you take them away](mindset-diagrams/pyramid-of-pain.png){ loading=lazy }](mindset-diagrams/pyramid-of-pain.png){ title="Open the full-resolution diagram" }
 
-??? info "Sources & Further Reading"
-    - Sqrrl — [*A Framework for Cyber Threat Hunting*](https://www.threathunting.net/files/framework-for-threat-hunting-whitepaper.pdf) · [*The Cyber Hunting Maturity Model*](https://medium.com/@sqrrldata/the-cyber-hunting-maturity-model-6d506faa8ad5) — the hunting loop and HMM0–HMM4.
-    - David J. Bianco — [*Things That Make You Go HMM*](https://speakerdeck.com/davidjbianco/things-that-make-you-go-hmm-using-a-simple-hunting-maturity-model-to-establish-and-improve-your-threat-hunting-program) — the maturity model presented by its author.
-    - Splunk SURGe — [*Introducing the PEAK Threat Hunting Framework*](https://www.splunk.com/en_us/blog/security/peak-threat-hunting-framework.html) · [hypothesis-driven](https://www.splunk.com/en_us/blog/security/peak-hypothesis-driven-threat-hunting.html) · [baseline](https://www.splunk.com/en_us/blog/security/peak-baseline-hunting) — Prepare / Execute / Act, and the three hunt types.
-    - David J. Bianco — [*The Pyramid of Pain*](http://detect-respond.blogspot.com/2013/03/the-pyramid-of-pain.html) · [SANS](https://www.sans.org/tools/the-pyramid-of-pain/).
-    - Caltagirone, Pendergast & Betz — [*The Diamond Model of Intrusion Analysis*](https://apps.dtic.mil/sti/pdfs/ADA586960.pdf) (full paper) · [practitioner's guide](https://www.vectra.ai/topics/diamond-model-of-intrusion-analysis).
-    - Lockheed Martin — [*Cyber Kill Chain*](https://www.lockheedmartin.com/en-us/capabilities/cyber/cyber-kill-chain.html) · [OODA loop](https://en.wikipedia.org/wiki/OODA_loop).
 
 ---
 
@@ -531,7 +488,7 @@ starting from scratch.
     - [*ent*](https://www.fourmilab.ch/random/) (Fourmilab) — the entropy tool used in the examples above.
     - **Carter Bullard** — [*Producer–Consumer Ratio*](http://qosient.com/argus/presentations/Argus.FloCon.2014.PCR.Presentation.pdf) (FloCon 2014), the origin of PCR · **David J. Bianco** — [*Detecting Data Staging & Exfil Using the PCR Shift*](http://detect-respond.blogspot.com/2016/09/detecting-data-staging-exfil-using-PCR-shift.html), baseline PCR against current PCR.
     - [olafhartong/sysmon-modular](https://github.com/olafhartong/sysmon-modular) · [SwiftOnSecurity/sysmon-config](https://github.com/SwiftOnSecurity/sysmon-config) — ATT&CK-annotated endpoint coverage; reading the rule modules is itself a technique → evidence map.
-    - [*Threat Hunting with Sysmon 101*](https://11x256.github.io/threat_hunting/Threat-Hunting-2-sysmon-event-structure/) — one data source worked field by field, with the warning to pivot on process **GUID** rather than PID, since PIDs are reused and will silently break a chain. · Splunk — [*Using Sysmon & Event Codes for Threat Hunting*](https://www.splunk.com/en_us/blog/security/a-salacious-soliloquy-on-sysmon.html).
+    - [*Threat Hunting with Sysmon 101*](https://11x256.github.io/threat_hunting/Threat-Hunting-2-sysmon-event-structure/) · [part 3 — command line](https://11x256.github.io/threat_hunting/Threat-Hunting-3-command-line-investigation/) — one data source worked field by field, with the warning to pivot on process **GUID** rather than PID, since PIDs are reused and will silently break a chain. · Splunk — [*Using Sysmon & Event Codes for Threat Hunting*](https://www.splunk.com/en_us/blog/security/a-salacious-soliloquy-on-sysmon.html).
     - **Intel 471** — [*Threat Hunting Tactics & Techniques*](https://www.intel471.com/blog/threat-hunting-tactics-techniques) · [*How to Threat Hunt: A Beginner's Guide*](https://www.intel471.com/blog/how-to-threat-hunt-a-beginners-guide) — stack counting and query refinement on real examples.
 
 === "Collections"
