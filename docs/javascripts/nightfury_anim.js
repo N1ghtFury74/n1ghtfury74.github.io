@@ -55,9 +55,13 @@
       selector: [".nf-section__title", ".md-typeset h2"].join(", ")
     },
     {
-      /* The post diagrams are the centrepiece of a write-up — scale up */
+      /* The post diagrams are the centrepiece of a write-up — scale up.
+         This matched `img[src$='.svg']` until the WRAITH diagrams were
+         redrawn as PNG, at which point it silently stopped matching
+         anything. The figure is the stabler target: it holds the image
+         and its caption, and tagging it keeps the class off the <img>. */
       variant: "nf-reveal--zoom",
-      selector: ".md-typeset img[src$='.svg']"
+      selector: ".md-typeset figure"
     },
     {
       /* Blocks that interrupt prose: a short, quiet rise */
@@ -71,7 +75,16 @@
         ".nf-timeline__item",
         "article.md-post",
         ".md-post--excerpt",
-        ".md-typeset table:not([class])",
+        /* The table's WRAPPER, never the table itself. Material styles
+           tables with `table:not([class])` -- its borders, header, cell
+           padding and alignment all hang off that selector. Tagging the
+           table with `nf-reveal` therefore stripped every table on the
+           blog of its styling and dropped it to browser defaults, which
+           is why headers rendered centred with no grid at all. Material
+           wraps each table in `.md-typeset__scrollwrap`, so animating
+           the wrapper gives the same motion and touches nothing the
+           theme depends on. */
+        ".md-typeset .md-typeset__scrollwrap",
         ".md-typeset .admonition",
         ".md-typeset details",
         ".md-typeset .tabbed-set",

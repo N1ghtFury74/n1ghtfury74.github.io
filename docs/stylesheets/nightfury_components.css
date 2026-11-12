@@ -279,7 +279,7 @@ body.nf-anim .md-content__inner {
 }
 
 .md-typeset table:not([class]) tbody tr:hover {
-  background: rgba(0, 200, 83, 0.06);
+  background: rgba(0, 200, 83, 0.09);
 }
 
 /* Code blocks lift very slightly, enough to feel interactive */
@@ -478,24 +478,33 @@ html {
 
 .md-typeset table:not([class]) th,
 .md-typeset table:not([class]) td {
-  padding: 0.62rem 0.85rem;
+  /* 0.7rem rather than 0.85rem horizontally. Across the three columns of
+     the certificate-posture table that reclaims enough room for a 58-
+     character registry path to sit on one line instead of forcing the
+     whole table to scroll. Vertical padding is unchanged. */
+  padding: 0.62rem 0.7rem;
   /* Multi-line cells should line up from the top, not float in the
      middle of the tallest row in the line. */
   vertical-align: top;
   line-height: 1.5;
 }
 
-.md-typeset table:not([class]) th {
-  /* A header that wraps mid-phrase is harder to scan than one that
-     scrolls, and the table already scrolls horizontally. */
-  white-space: nowrap;
-}
 
 /* An inline code span is a single value. Breaking `phpshell2.php`
    across two lines makes it unreadable, and leaving no gap between it
    and the next word makes two values look like one. */
 .md-typeset table:not([class]) code {
-  white-space: nowrap;
+  /* Keep a value intact while it fits -- `pwdLastSet` should never be split
+     across two lines. `break-word` does not shrink the column's min-content
+     width, so the browser still tries to fit the whole token first and only
+     breaks a genuinely oversized one such as a full registry path. */
+  /* Never split a value. `secretsdump.py`, `pwdLastSet` and a registry
+     path are each one token, and breaking one across two lines is worse
+     than letting the table scroll. keep-all also forces the column to be
+     at least as wide as its longest value. */
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: normal;
   margin-inline: 0.1em;
 }
 
@@ -504,3 +513,291 @@ html {
    long. Forcing those onto a single line pushes the table far past the page
    and makes the scroll worse than the wrap. Timestamps are kept intact at
    source instead, with non-breaking spaces inside the value. */
+
+
+/* ==================================================================
+   READING POLISH — tables, step lists, labels, figures
+   ================================================================== */
+
+/* ------------------------------------------------------------------
+   TABLES
+
+   Material's slate palette sets --md-typeset-table-color to white at
+   12% alpha. On this background the outer border and the row rules are
+   effectively invisible, and Material draws no column dividers at all,
+   so a short value in one column sits flush against prose in the next
+   with nothing between them. These rules give a table a visible grid,
+   a header that reads as a header, and alternating rows to follow
+   across a wide line.
+   ------------------------------------------------------------------ */
+
+.md-typeset table:not([class]) {
+  width: 100%;
+  border-color: var(--nf-tbl-line);
+  border-radius: 0.2rem;
+}
+
+/* Clipping to the rounded corner is only safe once the table sits inside
+   Material's scrollwrap. Before that script runs, the table is its own
+   scroller, and hiding its overflow would cut a wide table off with no
+   way to reach the rest of it. */
+.md-typeset .md-typeset__table > table {
+  overflow: hidden;
+}
+
+/* Headers wrap like any other cell. The previous nowrap rule let one
+   long header dictate the width of every column beside it. */
+.md-typeset table:not([class]) thead th {
+  white-space: normal;
+  background: var(--nf-tbl-head);
+  /* The accent underline makes the head of a table unmistakable. */
+  border-bottom: 0.12rem solid var(--md-accent-fg-color);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* Row rules you can actually see. */
+.md-typeset table:not([class]) td {
+  border-top: 0.05rem solid var(--nf-tbl-line-soft);
+}
+
+/* The dividers Material omits. Without these, column two and column
+   three are separated by nothing but whitespace. */
+.md-typeset table:not([class]) th + th,
+.md-typeset table:not([class]) td + td {
+  border-left: 0.05rem solid var(--nf-tbl-line-soft);
+}
+
+/* Alternating rows, so the eye can track one record across a wide
+   table. Kept well below the hover tint so hover still reads. */
+.md-typeset table:not([class]) tbody tr:nth-child(even) {
+  background: var(--nf-tbl-zebra);
+}
+
+/* Re-stated after the zebra rule: identical specificity, so whichever
+   comes last wins, and hover must win. */
+.md-typeset table:not([class]) tbody tr:hover {
+  background: rgba(0, 200, 83, 0.09);
+}
+
+/* ------------------------------------------------------------------
+   ORDERED LISTS AS STEPS
+
+   Procedures in this blog are genuine sequences — read the descriptor,
+   parse the ACEs, resolve the trustee, classify, emit the edge. A plain
+   decimal marker makes that read like prose. A badge and a rail make
+   the sequence visible at a glance.
+   ------------------------------------------------------------------ */
+
+/* NOTE: .md-typeset IS the article element on this theme, so a
+   descendant selector that also names the article matches nothing. */
+.md-typeset ol {
+  counter-reset: nf-step;
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.md-typeset ol > li {
+  counter-increment: nf-step;
+  position: relative;
+  padding-left: 2.3em;
+  margin-bottom: 0.45em;
+}
+
+.md-typeset ol > li::before {
+  content: counter(nf-step);
+  position: absolute;
+  left: 0;
+  top: 0.08em;
+  display: grid;
+  place-items: center;
+  width: 1.6em;
+  height: 1.6em;
+  border-radius: 50%;
+  background: var(--md-default-fg-color--lightest);
+  border: 0.05rem solid var(--md-accent-fg-color);
+  color: var(--md-accent-fg-color);
+  font-size: 0.72em;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* The table of contents is an ordered list too, and it is navigation,
+   not a procedure. Give it its numbers back. */
+.md-typeset details ol,
+.md-typeset .footnote ol {
+  counter-reset: none;
+  list-style: decimal;
+  margin-left: 1.2em;
+  padding-left: 0;
+}
+
+.md-typeset details ol > li,
+.md-typeset .footnote ol > li {
+  counter-increment: none;
+  padding-left: 0;
+}
+
+.md-typeset details ol > li::before,
+.md-typeset .footnote ol > li::before {
+  content: none;
+}
+
+/* ------------------------------------------------------------------
+   STRUCTURAL LABELS
+
+   `Input:`, `Approach:`, `Output and handoff:` and friends are written
+   as a paragraph holding nothing but bold text. There are 104 of them,
+   and at body weight they disappear into the page.
+   ------------------------------------------------------------------ */
+
+.md-typeset p > strong:only-child {
+  display: inline-block;
+  margin-top: 0.2em;
+  color: var(--md-accent-fg-color);
+  letter-spacing: 0.015em;
+}
+
+/* ------------------------------------------------------------------
+   FIGURES
+   ------------------------------------------------------------------ */
+
+.md-typeset figure {
+  margin: 1.6em 0;
+  text-align: center;
+}
+
+.md-typeset figure img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.25rem;
+}
+
+/* The diagrams are 1672px wide and render into a ~720px column, so the
+   fine annotations inside them are not readable at rest. Each one links
+   to its own full-resolution file; this is the affordance that says so. */
+.md-typeset figure a {
+  display: inline-block;
+  cursor: zoom-in;
+  border-bottom: none;
+  line-height: 0;
+}
+
+.md-typeset figure a img {
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.md-typeset figure a:hover img {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  transform: translateY(-2px);
+}
+
+/* The outbound-arrow decoration must not appear on a wrapped diagram. */
+.md-typeset figure a::after {
+  content: none;
+}
+
+.md-typeset figcaption {
+  max-width: 46rem;
+  margin: 0.7em auto 0;
+  padding: 0 0.6rem;
+  font-size: 0.72rem;
+  line-height: 1.6;
+  color: var(--md-default-fg-color--light);
+  text-align: center;
+}
+
+.md-typeset figcaption strong {
+  color: var(--md-default-fg-color);
+}
+
+
+/* ------------------------------------------------------------------
+   TABLE WRAPPER
+
+   Material wraps each table in `.md-typeset__table` and sets it to
+   `display: inline-block`, so the wrapper shrink-wraps its content
+   rather than filling the content column. Every width rule on the
+   table inside is then measured against a box that has already
+   collapsed, which is what made these tables look cramped and let one
+   long cell decide the layout for the whole row.
+
+   Block, full width, and scroll only as a last resort.
+   ------------------------------------------------------------------ */
+
+.md-typeset .md-typeset__table {
+  display: block;
+  width: 100%;
+  /* The 0.8rem padding is kept deliberately: Material's scrollwrap around
+     this element carries `margin: 1em -.8rem`, and this padding is what
+     cancels it, so the table's edges line up with the body text. Scrolling
+     stays on that scrollwrap -- adding overflow here would nest a second
+     scrollbar inside the first. */
+  padding: 0 0.8rem;
+}
+
+.md-typeset .md-typeset__table > table {
+  width: 100%;
+  /* Auto layout, so a prose column takes the room and a key column
+     does not. A table may still exceed 100% when its min-content width
+     demands it -- that is what the wrapper's scroll is for. */
+  table-layout: auto;
+}
+
+/* Material sets .64rem here, which is small for multi-line prose
+   cells. This is still smaller than body text, just legible. */
+.md-typeset table:not([class]) {
+  font-size: 0.68rem;
+  line-height: 1.65;
+}
+
+/* Stated outright rather than inherited: a header reads with its
+   column, never floating over the middle of it. */
+.md-typeset table:not([class]) th:not([align]),
+.md-typeset table:not([class]) td:not([align]) {
+  text-align: left;
+}
+
+/* A key column should not be padded out to Material's 5rem minimum
+   when its values are short. */
+.md-typeset table:not([class]) th {
+  min-width: 0;
+}
+
+
+/* ------------------------------------------------------------------
+   TABLE LINE COLOURS
+
+   Material's table border variable is white at 12% alpha on the dark
+   theme. Rendering the page headless and forcing a loud colour on the
+   same cells showed the rules were applying and painting all along --
+   they were simply invisible at that alpha against this background.
+   These are the same ideas at a contrast that can actually be read.
+   ------------------------------------------------------------------ */
+
+:root,
+[data-md-color-scheme="default"] {
+  --nf-tbl-line: rgba(0, 0, 0, 0.26);
+  --nf-tbl-line-soft: rgba(0, 0, 0, 0.14);
+  --nf-tbl-head: rgba(0, 0, 0, 0.05);
+  --nf-tbl-zebra: rgba(0, 0, 0, 0.028);
+}
+
+[data-md-color-scheme="slate"] {
+  --nf-tbl-line: rgba(255, 255, 255, 0.28);
+  --nf-tbl-line-soft: rgba(255, 255, 255, 0.15);
+  --nf-tbl-head: rgba(255, 255, 255, 0.075);
+  --nf-tbl-zebra: rgba(255, 255, 255, 0.035);
+}
+
+/* A header that paints centred over a left-aligned column reads as a
+   different table from the one underneath it. The computed value was
+   already `left`, so something resolves this after the cascade these
+   rules sit in; stated outright here. A markdown alignment row sets the
+   `align` attribute and still wins, which is why these are scoped to
+   cells that carry none. */
+.md-typeset table:not([class]) th:not([align]),
+.md-typeset table:not([class]) td:not([align]) {
+  text-align: left !important;
+}
