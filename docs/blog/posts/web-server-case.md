@@ -945,13 +945,6 @@ the investigation is here, starting with the case itself.
     - **Dr. Ali Hadi — DFIR Challenge #1, Web Server Case**: the published teaching image behind this entire report — a Windows Server 2008 host running XAMPP and DVWA, captured as an E01 disk image and a raw memory dump. [ashemery.com/dfir.html](https://www.ashemery.com/dfir.html)
     - **Evidence files**: [archive.org/details/dfir-case1](https://archive.org/details/dfir-case1) — the E01, the memory capture, the dd copy and the hash manifest.
 
-    Other published analyses of this same image, credited for the findings they reached first:
-
-    - [Between Two DFIRns — Web Server Case analysis](https://betweentwodfirns.blogspot.com/2017/03/ashemerycom-challenge-1-web-server-case.html)
-    - [#include &lt;sys/socket.h&gt; — Web Server Case analysis](https://socketo.hatenablog.jp/entry/2018/02/05/032146)
-    - [Just Another DFIR Blog, November 2015](http://justanotherdfirblog.blogspot.com/2015/11/)
-    - [CyberDefenders "Injector" analysis](https://medium.com/@chaoskist/cyberdefenders-write-up-injector-776e8117b466) — the same image, republished as a lab.
-
 === "Acquisition & Handling"
     Opening the evidence without changing it, and collecting from it repeatably.
 
