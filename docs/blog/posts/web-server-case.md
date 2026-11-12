@@ -104,7 +104,7 @@ Every finding carries one of three verdicts so the reader can see what is proven
 | Outcome | 2 local accounts in *Remote Desktop Users*, RDP allowed in the firewall, 2 persistent web shells, 1 reverse-connection stager |
 | Attribution | Single hands-on operator with console and network access. Commodity tooling |
 
-![The incident on one page](web-server-case/01-incident-overview.svg)
+[![The whole incident on one page: access through the web application, two persistent web shells and a reverse-connection stager, two local accounts added to Remote Desktop Users, and RDP opened in the firewall](web-server-case/01-incident-overview.svg){ loading=lazy }](web-server-case/01-incident-overview.svg){ title="Open the full-resolution image" }
 
 ---
 
@@ -112,7 +112,7 @@ Every finding carries one of three verdicts so the reader can see what is proven
 
 ### What Arrived, and What Each File Really Is
 
-![Case folder after download](web-server-case/s01-evidence-files.png)
+[![Case folder after download](web-server-case/s01-evidence-files.png){ loading=lazy }](web-server-case/s01-evidence-files.png){ title="Open the full-resolution image" }
 
 | File | What it is | Role |
 |---|---|---|
@@ -132,11 +132,11 @@ Every finding carries one of three verdicts so the reader can see what is proven
 - **Integrity first.** The E01 carries its own MD5/SHA-1, and the `hashes` file covers the archives. `ewfverify` on the image and `Get-FileHash` on the memory dump are compared with the manifest before anything is opened. A mismatch stops the analysis.
 - **Mount without writing.** Arsenal Image Mounter in **write-temporary** mode presents a normal writable disk to every tool while redirecting writes to a disposable overlay that is deleted at unmount. The image never changes.
 
-![Arsenal Image Mounter: write-temporary, overlay deleted at unmount](web-server-case/s02-aim-write-temporary.png)
+[![Arsenal Image Mounter: write-temporary, overlay deleted at unmount](web-server-case/s02-aim-write-temporary.png){ loading=lazy }](web-server-case/s02-aim-write-temporary.png){ title="Open the full-resolution image" }
 
 - **Collect with a repeatable tool, not by hand.** KAPE with the `!SANS_Triage` target pulls registry hives, event logs, file-system metadata and user artefacts in one documented pass (`--vss` included).
 
-![KAPE !SANS_Triage collection from the mounted volume](web-server-case/s03-kape-sans-triage.png)
+[![KAPE !SANS_Triage collection from the mounted volume](web-server-case/s03-kape-sans-triage.png){ loading=lazy }](web-server-case/s03-kape-sans-triage.png){ title="Open the full-resolution image" }
 
 - **Memory:** MemProcFS in forensic mode for browsing and timelines, Volatility 2 (`Win2008SP1x86`) to confirm each finding with a second tool.
 
@@ -148,7 +148,7 @@ The memory image contains a running `FTK Imager.exe` that started at **2015-09-0
 - Registry: the `Tcpip\Parameters\Interfaces` keys and the Administrator's ProfileList entry were last written on **2015-09-12** (17:42 and 18:19:20)
 - SAM: Administrator's last logon **2015-09-12 18:19:18**, logon count 23
 
-![Evidence timing](web-server-case/03-evidence-timing.svg)
+[![Evidence timing: the shutdown record, registry last-write and SAM logon timestamps left by the 12 September console session, set against the point the disk was acquired](web-server-case/03-evidence-timing.svg){ loading=lazy }](web-server-case/03-evidence-timing.svg){ title="Open the full-resolution image" }
 
 !!! warning "Consequence for the Whole Investigation"
     The disk is **not** the state of the server at the time of the incident. It was booted and logged into again before imaging. I therefore applied one rule throughout: **any disk artefact later than 2015-09-03 10:03 UTC is handling noise, never attacker activity.** Without that rule, the 12 September ProfileList timestamp would have looked like a post-incident logon by the attacker.
@@ -170,21 +170,21 @@ Profiling comes before hunting because Windows release, role and configuration d
 | Prefetch | Not expected: application prefetch is off by default on Server SKUs | `PrefetchParameters` | Expected absence |
 | Process creation auditing (4688) | Not enabled: no 4688 events exist | Security.evtx | Expected absence |
 
-![OS identity in the SOFTWARE hive](web-server-case/s04-os-version.png)
+[![OS identity in the SOFTWARE hive](web-server-case/s04-os-version.png){ loading=lazy }](web-server-case/s04-os-version.png){ title="Open the full-resolution image" }
 
-![Computer name in the SYSTEM hive](web-server-case/s05-computer-name.png)
+[![Computer name in the SYSTEM hive](web-server-case/s05-computer-name.png){ loading=lazy }](web-server-case/s05-computer-name.png){ title="Open the full-resolution image" }
 
 ### Network: When the Obvious Key Is Empty
 
 The interface keys under `Tcpip\Parameters\Interfaces` held no usable address. They were rewritten on 12 September, which fits the evidence-timing finding above. Instead of stopping there, I took the address from sources that *must* contain it: the Referer header in the attacker's own requests (`http://192.168.56.101/…`) and the client addresses in the logs. The two networks visible in the evidence (10.20.0.0/24 on the build day, 192.168.56.0/24, the VirtualBox host-only default, during the incident) also tell us this is a lab: attacker and victim are VMs on one host-only network.
 
-![Tcpip interface keys: no address, rewritten on 12 Sep](web-server-case/s06-tcpip-interfaces.png)
+[![Tcpip interface keys: no address, rewritten on 12 Sep](web-server-case/s06-tcpip-interfaces.png){ loading=lazy }](web-server-case/s06-tcpip-interfaces.png){ title="Open the full-resolution image" }
 
 ### Accounts: Why the Added Users Are Not in ProfileList
 
 ProfileList showed only the three service SIDs and the built-in Administrator (RID 500). That was the first real puzzle of the case, because the brief says users were added.
 
-![ProfileList: services and Administrator only](web-server-case/s07-profilelist.png)
+[![ProfileList: services and Administrator only](web-server-case/s07-profilelist.png){ loading=lazy }](web-server-case/s07-profilelist.png){ title="Open the full-resolution image" }
 
 The answer is that **ProfileList lists profiles, not accounts.** A profile, with its `C:\Users\<name>` folder, `NTUSER.DAT` and ProfileList entry, is created at an account's **first interactive logon**. An account created with `net user <name> <pass> /add` that never logs on has none of these. The authoritative list of local accounts is the **SAM hive**, `SAM\Domains\Account\Users\Names` plus the per-RID `F`/`V` values:
 
@@ -223,7 +223,7 @@ These conflicts sit entirely in the **lab build period** (23–24 Aug), before a
 
 The brief, "breached through its website", supports two hypotheses with very different evidence: compromise at the **Windows** level (credentials, remote services) or through the **web application**. I tested both in parallel, from broad and cheap to narrow and expensive. Each next step was chosen by what the previous one found.
 
-![Investigation path](web-server-case/02-investigation-path.svg)
+[![The investigation path: the Windows-level and web-application hypotheses tested in parallel, broad and cheap before narrow and expensive, each step chosen by what the previous one found](web-server-case/02-investigation-path.svg){ loading=lazy }](web-server-case/02-investigation-path.svg){ title="Open the full-resolution image" }
 
 | ID | Hypothesis | Test | Result | Verdict |
 |---|---|---|---|---|
@@ -252,13 +252,13 @@ hayabusa.exe csv-timeline -d .\Logs -o .\CSVs\hayabusa_timeline.csv --no-wizard 
 
 The loudest signal was a burst of **4625** (Logon Type 3, NTLM) for the user **`Student`** from workstation **IT104-3**, **10.20.0.118**, at 2015-08-23 10:53:26.
 
-![Hayabusa: 4625 burst for 'Student'](web-server-case/s08-hayabusa-4625.png)
+[![Hayabusa: 4625 burst for 'Student'](web-server-case/s08-hayabusa-4625.png){ loading=lazy }](web-server-case/s08-hayabusa-4625.png){ title="Open the full-resolution image" }
 
-![Event Log Explorer: Student / IT104-3 / 10.20.0.118, source port 7943](web-server-case/s09-eventlog-explorer-4625.png)
+[![Event Log Explorer: Student / IT104-3 / 10.20.0.118, source port 7943](web-server-case/s09-eventlog-explorer-4625.png){ loading=lazy }](web-server-case/s09-eventlog-explorer-4625.png){ title="Open the full-resolution image" }
 
 A burst of network logon failures can mean (a) password spraying or (b) a stale credential, such as a mapped drive or scheduled task, retrying. To tell them apart, I looked at the minute around it in **EvtxECmd + Timeline Explorer**:
 
-![EvtxECmd: the window around the burst](web-server-case/s10-evtxecmd-window.png)
+[![EvtxECmd: the window around the burst](web-server-case/s10-evtxecmd-window.png){ loading=lazy }](web-server-case/s10-evtxecmd-window.png){ title="Open the full-resolution image" }
 
 - All failures fall inside a few seconds; there is **no 4624** for that source, before or after.
 - `Student` does not exist on this server, so this is a client presenting its own domain credentials, not someone guessing this server's accounts.
@@ -277,7 +277,7 @@ On a web server, the workload's logs matter more than the OS's. **Application.ev
 c:\xampp\mysql\bin\mysqld.exe (mysqld 5.6.25) starting as process 2804 …   2015-08-23 10:32:24
 ```
 
-![Application.evtx: MySQL 5.6.25 under XAMPP](web-server-case/s11-application-evtx-mysql.png)
+[![Application.evtx: MySQL 5.6.25 under XAMPP](web-server-case/s11-application-evtx-mysql.png){ loading=lazy }](web-server-case/s11-application-evtx-mysql.png){ title="Open the full-resolution image" }
 
 That identifies **XAMPP**, a developer bundle of Apache, PHP, MySQL and FileZilla Server under `C:\xampp\`. Each component keeps its own log, and the one that records a web breach is `C:\xampp\apache\logs\access.log`. Two properties of that log shaped everything that followed:
 
@@ -288,11 +288,11 @@ That identifies **XAMPP**, a developer bundle of Apache, PHP, MySQL and FileZill
 
 I converted `access.log` to CSV with my own parser, [ApacheLogs2CSV](https://github.com/N1ghtFury74/Scripts/tree/main/ApacheLogs2CSV). It normalises every timestamp to UTC and splits each line into ECS-style fields: 7,716 records, 0 unparsable.
 
-![apache_to_csv.py: 7,716 records, 0 bad lines](web-server-case/s12-apache-to-csv.png)
+[![apache_to_csv.py: 7,716 records, 0 bad lines](web-server-case/s12-apache-to-csv.png){ loading=lazy }](web-server-case/s12-apache-to-csv.png){ title="Open the full-resolution image" }
 
 Then I **stacked by User-Agent**, the cheapest way to see who talked to the server:
 
-![User-Agent stacking in Timeline Explorer](web-server-case/s13-useragent-stacking.png)
+[![User-Agent stacking in Timeline Explorer](web-server-case/s13-useragent-stacking.png){ loading=lazy }](web-server-case/s13-useragent-stacking.png){ title="Open the full-resolution image" }
 
 | User-Agent | Requests | Who it is |
 |---|---:|---|
@@ -305,7 +305,7 @@ Then I **stacked by User-Agent**, the cheapest way to see who talked to the serv
 
 The populations tell the story before any single line is read: a build-day crawl, local browsing, and a remote operator who browses with Kali's browser and automates with sqlmap.
 
-![Build-day wget crawl of the XAMPP dashboard from 10.20.0.58](web-server-case/s20-wget-crawl.png)
+[![Build-day wget crawl of the XAMPP dashboard from 10.20.0.58](web-server-case/s20-wget-crawl.png){ loading=lazy }](web-server-case/s20-wget-crawl.png){ title="Open the full-resolution image" }
 
 ### 4. The "XSS" That Was DVWA's Own Self-Test
 
@@ -315,7 +315,7 @@ The earliest exploit-shaped request on 2 September is:
 2015-09-02 06:00:04  ::1  GET /dvwa/security.php?test="><script>eval(window.name)</script>
 ```
 
-![The XSS payload, from ::1](web-server-case/s21-xss-loopback.png)
+[![The XSS payload, from ::1](web-server-case/s21-xss-loopback.png){ loading=lazy }](web-server-case/s21-xss-loopback.png){ title="Open the full-resolution image" }
 
 Other published analyses of this image call this "the first vulnerability exploited". The surrounding lines tell a different story. The request came from **`::1`, the server itself**. It sits between `security.php?phpids=on` and `security.php?phpids=off`, and the payload is the exact *simple attack* link that DVWA's security page offers for testing its PHPIDS module. This is someone at the server's console **configuring DVWA and clicking its built-in test**, not a remote XSS attack.
 
@@ -345,7 +345,7 @@ netsh firewall set service type=remotedesktop mode=enable
 netsh firewall set service type=remotedesktop mode=enable scope=subnet
 ```
 
-![Two accounts, two channels, 19 seconds apart](web-server-case/04-accounts-two-channels.svg)
+[![Two accounts, two channels, 19 seconds apart](web-server-case/04-accounts-two-channels.svg){ loading=lazy }](web-server-case/04-accounts-two-channels.svg){ title="Open the full-resolution image" }
 
 Putting the pieces against each other:
 
@@ -362,7 +362,7 @@ Putting the pieces against each other:
 
 From **09:30:17** the operator turns to the file-inclusion module and walks out of the web root with `../` traversal:
 
-![Command injection and LFI requests, 2 Sep](web-server-case/s22-exec-and-lfi.png)
+[![Command injection and LFI requests, 2 Sep](web-server-case/s22-exec-and-lfi.png){ loading=lazy }](web-server-case/s22-exec-and-lfi.png){ title="Open the full-resolution image" }
 
 | Time | `page=` target | Meaning |
 |---|---|---|
@@ -383,13 +383,13 @@ sqlmap starts at **11:15:40** against `/dvwa/vulnerabilities/sqli/?id=…`. Its 
           LINES TERMINATED BY 0x3c3f7068700a696628697373657428245f524551554553545b2275706c6f6164225d29…
 ```
 
-![Decoding the INTO OUTFILE request in CyberChef](web-server-case/s14-cyberchef-into-outfile.png)
+[![Decoding the INTO OUTFILE request in CyberChef](web-server-case/s14-cyberchef-into-outfile.png){ loading=lazy }](web-server-case/s14-cyberchef-into-outfile.png){ title="Open the full-resolution image" }
 
 `SELECT … INTO OUTFILE` makes **MySQL write a file on the server**. It needs the `FILE` privilege, and DVWA's default configuration connects as MySQL `root`, which has it. MySQL and Apache share the disk, and `C:\xampp\htdocs\` is the web root, so whatever lands there is immediately executable over HTTP. That single primitive turns SQL injection into code execution.
 
 What follows is not a human typing. It is **sqlmap's `--os-shell` routine**, and recognising the tool changes how the whole cluster is read:
 
-![How sqlmap --os-shell turned SQL injection into commands](web-server-case/05-sqlmap-os-shell.svg)
+[![How sqlmap --os-shell turned SQL injection into commands](web-server-case/05-sqlmap-os-shell.svg){ loading=lazy }](web-server-case/05-sqlmap-os-shell.svg){ title="Open the full-resolution image" }
 
 | Observed | What sqlmap is doing |
 |---|---|
@@ -399,9 +399,9 @@ What follows is not a human typing. It is **sqlmap's `--os-shell` routine**, and
 | `tmpb*****.php?cmd=echo command execution test` | sqlmap's own check that execution works |
 | `?cmd=del /F /Q …tmpu….php`, then `…tmpb….php` | sqlmap removing both files when the os-shell exits |
 
-![The two os-shell sessions in access.log](web-server-case/s15-sqlmap-os-shell-sessions.png)
+[![The two os-shell sessions in access.log](web-server-case/s15-sqlmap-os-shell-sessions.png){ loading=lazy }](web-server-case/s15-sqlmap-os-shell-sessions.png){ title="Open the full-resolution image" }
 
-![Decoding the clean-up command](web-server-case/s16-cyberchef-del-decode.png)
+[![Decoding the clean-up command](web-server-case/s16-cyberchef-del-decode.png){ loading=lazy }](web-server-case/s16-cyberchef-del-decode.png){ title="Open the full-resolution image" }
 
 | Session | Stager / backdoor | Window (UTC) | Operator commands |
 |---|---|---|---|
@@ -443,7 +443,7 @@ It is a **PHP upload stager**, not native machine code: an upload form that **ch
 
 On 3 September the operator switches from sqlmap to DVWA's **file upload** module, which at security level *low* accepts `.php` files and stores them in a directory Apache executes.
 
-![The web shell chain](web-server-case/06-web-shell-chain.svg)
+[![The web shell chain: DVWA's upload module at security level low accepting .php files into a directory Apache executes, from throwaway shells to a reverse-connection stager](web-server-case/06-web-shell-chain.svg){ loading=lazy }](web-server-case/06-web-shell-chain.svg){ title="Open the full-resolution image" }
 
 | Time (UTC) | Event | Source |
 |---|---|---|
@@ -456,13 +456,13 @@ On 3 September the operator switches from sqlmap to DVWA's **file upload** modul
 | 07:31:14 → 07:31:30 | Back to `/dvwa/`, open the upload page, `POST` `phpshell2.php` | `access.log` |
 | 07:31:54 | `GET /dvwa/hackable/uploads/phpshell2.php` → **200, 2 bytes** | `access.log`: the last request in the log |
 
-![c99.php on VirusTotal (44/61) and the uploads folder](web-server-case/s19-c99-virustotal-uploads.png)
+[![c99.php on VirusTotal (44/61) and the uploads folder](web-server-case/s19-c99-virustotal-uploads.png){ loading=lazy }](web-server-case/s19-c99-virustotal-uploads.png){ title="Open the full-resolution image" }
 
-![FTK Imager: htdocs and DVWA timestamps](web-server-case/s17-ftk-htdocs.png)
+[![FTK Imager: htdocs and DVWA timestamps](web-server-case/s17-ftk-htdocs.png){ loading=lazy }](web-server-case/s17-ftk-htdocs.png){ title="Open the full-resolution image" }
 
-![Autopsy: the same folders from the raw image](web-server-case/s18-autopsy-htdocs.png)
+[![Autopsy: the same folders from the raw image](web-server-case/s18-autopsy-htdocs.png){ loading=lazy }](web-server-case/s18-autopsy-htdocs.png){ title="Open the full-resolution image" }
 
-![Every ?cmd= / act=cmd request in one view](web-server-case/s23-cmd-parameter-search.png)
+[![Every ?cmd= / act=cmd request in one view](web-server-case/s23-cmd-parameter-search.png){ loading=lazy }](web-server-case/s23-cmd-parameter-search.png){ title="Open the full-resolution image" }
 
 Three observations a log-only reading would miss:
 
@@ -507,7 +507,7 @@ explorer.exe (816)                    2015-08-23 10:30:34
 
 ## Attack Timeline
 
-![Incident timeline](web-server-case/07-incident-timeline.svg)
+[![The incident timeline: the attack sequence from first web-application probing through to the console session, each step tied to the artefact that evidences it](web-server-case/07-incident-timeline.svg){ loading=lazy }](web-server-case/07-incident-timeline.svg){ title="Open the full-resolution image" }
 
 | Timestamp (UTC) | Event | ATT&CK | Evidence source |
 |---|---|---|---|
@@ -579,7 +579,7 @@ explorer.exe (816)                    2015-08-23 10:30:34
 | Command and Control | T1105 Ingress Tool Transfer | Backdoors via stager, shells via upload, `webshells.zip` |
 | Lateral Movement *(prepared)* | T1021.001 Remote Services: RDP | RDP opened for the new accounts; no RDP logon observed |
 
-![Diamond Model of the intrusion](web-server-case/08-diamond-model.svg)
+[![Diamond Model of the intrusion: adversary, capability, infrastructure and victim, each vertex supported by observable artefacts, with operator identity and unobserved actions left uncertain](web-server-case/08-diamond-model.svg){ loading=lazy }](web-server-case/08-diamond-model.svg){ title="Open the full-resolution image" }
 
 ---
 

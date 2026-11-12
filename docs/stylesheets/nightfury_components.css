@@ -801,3 +801,34 @@ html {
 .md-typeset table:not([class]) td:not([align]) {
   text-align: left !important;
 }
+
+/* ------------------------------------------------------------------
+   IMAGES OUTSIDE A FIGURE
+
+   The WRAITH post wraps its diagrams in <figure> and gets the zoom
+   affordance from the figure rules above. The web-server case post
+   writes its images as plain markdown, and every one of its 31 images
+   is wider than the content column, so they are all downscaled in
+   place. These rules give those images the same "open me" affordance
+   without adding a caption the author did not write.
+   ------------------------------------------------------------------ */
+
+.md-typeset p > a > img {
+  cursor: zoom-in;
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.25rem;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.md-typeset p > a > img:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  transform: translateY(-2px);
+}
+
+/* The link exists only to carry the image: no underline, and no gap
+   from the line-height of a text link. */
+.md-typeset p > a > img:only-child {
+  display: block;
+  margin-inline: auto;
+}

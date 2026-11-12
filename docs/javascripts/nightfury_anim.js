@@ -61,7 +61,15 @@
          anything. The figure is the stabler target: it holds the image
          and its caption, and tagging it keeps the class off the <img>. */
       variant: "nf-reveal--zoom",
-      selector: ".md-typeset figure"
+      selector: [
+        ".md-typeset figure",
+        /* Not every post wraps its images in a figure -- the web-server
+           case writes them as plain markdown, so matching only figures
+           would leave its diagrams with no entrance at all. Material has
+           no `img:not([class])` rules, so tagging the image is safe. */
+        ".md-typeset p > a > img",
+        ".md-typeset p > img"
+      ].join(", ")
     },
     {
       /* Blocks that interrupt prose: a short, quiet rise */
