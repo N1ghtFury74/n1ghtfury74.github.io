@@ -32,7 +32,7 @@ tags:
 <!-- more -->
 
 !!! abstract "At a Glance"
-    - **What it is:** WRAITH is being developed as a broader approach to understanding environments - INSPIRED BY blloddhound the great tool of AD mapping, identifying weaknesses, and establishing behavioural and structural baselines. Version 1.0 focuses on offline Active Directory relationship analysis for dead-disk forensics. It helps threat hunters understand relationships and weaknesses within an environment, develop investigation hypotheses, and explore potential attack paths. It also supports penetration-testing teams during time-constrained engagements, working alongside the hunting team to identify potential entry points and prioritise the most effective paths to explore.
+    - **What it is:** WRAITH is being developed as a broader approach to understanding environments — inspired by BloodHound, the great tool of AD mapping — identifying weaknesses, and establishing behavioural and structural baselines. Version 1.0 focuses on offline Active Directory relationship analysis for dead-disk forensics. It helps threat hunters understand relationships and weaknesses within an environment, develop investigation hypotheses, and explore potential attack paths. It also supports penetration-testing teams during time-constrained engagements, working alongside the hunting team to identify potential entry points and prioritise the most effective paths to explore.
 
     - **Future direction:** Extend environment baselining through different approaches and data sources, including network telemetry, endpoint telemetry, and other security signals, using anomaly detection techniques to identify deviations and suspicious activity.
 
