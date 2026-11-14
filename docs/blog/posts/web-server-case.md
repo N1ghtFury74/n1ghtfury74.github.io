@@ -374,7 +374,7 @@ From **09:30:17** the operator turns to the file-inclusion module and walks out 
 
 `data.txt` in the Administrator's profile was created at about **09:32** (content: `hello`), between the command-injection POSTs at 09:31:45–09:32:22 and the LFI read at 09:33:23. The most likely sequence: the operator **wrote** a file through command injection and **read it back** through LFI, testing that two different weaknesses reach the same file system. **(Inferred** from the ordering.)
 
-### 7. SQL Injection: Recognising Sqlmap's `--os-shell`
+### 7. SQL Injection: Recognising sqlmap's `--os-shell`
 
 sqlmap starts at **11:15:40** against `/dvwa/vulnerabilities/sqli/?id=…`. Its time-based `BENCHMARK` probes appear at 11:20:21 and 11:22:13, followed by UNION enumeration. Then comes the request that matters:
 
@@ -413,7 +413,7 @@ What follows is not a human typing. It is **sqlmap's `--os-shell` routine**, and
 
 **The payload: what "shellcode" means in this case.** The hex blob in `LINES TERMINATED BY` is the code that SQL injection delivered to the server. Decoding it (CyberChef: *URL Decode → From Hex*) gives sqlmap's PHP file stager:
 
-??? example "Decoded Stager Written To `tmpukudk.php` (Formatted for Reading)"
+??? example "Decoded Stager Written to `tmpukudk.php` (Formatted for Reading)"
     ```php
     <?php
     if (isset($_REQUEST["upload"])) {

@@ -46,7 +46,7 @@ hide:
 
 ---
 
-## Skills &Amp; Focus Areas
+## Skills &amp; Focus Areas
 
 <div class="nf-skills">
   <span class="nf-skill-tag">Threat Hunting</span>
@@ -81,13 +81,12 @@ hide:
     <p class="nf-timeline__title">Threat Hunting &amp; Detection Engineer</p>
     <p class="nf-timeline__company">HexaPrime</p>
     <ul>
-      <li>Run hypothesis-driven, intelligence-led, baseline and anomaly-based hunts across endpoint, identity, network and cloud telemetry. 20+ hunts have surfaced misconfigured developer applications, AI misuse and active incidents — each escalated with clear evidence and turned into new detections.</li>
-      <li>Own the cyber threat intelligence program and its stack (MISP, OpenCTI, AIL Framework, Lacus, AlienVault OTX, AbuseIPDB, ransomware.live): defined 5 Priority Intelligence Requirements with stakeholders and deliver intelligence that answers them, including dark web and leak monitoring and validation of threat-actor breach claims.</li>
-      <li>Operationalize that intelligence — threat-actor and campaign context, TTPs, IOCs — for incident response, detection engineering, the SOC and clients, turning it into hunts, detections and triage enrichment.</li>
-      <li>Maintain a ~1,500-rule detection library aligned to MITRE ATT&amp;CK, prioritizing techniques by coverage and available data sources. 200+ rules tested and tuned into production to date, holding the false-positive rate at 10–15%.</li>
-      <li>Engineer agentic AI workflows across detection engineering, threat hunting, CTI and the SOC that automate triage, hunt execution, detection development and validation, intelligence collection and enrichment, and investigation — all under analyst governance.</li>
-      <li>Perform compromise assessments and forensic analysis to rebuild attack timelines and determine attacker pathways, persistence, scope and root cause; feed lessons learned back into SOC playbooks and detections.</li>
-      <li>Lead and mentor junior detection engineers and threat hunters, and report findings and intelligence to clients, management and internal teams.</li>
+      <li><strong>Agentic SOC &amp; AI Automation Workflows:</strong> Build and support end-to-end AI-driven detection engineering and SOC automation workflows, translating triage, hunting, detection development, deployment, validation, and investigation logic into structured autonomous flows using connectors for context collection, alert enrichment, evidence correlation, detection output generation, and analyst governance.</li>
+      <li><strong>Detection Engineering &amp; Investigation Workflows:</strong> Develop and refine high-fidelity detections aligned with real adversary behavior, using MITRE ATT&amp;CK heatmaps, technique prioritization, and available data sources to improve coverage, reduce false positives, validate logic, and strengthen SOC triage, playbooks, and response workflows.</li>
+      <li><strong>Threat Hunting Operations:</strong> Lead hypothesis-driven, intelligence-led, baseline-based, and anomaly-driven threat hunting across endpoint, network, identity, and cloud data, validating suspicious behavior and escalating confirmed findings with clear evidence trails.</li>
+      <li><strong>Threat Intelligence Program Ownership:</strong> Own and run the cyber threat intelligence program end to end — I architected and operate the stack myself (MISP, OpenCTI, AIL Framework, Lacus, AlienVault OTX, AbuseIPDB, ransomware.live), defined the Priority Intelligence Requirements with stakeholders, and deliver the intelligence that answers them, including dark web and leak monitoring and validation of threat-actor breach claims. I then operationalize that intelligence — threat-actor and campaign context, TTPs, IOCs — for incident response, detection engineering, the SOC and clients, turning it into hunts, detections and triage enrichment.</li>
+      <li><strong>Compromise Assessment &amp; Forensic Analysis:</strong> Perform compromise assessments and forensic analysis by correlating multi-source evidence, rebuilding attack timelines, identifying attacker pathways, persistence opportunities, scope, impact, and root cause.</li>
+      <li><strong>Leadership &amp; Reporting:</strong> Lead and mentor junior detection engineers and threat hunters, and report findings and intelligence to clients, management and internal teams.</li>
     </ul>
   </div>
 </div>

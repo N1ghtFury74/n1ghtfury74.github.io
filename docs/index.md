@@ -20,7 +20,7 @@ hide:
 
 <div class="nf-section" markdown>
 
-## Latest Posts { #Recent-Posts .Nf-Section__title }
+## Latest Posts { #recent-posts .nf-section__title }
 
 <!-- nf:recent-posts -->
 
@@ -30,7 +30,7 @@ hide:
 
 <div class="nf-section nf-section--tinted" markdown>
 
-## Browse by Category { .Nf-Section__title }
+## Browse by Category { .nf-section__title }
 
 <p class="nf-section__lead">Every post is filed under one or more areas. Pick one to see
 everything in it.</p>
@@ -41,7 +41,7 @@ everything in it.</p>
 
 <div class="nf-section" markdown>
 
-## What This Blog Is { .Nf-Section__title }
+## What This Blog Is { .nf-section__title }
 
 <p class="nf-section__lead">N1ghtFury is a knowledge hub where I explore security research and
 defensive strategies. While my roots are in threat research, DFIR, adversary emulation, and
@@ -63,7 +63,7 @@ everything in between.</p>
 
 <div class="nf-section nf-section--dragon" markdown>
 
-## Why "N1ghtFury"? { .Nf-Section__title }
+## Why "N1ghtFury"? { .nf-section__title }
 
 !!! quote ""
     In *How to Train Your Dragon*, Toothless the Night Fury is the most feared and most

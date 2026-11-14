@@ -17,7 +17,7 @@ description: >
 
 <!-- more -->
 
-!!! info "This Is Part 1 Of Two"
+!!! info "This Is Part 1 of Two"
     Part 1 is the thinking: how hunting is structured, what an anomaly is, and how to turn a
     chosen attack into a list of things to go looking for.
     **[Part 2](../../16/hunting-mindset-working-the-data/)** is the doing — the
