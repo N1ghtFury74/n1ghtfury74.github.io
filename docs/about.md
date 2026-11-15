@@ -14,10 +14,7 @@ hide:
     <p class="nf-profile__location">&#128205; Cairo, Egypt</p>
     <p class="nf-profile__bio">A guy who loves to learn how things work, break them down,
     and develop solutions. I turn curiosity into research, research into knowledge, and
-    knowledge into teaching others. Day to day that means hunting adversaries across
-    endpoint, identity, network and cloud telemetry, maintaining the detection library that
-    catches them, and running a threat intelligence program that tells both where to look —
-    then writing it up so other defenders can use it.</p>
+    knowledge into teaching others.</p>
     <div class="nf-profile__actions">
       <a href="https://linkedin.com/in/mohamed-hanii-0291031aa" class="nf-btn nf-btn--primary" target="_blank" rel="noopener">Connect on LinkedIn</a>
       <a href="https://github.com/N1ghtFury74" class="nf-btn nf-btn--secondary" target="_blank" rel="noopener">GitHub Profile</a>
