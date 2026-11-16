@@ -92,7 +92,10 @@ Concretely, Part 4 is about **finding the observations that start investigative 
 
 This part is built in layers, and it rewards being read top to bottom the first time — after that, each section stands alone as a reference. The arc is deliberate. We start with the **mental models** that give hunting its structure, so the rest has something to hang on. We then get concrete about **doing attack-based hunting**, with the attack-dissection framework that turns a threat-intel report into a hunt. From there we shift to the data side — **knowing and valuing your evidence**, then the **mechanics of transforming that data** (the GAPSS toolbox), which is how you actually execute the third question of every hunt. Finally we turn to **reading what surfaces** — anomaly detection — and close by grounding everything in well-known frameworks. In one line: *models → which attack to hunt → how to hunt it → know your data → transform the data → read the anomalies.*
 
-[![The hunting workflow this part builds in layers, meant to be read top to bottom once and used as a reference afterwards](mindset-diagrams/04-hunting-workflow.png){ loading=lazy }](mindset-diagrams/04-hunting-workflow.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![The hunting workflow this part builds in layers, meant to be read top to bottom once and used as a reference afterwards](mindset-diagrams/04-hunting-workflow.png){ loading=lazy }](mindset-diagrams/04-hunting-workflow.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**The arc of this part** — models, then which attack to hunt, then how to hunt it, then your data and what surfaces from it.</figcaption>
+</figure>
 
 ---
 
@@ -132,7 +135,10 @@ An attack is not an abstraction. It is a set of **tangible events occurring in s
 
 The reframe that changes everything: when you find evidence of an attack, you are inserting yourself into a timeline that **already exists**. You rarely land at the beginning. You land somewhere in the middle, holding a single event, and your job is to discover the rest — what came before (how they got in) and what came after (what they did next). And real incidents are usually not one clean line but several **parallel timelines** braided together: multiple hosts, multiple sessions, multiple concurrent objectives.
 
-[![The attack timeline: you land mid-sequence on the evidence you found, then reconstruct the earlier steps that show how they got in and the later steps that show what they did, while other timelines run in parallel](mindset-diagrams/01-attack-timeline.png){ loading=lazy }](mindset-diagrams/01-attack-timeline.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![The attack timeline: you land mid-sequence on the evidence you found, then reconstruct the earlier steps that show how they got in and the later steps that show what they did, while other timelines run in parallel](mindset-diagrams/01-attack-timeline.png){ loading=lazy }](mindset-diagrams/01-attack-timeline.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**The attack timeline** — you land mid-sequence, and the work is reconstructing what came before and what came after.</figcaption>
+</figure>
 
 How do you actually walk the timeline? Every event is backed by evidence sitting in a large shared pool — the logs and artifacts from Parts 2 and 3. The working assumption of a good hunter is deliberately optimistic:
 
@@ -160,7 +166,10 @@ One rule matters more than the rest: **an investigation cannot start without an 
 
 Here's the quietly powerful part: that same Observation → Question → Hypothesis → Answer → Conclusion engine underlies **every** defensive discipline. Network security monitoring, incident response, host forensics, malware analysis, and hunting all run the identical loop. The *only* thing that differs is where the initial observation comes from.
 
-[![The investigation reasoning loop of observation, question, hypothesis, answer and conclusion, the same engine underneath every defensive discipline](mindset-diagrams/03-investigation-reasoning-loop.png){ loading=lazy }](mindset-diagrams/03-investigation-reasoning-loop.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![The investigation reasoning loop of observation, question, hypothesis, answer and conclusion, the same engine underneath every defensive discipline](mindset-diagrams/03-investigation-reasoning-loop.png){ loading=lazy }](mindset-diagrams/03-investigation-reasoning-loop.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**The investigation loop** — observation, question, hypothesis, answer, conclusion. Only the source of the first observation changes.</figcaption>
+</figure>
 
 An initial observation is simply any event that launches an investigation, and it can arrive from many places: an IDS alert, a malware sample, a third-party notification, a user-reported anomaly, or — the one we care about — a **hunting observation**. Whatever the source, the rest is the same: ask investigative questions, review evidence, validate hypotheses, reach a conclusion. Observation is where everything starts.
 
@@ -208,7 +217,10 @@ Frame every hunt as **"Has [specific attack] happened on my network?"** Then dec
 
     Every section after this one is an answer to one of these three.
 
-[![Attack-based hunting: decomposing one big question into what am I looking for, where am I likely to find it, and how can I manipulate the data to see it, ending in a hunting observation handed to the investigation loop](mindset-diagrams/05-attack-based-hunting.png){ loading=lazy }](mindset-diagrams/05-attack-based-hunting.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![Attack-based hunting: decomposing one big question into what am I looking for, where am I likely to find it, and how can I manipulate the data to see it, ending in a hunting observation handed to the investigation loop](mindset-diagrams/05-attack-based-hunting.png){ loading=lazy }](mindset-diagrams/05-attack-based-hunting.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Attack-based hunting** — one big question decomposed into three, ending in an observation the investigation loop can take.</figcaption>
+</figure>
 
 #### Worked Example — Malicious Account Creation
 
@@ -226,7 +238,10 @@ Notice the same three questions repeating for every anomaly, and notice how many
 
 Because a signature catches *one* attack — "alert when `svch0st.exe` executes" — but attackers rename, recompile, and mistype. You want the whole **family of variations**, so you hunt the manifestation, not the string. Invert the question: instead of *"does this match known-bad?"* ask *"what is abnormally rare across my fleet?"* Stack every executed binary by name and by hash, sort by least-frequency-of-occurrence, and the singletons float up — the dumper that ran on exactly one host betrays itself by its rarity, no matter what it's named.
 
-[![A signature catches one attack, while hunting catches the whole family of behaviours behind it](mindset-diagrams/preview_06-signatures-vs-hunting.png){ loading=lazy }](mindset-diagrams/preview_06-signatures-vs-hunting.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![A signature catches one attack, while hunting catches the whole family of behaviours behind it](mindset-diagrams/preview_06-signatures-vs-hunting.png){ loading=lazy }](mindset-diagrams/preview_06-signatures-vs-hunting.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Signatures against hunting** — a signature catches one attack; hunting catches the whole family it belongs to.</figcaption>
+</figure>
 
 
 ---
@@ -243,7 +258,10 @@ The process mirrors ABH with three data-shaped questions. Pick a source and ask:
 
 There's a clean flip of the ABH framing here. In ABH we said attacks are about evolving relationships, and detection works on the individual behaviors that represent them. In DBH the sentence turns around: **data represents individual behaviors, and detection is about understanding the relationships those behaviors represent.** It is the same reality approached from opposite ends — ABH pushes down from the attack toward the data, DBH reasons up from the data toward the attack. Master both and they meet in the middle.
 
-[![ABH and DBH as two directions along one chain of attack, relationships, behaviours and data source: ABH starts from the attack and finds where it lands in data, DBH starts from the data and reasons up to the attack](mindset-diagrams/04-abh-dbh-two-angles.png){ loading=lazy }](mindset-diagrams/04-abh-dbh-two-angles.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![ABH and DBH as two directions along one chain of attack, relationships, behaviours and data source: ABH starts from the attack and finds where it lands in data, DBH starts from the data and reasons up to the attack](mindset-diagrams/04-abh-dbh-two-angles.png){ loading=lazy }](mindset-diagrams/04-abh-dbh-two-angles.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**ABH and DBH** — two directions along one chain — down from the attack to the data, or up from the data to the attack.</figcaption>
+</figure>
 
 #### A Worked Source: Windows Process Creation (EID 4688)
 
@@ -272,7 +290,10 @@ The single most important idea: **an anomaly is always relative to the entity an
 
 Nearly every anomaly falls into one of two categories, and they map to a simple distinction: the threat actor *itself*, versus the threat actor's *relationships*. A **subject anomaly** is unexpected data directly within the evidence describing an action — the actor is wrong *on its own*, by its own properties, considered without any relations. `Svch0st.exe`, with a zero where the "o" should be, is wrong all by itself. A **context anomaly** is unexpected data in relation to the other data surrounding an action — the actor is normal in isolation but wrong in its *relation to the scene*. Two instances of `wininit.exe` is the example: one is normal, and only knowing that makes the second one suspicious. Or, put visually: a zebra isn't an anomaly — a zebra standing in a downtown street is. Subject looks at the actor; context looks at the actor's relationship to everything around it.
 
-[![Subject anomalies describe the threat actor itself, context anomalies describe its relationship to its surroundings](mindset-diagrams/preview_11-subject-vs-context.png){ loading=lazy }](mindset-diagrams/preview_11-subject-vs-context.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![Subject anomalies describe the threat actor itself, context anomalies describe its relationship to its surroundings](mindset-diagrams/preview_11-subject-vs-context.png){ loading=lazy }](mindset-diagrams/preview_11-subject-vs-context.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Subject against context** — the actor wrong on its own, or the actor normal in isolation and wrong for the scene around it.</figcaption>
+</figure>
 
 ### The Eye Test
 
@@ -346,7 +367,10 @@ The process takes any input — a threat-intel report, a colleague's tip, a stra
 4. **Map the steps to evidence.**
 5. **Identify the anomaly types.**
 
-[![The attack dissection process: collect examples, identify entities, relationships and steps, optionally simulate the attack, map the steps to evidence, and identify anomaly types, the same five steps for any input](mindset-diagrams/08-attack-dissection-process.png){ loading=lazy }](mindset-diagrams/08-attack-dissection-process.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![The attack dissection process: collect examples, identify entities, relationships and steps, optionally simulate the attack, map the steps to evidence, and identify anomaly types, the same five steps for any input](mindset-diagrams/08-attack-dissection-process.png){ loading=lazy }](mindset-diagrams/08-attack-dissection-process.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**The dissection process** — the same five steps whatever the input, from an intel report to a list of anomalies to go hunting for.</figcaption>
+</figure>
 
 
 ### Step 1 — Collect Examples
@@ -372,7 +396,10 @@ Interrogate the **victim**:
 - What access will a successful attack provide? (a denial of service, command execution, RDP)
 - What information could be disclosed if it succeeds? (RAM, disk, network traffic)
 
-[![The questions that dissect an attack: on the attacker side the tooling needed, its position relative to the victim and what it must know or guess; on the victim side the software and version, open ports, settings, what a success grants and what information is disclosed](mindset-diagrams/02-dissecting-attack-questions.png){ loading=lazy }](mindset-diagrams/02-dissecting-attack-questions.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![The questions that dissect an attack: on the attacker side the tooling needed, its position relative to the victim and what it must know or guess; on the victim side the software and version, open ports, settings, what a success grants and what information is disclosed](mindset-diagrams/02-dissecting-attack-questions.png){ loading=lazy }](mindset-diagrams/02-dissecting-attack-questions.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**The questions that dissect an attack** — what the attacker needs on one side, and what the victim exposes on the other.</figcaption>
+</figure>
 
 #### Worked Example: RDP Tunneling
 
@@ -399,7 +426,10 @@ With the entities and relationships pinned down, the attack collapses into a cle
 
 In one breath — **prerequisites:** a foothold and valid credentials on the attacker's side; a Windows host with 3389 and outbound internet on the victim's side. **Result:** interactive RDP that evades the perimeter. Casting an attack as this kind of high-level overview is precisely what makes its nuances visible — and any detail you *can't* resolve from reading is exactly the kind of thing you'd settle by simulating the attack in the next step.
 
-[![The RDP reverse tunnel in overview: a foothold and valid credentials on the attacker side, and a Windows host with 3389 and outbound internet on the victim side](mindset-diagrams/preview_02-rdp-reverse-tunnel.png){ loading=lazy }](mindset-diagrams/preview_02-rdp-reverse-tunnel.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![The RDP reverse tunnel in overview: a foothold and valid credentials on the attacker side, and a Windows host with 3389 and outbound internet on the victim side](mindset-diagrams/preview_02-rdp-reverse-tunnel.png){ loading=lazy }](mindset-diagrams/preview_02-rdp-reverse-tunnel.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**The worked example** — a foothold and valid credentials on one side; a Windows host with 3389 and outbound internet on the other.</figcaption>
+</figure>
 
 
 ### Step 3 — Simulate the Attack (Optional)
@@ -412,7 +442,10 @@ There are two flavors. In a **full simulation** you perform the entire attack yo
 
 The framing that keeps a simulation honest is to treat it as a **controlled experiment**, where your lab network and its logging instrumentation are the dependent variable — the thing you're measuring. The procedure is disciplined: clear existing evidence, start the clock, perform the attack, stop the clock, and then stop the evidence-collection processes (the Windows Event Log Service, Linux `rsyslog`, the packet capture). Said another way, the simulated attack is the **stimulus** and the host and network evidence is the **response** you measure — and bounding it with a start-and-stop clock is what lets you isolate *only* the evidence the attack produced. Each run answers one concrete question, such as *"what shows up when the attacker enables RDP on the victim?"*
 
-[![Simulating an attack as a controlled experiment, with the lab network and its logging instrumentation as the apparatus](mindset-diagrams/preview_07-controlled-simulation.png){ loading=lazy }](mindset-diagrams/preview_07-controlled-simulation.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![Simulating an attack as a controlled experiment, with the lab network and its logging instrumentation as the apparatus](mindset-diagrams/preview_07-controlled-simulation.png){ loading=lazy }](mindset-diagrams/preview_07-controlled-simulation.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Simulation as a controlled experiment** — the lab and its instrumentation are the thing being measured, not the attack.</figcaption>
+</figure>
 
 
 ### Step 4 — Map the Steps to Evidence
@@ -428,7 +461,10 @@ Mapped out, RDP tunneling turns into a step-by-step evidence plan:
 
 Notice that this mapping deliberately spans all three evidence realms, which is exactly what "map to evidence" is supposed to force. On **disk/host** you have the Windows event IDs (2005, 4688, 21/25, 4624) and the execution artifacts (ShimCache, Amcache, Prefetch, the registry keys plink and PortProxy leave behind). On the **network** you have the outbound connection to a low port and the `mstshash` cookie in the packet payload. And in **memory** you'd find the live tunnel process itself — plink or the netsh helper — with its revealing command-line arguments, its open network connections, and any named pipes it created, none of which may survive on disk. If a step seems to touch only one realm, that's usually a sign you haven't decomposed it far enough.
 
-[![The RDP tunneling steps mapped to evidence across all three realms, which is what mapping to evidence is meant to force](mindset-diagrams/01-rdp-steps-to-evidence.png){ loading=lazy }](mindset-diagrams/01-rdp-steps-to-evidence.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![The RDP tunneling steps mapped to evidence across all three realms, which is what mapping to evidence is meant to force](mindset-diagrams/01-rdp-steps-to-evidence.png){ loading=lazy }](mindset-diagrams/01-rdp-steps-to-evidence.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Steps to evidence** — a step that seems to touch only one realm has not been decomposed far enough.</figcaption>
+</figure>
 
 That last tell is worth flagging here and unpacking in the next step, because it shows how much sits inside a single step: the `Cookie: mstshash=` string in RDP's early **X.224 connection-request** phase is readable in cleartext, which is why "traffic logs" in this plan specifically means payload-inspecting telemetry rather than flow records. Step 5 takes it apart properly. (It's the same source/destination artifact picture you would build for any lateral-movement technique — the mapping simply makes each step's evidence explicit.)
 
@@ -465,9 +501,15 @@ Finally, the **loopback authentication**, which is the weirdest and most decisiv
 
 Every one of these was chosen because it maps to a *specific step* of the dissected attack — the firewall change and process execution that enable and stage the tunnel, the outbound tunnel relationship, and the loopback-sourced RDP connection at the end. That's the entire point of dissecting an attack: the steps hand you the exact anomalies to hunt.
 
-[![Each RDP tunneling tell mapped back to the dissected step it came from: the firewall change and process execution that stage the tunnel, the outbound tunnel relationship, and the loopback-sourced logon at the end](mindset-diagrams/10-rdp-step-anomaly-mapping.png){ loading=lazy }](mindset-diagrams/10-rdp-step-anomaly-mapping.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![Each RDP tunneling tell mapped back to the dissected step it came from: the firewall change and process execution that stage the tunnel, the outbound tunnel relationship, and the loopback-sourced logon at the end](mindset-diagrams/10-rdp-step-anomaly-mapping.png){ loading=lazy }](mindset-diagrams/10-rdp-step-anomaly-mapping.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Every tell traces back to a step** — which is the entire point of dissecting the attack before you go looking.</figcaption>
+</figure>
 
-[![Port patterns behind an RDP tunnel: a victim host reaching out to a low service port it never normally initiates, an unusual high-to-low connection](mindset-diagrams/08-port-patterns-and-rdp-tunnels.png){ loading=lazy }](mindset-diagrams/08-port-patterns-and-rdp-tunnels.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![Port patterns behind an RDP tunnel: a victim host reaching out to a low service port it never normally initiates, an unusual high-to-low connection](mindset-diagrams/08-port-patterns-and-rdp-tunnels.png){ loading=lazy }](mindset-diagrams/08-port-patterns-and-rdp-tunnels.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**The port pattern** — a host that never initiates, initiating — out to a service port it has no business calling.</figcaption>
+</figure>
 
 
 ### Wrapping Up Attack Dissection
@@ -490,7 +532,10 @@ The five models so far were about how investigation and hunting *work*. These la
 
 To hunt across a source you first have to understand it, and to plan coverage you need a map of where evidence even lives. Group it into realms — **Network** (connection/flow logs, HTTP transactions, DNS, VPN access), **Disk** (Windows and *nix logs, Sysmon, app-server auth, mail transactions, the registry), **Threat Intel** (passive DNS, reputation, sandbox — what the world knows about the adversary), and **Friendly Intel** (user roles, asset roles, installed apps — "know yourself"), with **Memory** sitting in the center because it corroborates all of them. Today you'd add a fifth working realm, **Cloud** — audit and sign-in logs where a growing share of attacks now manifest.
 
-[![Evidence realms: network, cloud, disk, threat intel and friendly intel arranged around memory, which sits at the centre because it corroborates every other realm](mindset-diagrams/03-evidence-realms.png){ loading=lazy }](mindset-diagrams/03-evidence-realms.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![Evidence realms: network, cloud, disk, threat intel and friendly intel arranged around memory, which sits at the centre because it corroborates every other realm](mindset-diagrams/03-evidence-realms.png){ loading=lazy }](mindset-diagrams/03-evidence-realms.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Evidence realms** — memory sits at the centre because it corroborates every other realm.</figcaption>
+</figure>
 
 What separates a skilled hunter from a typical analyst is a deeper understanding of the *value* each source represents. When you meet a new data source — or want to go deeper on a familiar one — interrogate it: where does the data come from, what behaviors does it represent, what attack techniques manifest here, what fields exist, and what other sources can I pivot to from here (take one field and chase it across another dataset)? Two questions matter more than they first appear. Is this **intentional evidence** — a log designed to be read — or a byproduct never meant as evidence, like ShimCache, that carries real interpretation caveats? And is coverage **universal** or partial — do you have PCAP for the whole estate or just one subnet? The hunter's discipline is to know the limitations, because **evidence does not always manifest the way you expect, every time.** The way you learn what to expect is to **simulate** the attack against the source and watch what it actually produces.
 
@@ -544,8 +589,8 @@ starting from scratch.
 
 === "The Mindset"
     Where the way of thinking in this post comes from.
-    - **Chris Sanders** — [chrissanders.org](https://chrissanders.org) — his doctoral work on the analyst mindset found the investigative skillset to be broadly universal across DF, IR and SOC work, which is exactly this model's claim.
 
+    - **Chris Sanders** — [chrissanders.org](https://chrissanders.org) — his doctoral work on the analyst mindset found the investigative skillset to be broadly universal across DF, IR and SOC work, which is exactly this model's claim.
     - **Chris Sanders — _Practical Threat Hunting_** (Applied Network Defense) — **start here if you want to go deeper.** The ABH/DBH split, the five-step attack dissection and the evidence realms are all taught in full, with your hands on the data: [networkdefense.co/courses/hunting](https://www.networkdefense.co/courses/hunting/)
     - **Chris Sanders** — the standing reference on hunting cognition. *The Mind of a Hunter: A Cognitive, Data-Driven Approach* (SANS Threat Hunting & IR Summit 2017), [*Deconstructing the Analyst Mindset*](https://www.sans.org/presentations/keynote-deconstructing-the-analyst-mindset) (SANS CTI Summit keynote), [*Leveraging Curiosity to Enhance Analytic Technique*](https://www.sans.org/presentations/leveraging-curiosity-to-enhance-analytic-technique), and [*Investigation Theory: A Cognitive Approach*](https://www.slideshare.net/slideshow/art-into-science-2017-investigation-theory-a-cognitive-approach/71384306). His research on analyst cognition is the evidence base for the claim that the investigative skillset is universal across DF/IR/SOC.
     - [*Huntpedia: Your Guide to Expert-Level Threat Hunting*](https://www.slideshare.net/slideshow/huntpedia-249837834/249837834) (Sqrrl) — the essay collection that argues hunting is a discipline rather than a talent.

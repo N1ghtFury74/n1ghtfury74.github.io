@@ -97,7 +97,10 @@ Why does perspective get its own step? Because a hunter fails in three ways — 
     Get strong at **Search, Pivot and Aggregation** first. The other two are for confirming
     and communicating, not for finding.
 
-[![The GAPSS data transformations that make up the hunting step itself](mindset-diagrams/02-gapss-data-transformations.png){ loading=lazy }](mindset-diagrams/02-gapss-data-transformations.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![The GAPSS data transformations that make up the hunting step itself](mindset-diagrams/02-gapss-data-transformations.png){ loading=lazy }](mindset-diagrams/02-gapss-data-transformations.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**GAPSS** — five ways to change your view of the data — looped between, never run as a fixed sequence.</figcaption>
+</figure>
 
 
 ### Search — The Workhorse
@@ -112,7 +115,10 @@ The refinement can carry a whole hunt. *Has PowerShell malware run on my network
 
 One more distinction, and it's really the hunting/investigation context switch in another guise. When you're **finding anomalies** — hunting, which is exploratory — you generally **start broad and reduce** as needed. When you're **investigating** a specific anomaly you already have, you **start narrow and expand** as needed, because a tight search lands you directly on the specific answer you're chasing. Same person, same tools, opposite opening move, depending on which mode you're in.
 
-[![Hunting searches broad while investigation searches narrow, and the two need different queries](mindset-diagrams/preview_04-hunt-broad-investigate-narrow.png){ loading=lazy }](mindset-diagrams/preview_04-hunt-broad-investigate-narrow.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![Hunting searches broad while investigation searches narrow, and the two need different queries](mindset-diagrams/preview_04-hunt-broad-investigate-narrow.png){ loading=lazy }](mindset-diagrams/preview_04-hunt-broad-investigate-narrow.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Opposite opening moves** — hunting starts broad and reduces; investigating starts narrow and expands.</figcaption>
+</figure>
 
 ### Getting Fluent in Your Search Tool
 
@@ -137,7 +143,10 @@ Two last techniques are worth knowing because they show up the moment your hunts
 
 Pull it together and the lesson is the same one we started with: you can learn any search *syntax* in an afternoon. Real fluency is knowing your tool's backend, its data types, and its quirks well enough that you know what to search for — and that you can trust what it hands back.
 
-[![How typed data is held by the search backend, which is what makes a query fast or slow](mindset-diagrams/preview_01-typed-data-backend.png){ loading=lazy }](mindset-diagrams/preview_01-typed-data-backend.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![How typed data is held by the search backend, which is what makes a query fast or slow](mindset-diagrams/preview_01-typed-data-backend.png){ loading=lazy }](mindset-diagrams/preview_01-typed-data-backend.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Typed data** — the type decides not just how a value is stored, but what you are allowed to ask of it.</figcaption>
+</figure>
 
 ### Matching Parts, Ranges, and Patterns
 
@@ -165,8 +174,14 @@ One more silent gap lives a layer above the engine, in **field mapping**. SIEMs 
 
 Step back and all of this becomes a checklist you can apply to any search platform someone hands you. There are five areas. The **backend** — its data storage model, its typed data, and whether you're filtering or querying. The **syntax** — basic structure, compound queries, Boolean operators, subsearch and nested search, escaped characters, and comparison operators. **Partial matching** — wildcards, prefix, suffix, and regular expressions. **Additional features** — ranges and exists searches. And **output** — transformations and formats. Work through those five for any tool and the blank search bar over a mountain of data stops being intimidating.
 
-[![A framework for mastering any search tool, independent of which product it is](mindset-diagrams/preview_05-search-tool-mastery.png){ loading=lazy }](mindset-diagrams/preview_05-search-tool-mastery.png){ title="Open the full-resolution diagram" }
-[![Sampling against bloom filters as two ways a search backend trades accuracy for speed](mindset-diagrams/preview_03-sampling-vs-bloom.png){ loading=lazy }](mindset-diagrams/preview_03-sampling-vs-bloom.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![A framework for mastering any search tool, independent of which product it is](mindset-diagrams/preview_05-search-tool-mastery.png){ loading=lazy }](mindset-diagrams/preview_05-search-tool-mastery.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Five areas, any platform** — backend, syntax, partial matching, additional features, output.</figcaption>
+</figure>
+<figure markdown>
+  [![Sampling against bloom filters as two ways a search backend trades accuracy for speed](mindset-diagrams/preview_03-sampling-vs-bloom.png){ loading=lazy }](mindset-diagrams/preview_03-sampling-vs-bloom.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Sampling and Bloom filters** — two different trades of completeness for speed, which is why you need to know which one your engine makes.</figcaption>
+</figure>
 
 And that is the whole reason this detour into search mattered: fluency in the tool is what finally lets you execute the third question of every hunt — *how do I manipulate the data to see it?* — well enough that the anomaly actually shows itself.
 
@@ -177,7 +192,10 @@ If search is how you pull data, **aggregation** is how you make sense of a lot o
 
 The simplest form is a **unique term plus count**. Take a field full of values — `chrome.exe`, `powershell.exe`, `chrome.exe`, `powershell.exe`, `powershell.exe`, `certutil.exe` — group the unique ones, count each, and sort, and you get three `powershell.exe`, two `chrome.exe`, one `certutil.exe`. That's the whole idea, and it scales to millions of rows — at which point the single `certutil.exe` is the row you care about.
 
-[![Aggregation as grouping unique values, counting them and sorting, turning a raw field into counts per value](mindset-diagrams/06-aggregation-count-sort.png){ loading=lazy }](mindset-diagrams/06-aggregation-count-sort.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![Aggregation as grouping unique values, counting them and sorting, turning a raw field into counts per value](mindset-diagrams/06-aggregation-count-sort.png){ loading=lazy }](mindset-diagrams/06-aggregation-count-sort.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Aggregation** — group unique values, count them, sort — and a raw field becomes the shape of the data.</figcaption>
+</figure>
 
 Aggregation isn't limited to one field. Group by a **combination** of fields and you count unique *pairs* — user and process together (two `jdoe`+`powershell.exe`, two `svc-backup`+`chrome.exe`, one `jdoe`+`certutil.exe`), or source IP together with destination IP, and you can keep adding fields as the question demands. The pair is often where the signal is: neither `jdoe` nor `certutil.exe` is remarkable alone. And the math doesn't have to be a count: a **unique term plus sum** lets you total another field per group — sum the bytes transferred and aggregate that by host, and you've built a "top talkers" list in one move.
 
@@ -219,7 +237,10 @@ Here's the part that ties it back to everything before it: **aggregation is alwa
 
 The clearest way to see this is a real workflow, peeling back one layer at a time. You **search** HTTP data for a single branch office. You **aggregate** the unique MIME types with a count, sorted least-frequent-first, to bring the oddities to the top. You **search** those outlier values to get context on what they are. Some turn out to be normal IT-department activity, so you **add an exclusion** for that to your aggregation and run it again — and with the known-good removed, a new layer of outliers rises into view. You **search** those for context, find another cluster of legitimate processes, and **add exclusions** for them too. Each pass strips away a layer of known-legitimate clutter, and each time, the genuinely anomalous values stand out a little more sharply. That back-and-forth — search, aggregate, exclude, repeat — is the everyday rhythm of hunting.
 
-[![Aggregation and search peeling back the layers in turn, each pass stripping known-legitimate clutter so the genuinely anomalous values rise to the top](mindset-diagrams/07-aggregation-search-loop.png){ loading=lazy }](mindset-diagrams/07-aggregation-search-loop.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![Aggregation and search peeling back the layers in turn, each pass stripping known-legitimate clutter so the genuinely anomalous values rise to the top](mindset-diagrams/07-aggregation-search-loop.png){ loading=lazy }](mindset-diagrams/07-aggregation-search-loop.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Aggregation on top of search** — each pass strips known-legitimate clutter so the genuinely anomalous rises to the top.</figcaption>
+</figure>
 
 #### Aggregation and the Third Question
 
@@ -252,7 +273,10 @@ The everyday question an average answers is a hunting question in disguise: *wha
 
 So the discipline is to match the measure to the **distribution** of your data, and to actually look at that distribution first. Is authentication spread evenly across every user, or is this an app where a few service accounts do most of the logging in? The shape decides which "average" is honest: in a symmetric distribution the mean and median coincide; in a right-skewed one the median sits left of the mean; in a left-skewed one the mean sits left of the median.
 
-[![Mean, median and mode as three different answers to what you should expect to see in a field](mindset-diagrams/preview_08-mean-median-mode.png){ loading=lazy }](mindset-diagrams/preview_08-mean-median-mode.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![Mean, median and mode as three different answers to what you should expect to see in a field](mindset-diagrams/preview_08-mean-median-mode.png){ loading=lazy }](mindset-diagrams/preview_08-mean-median-mode.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Three answers to what is typical** — each is skewed by something different, so match the measure to the distribution.</figcaption>
+</figure>
 
 #### Standard Deviation: How Far Is Too Far?
 
@@ -260,7 +284,10 @@ Knowing the average invites the next question — *how far from it is far enough
 
 The reason it works is the shape of the bell curve: about 68% of all values fall within one standard deviation of the mean, about 95% within two, and about 99.7% within three. Density falls off a cliff as you move out — being one or two σ from the mean is mild and common, but being four, five, or six σ out is genuinely rare, and that rarity is the signal. The workflow is mechanical: take your value, compare it to the average, count how many standard deviations away it sits, and that count *is* the degree of the outlier. (As always: an outlier is a lead, not a verdict — rare is not the same as malicious, so you still dig.)
 
-[![Standard deviation as the measure of how far from normal is far enough to be worth looking at](mindset-diagrams/preview_10-standard-deviation.png){ loading=lazy }](mindset-diagrams/preview_10-standard-deviation.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![Standard deviation as the measure of how far from normal is far enough to be worth looking at](mindset-diagrams/preview_10-standard-deviation.png){ loading=lazy }](mindset-diagrams/preview_10-standard-deviation.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Standard deviation** — how many σ from the mean a value sits is the degree of the outlier.</figcaption>
+</figure>
 
 #### Entropy: Measuring Randomness
 
@@ -282,7 +309,10 @@ We're trained to think of endpoints as client and server, but **producer:consume
 
 A value near **+1** means the host is almost purely pushing data out — a file upload, or a beacon; around **+0.4** is a 70/30 export like sending email; **0.0** is a balanced exchange like NTP, ARP, or DHCP; **−0.5** is roughly 3:1 inbound, like normal HTTP browsing; and **−1.0** is a pure pull, a file download. That single ratio classifies a host's role and makes unexpected behavior pop.
 
-[![The producer-consumer ratio scale, showing whether a host is mostly sending or mostly receiving](mindset-diagrams/pcr-scale.png){ loading=lazy }](mindset-diagrams/pcr-scale.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![The producer-consumer ratio scale, showing whether a host is mostly sending or mostly receiving](mindset-diagrams/pcr-scale.png){ loading=lazy }](mindset-diagrams/pcr-scale.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Producer:Consumer ratio** — one number between −1 and +1 for whether a host is pushing data out or pulling it in.</figcaption>
+</figure>
 
 The genuinely powerful use is the **PCR shift**: plot each host's *baseline* PCR (its normal balance) against its *current* PCR. A host that shifts sharply toward producing — up and off the line — is a candidate for **data exfiltration**; one that shifts the other way can indicate **data staging**. Two well-known references develop this: Carter Bullard's FloCon 2014 PCR presentation, and David Bianco's "Detecting Data Staging & Exfil Using the PCR Shift."
 
@@ -298,7 +328,10 @@ The genuinely powerful use is the **PCR shift**: plot each host's *baseline* PCR
 
 It's worth being precise about what statistics is and isn't for. You *can* use it to summarize data and take in the lay of the land, as a **step-one detection** that surfaces a lead, as a **step-two confirmation** when you've found something odd and need to know *to what extent* it's abnormal compared to everything else, and to inform your decisions. You *cannot* use it to automate the whole process or to make the decision for you. And keep a healthy skepticism about the "advanced statistics" vendors sell: much of it is just a more involved version of the fundamentals in this section, and the cost-versus-benefit of a lot of machine-learning and AI statistical products remains unproven. Master the fundamentals; treat the magic box with caution.
 
-[![The role statistics play in hunting: describing what normal looks like so an outlier can be recognised](mindset-diagrams/preview_09-role-of-statistics.png){ loading=lazy }](mindset-diagrams/preview_09-role-of-statistics.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![The role statistics play in hunting: describing what normal looks like so an outlier can be recognised](mindset-diagrams/preview_09-role-of-statistics.png){ loading=lazy }](mindset-diagrams/preview_09-role-of-statistics.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**What statistics is for** — confirming and prioritising leads on a narrowed scope — never an autopilot.</figcaption>
+</figure>
 
 The through-line for the whole technique: statistics gives you a different perspective and, above all, a way to quantify "normal" — so reach for it to confirm and prioritize leads on a narrowed scope, never as an autopilot.
 
@@ -315,7 +348,10 @@ The value you pivot on doesn't have to stay inside your own telemetry, either. S
 
 Real pivoting rarely stops at one hop; it fans out into long chains with many directions, because every new source raises new questions and every question has its own pivot. Picture a real scenario: while hunting, you find a process whose *name* makes you suspicious. You pivot from the Sysmon process logs on its **MD5 hash** into Zeek/Bro file logs. From there a **connection ID** carries you to Bro HTTP logs, and the **domain** you find there pivots onward to DNS logs and OSINT. Meanwhile the **responder IP** branches off to PCAP, flow, and OSINT — and the domains you turn up in *those* pivot again. Each hop is driven by whatever value the current data happens to represent, and the discipline is choosing the right path: a wrong turn simply won't reach the destination, so you keep the question you're actually trying to answer in front of you the whole way.
 
-[![Pivots form long chains, so the field you pivot on decides how far the chain can run before it breaks](mindset-diagrams/06-pivot-chain.png){ loading=lazy }](mindset-diagrams/06-pivot-chain.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![Pivots form long chains, so the field you pivot on decides how far the chain can run before it breaks](mindset-diagrams/06-pivot-chain.png){ loading=lazy }](mindset-diagrams/06-pivot-chain.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**Pivots form long chains** — every new source raises a new question, and every question has its own pivot.</figcaption>
+</figure>
 
 #### The Fields That Make Pivoting Work — Know These Cold
 
@@ -326,7 +362,10 @@ A pivot is only possible when the *same value* is recorded in both data sources,
 - **Domain** — proxy, Zeek, DNS, PCAP, plus external VirusTotal and domain-reputation services.
 - **File hash** — Sysmon, Zeek, EDR, plus external VirusTotal, sandbox, and application-whitelisting data.
 
-[![The fields that make pivoting work, and what each one can and cannot carry you across](mindset-diagrams/07-pivot-fields.png){ loading=lazy }](mindset-diagrams/07-pivot-fields.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![The fields that make pivoting work, and what each one can and cannot carry you across](mindset-diagrams/07-pivot-fields.png){ loading=lazy }](mindset-diagrams/07-pivot-fields.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**The fields that carry a pivot** — IP address, username, domain and file hash — and everywhere else each one is recorded.</figcaption>
+</figure>
 
 The habit to build is reflexive: whenever you find a value, ask *"which of my data sources also records this?"* — because that set of sources is your pivot map, and cross-source correlation is one of the strongest moves a hunter has.
 
@@ -402,7 +441,10 @@ point at its own frameworks is a great deal easier to defend to the people fundi
 
 </div>
 
-[![The Pyramid of Pain, ranking indicator types by how much it costs an attacker when you take them away](mindset-diagrams/pyramid-of-pain.png){ loading=lazy }](mindset-diagrams/pyramid-of-pain.png){ title="Open the full-resolution diagram" }
+<figure markdown>
+  [![The Pyramid of Pain, ranking indicator types by how much it costs an attacker when you take them away](mindset-diagrams/pyramid-of-pain.png){ loading=lazy }](mindset-diagrams/pyramid-of-pain.png){ title="Open the full-resolution diagram" }
+  <figcaption markdown="span">**The Pyramid of Pain** — the higher you deny, the more it costs the adversary to carry on.</figcaption>
+</figure>
 
 
 ---
