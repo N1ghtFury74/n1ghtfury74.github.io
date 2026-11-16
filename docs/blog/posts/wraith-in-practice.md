@@ -7,6 +7,7 @@ categories:
   - Threat Hunting
   - Detection Engineering
   - Security Engineering
+  - Tools
 tags:
   - WRAITH
   - Active Directory
@@ -21,7 +22,7 @@ tags:
   - Coverage
 ---
 
-# WRAITH Use Cases — Five Different Roles, One Offline Reconstruction
+# WRAITH V1.0 Use Cases — Five Different Roles, One Offline Reconstruction
 
 *Worked examples, not a feature tour: five different people asking five different questions of the same offline Active Directory reconstruction — including the hunts that came back empty.*
 
