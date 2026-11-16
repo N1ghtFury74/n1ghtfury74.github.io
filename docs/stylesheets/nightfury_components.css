@@ -84,6 +84,13 @@
   color: var(--md-default-fg-color--light);
 }
 
+/* The date inherits its font and colour from .nf-post-card__meta above; this
+   rule exists so the class is defined rather than implicit, and so a date
+   never breaks across two lines in the flex meta row. */
+.nf-post-card__date {
+  white-space: nowrap;
+}
+
 .nf-post-card__read::before {
   content: "·";
   margin-right: 0.5rem;
@@ -195,6 +202,12 @@
   font-size: 0.66rem;
   font-weight: 700;
   transition: background 0.26s ease;
+}
+
+/* The name inherits the chip's font and colour; this keeps a two-word
+   category such as "Threat Hunting" on one line inside the pill. */
+.nf-cat-chip__name {
+  white-space: nowrap;
 }
 
 .nf-cat-chip:hover .nf-cat-chip__count {
